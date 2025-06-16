@@ -17,10 +17,10 @@ public class PartMainGame : PartBase {
     public override async UniTask SetUp() {
         await base.SetUp();
         // フェードイン
-        await FadeManager.instance.FadeIn();
 
         // プレイヤーとステージ生成
         instance.UsePlayer(Vector3.zero, Quaternion.Euler(0, 0, 0));
+        await FadeManager.instance.FadeIn();
 
         // ステージ生成
         // プレイヤー取得
@@ -64,6 +64,7 @@ public class PartMainGame : PartBase {
             if (moveScript.GetIsStopped()) {
                 // エンディングパートへ遷移
                 await UniTask.Delay(3000);
+                await FadeManager.instance.FadeOut();
                 await PartManager.Instance.TransitionPart(eGamePart.Ending);
                 break;
             }

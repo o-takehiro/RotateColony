@@ -8,7 +8,7 @@ using UnityEngine;
 public class StageSegment : MonoBehaviour {
     private bool shouldRotate = false;
 
-
+    private bool stopMove = false;
     /// <summary>
     /// 回転対象にする
     /// </summary>
@@ -18,12 +18,30 @@ public class StageSegment : MonoBehaviour {
     }
 
     private void Update() {
+        if (!shouldRotate) return;
 
-        // 回転対象であれば
-        if(shouldRotate) {
-            transform.Rotate(0f, 30f * Time.deltaTime, 0f);
+        float rotationSpeed = 60f; // 回転速度（度/秒）
+        float rotationInput = 0f;
+
+        if (Input.GetKey(KeyCode.LeftArrow)) {
+            rotationInput = 1f;  // 左矢印キーで反時計回りに回転
+        }
+        else if (Input.GetKey(KeyCode.RightArrow)) {
+            rotationInput = -1f;   // 右矢印キーで時計回りに回転
         }
 
+        transform.Rotate(0f, rotationSpeed * rotationInput * Time.deltaTime, 0f);
     }
+
+
+
+    /// <summary>
+    /// 衝突可否判定
+    /// </summary>
+    public void StopStageMoving() {
+        stopMove = true;
+    }
+
+
 
 }

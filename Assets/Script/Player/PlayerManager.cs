@@ -13,11 +13,13 @@ public class PlayerManager : SystemObject {
     private GameObject playerPrefab;
     private GameObject playerInstance;
 
+
+
     /// <summary>
     /// シングルトンの初期化
     /// </summary>
     private void Awake() {
-        if(instance != null && instance != this) {
+        if (instance != null && instance != this) {
             Destroy(this.gameObject);
             return;
         }
@@ -30,7 +32,7 @@ public class PlayerManager : SystemObject {
     /// <returns></returns>
     public override async UniTask Initialize() {
         instance = this;
-        await UniTask.CompletedTask;    
+        await UniTask.CompletedTask;
     }
 
     /// <summary>
@@ -38,18 +40,30 @@ public class PlayerManager : SystemObject {
     /// </summary>
     /// <param name="_position"></param>
     /// <param name="_rotation"></param>
-    public void UsePlayer(Vector3 _position,Quaternion _rotation) {
+    public void UsePlayer(Vector3 _position, Quaternion _rotation) {
         if (playerInstance == null && playerPrefab != null) {
             // 生成
             playerInstance = Instantiate(playerPrefab, _position, _rotation);
 
             FollowCamera camera = Camera.main?.GetComponent<FollowCamera>();
-            if(camera != null) {
-                // カメラのターゲットに生成したプレイヤーをセット
+            // カメラをセット
+            if (camera != null) {
+                // カメラのターゲットにプレイヤーをセット
                 camera.SetTarget(playerInstance.transform);
-            }
 
+                // カメラ演出と追従
+                camera.StartCircularMove(
+                fromOffset: new Vector3(-3f, 0f, 3f),   // 円の半径と高さ初期値（例）
+                toOffset: new Vector3(0f, 2f, -6f),     // 高さを少し上げる
+                fromAngleDeg: 0f,                      // スタート角度
+                toAngleDeg: 248f,                      // 360度一周させたい場合
+                duration: 3f
+                );
+
+            }
         }
+
+
     }
 
     /// <summary>
@@ -67,5 +81,6 @@ public class PlayerManager : SystemObject {
     /// </summary>
     /// <returns></returns>
     public GameObject GetPlayerObject() => playerInstance;
+
 
 }

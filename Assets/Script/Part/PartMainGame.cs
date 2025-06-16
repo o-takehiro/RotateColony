@@ -9,41 +9,67 @@ using static PlayerManager;
 /// </summary>
 public class PartMainGame : PartBase {
 
-    private bool endFlag = false;
-    private bool clerFlag = false;
-
     public override async UniTask Initialize() {
         await base.Initialize();
-        //await instance.Initialize();
+
     }
 
     public override async UniTask SetUp() {
         await base.SetUp();
+        // フェードイン
         await FadeManager.instance.FadeIn();
-        // プレイヤーとステージ生成
-        instance.UsePlayer(Vector3.zero, Quaternion.Euler(0,90,0));
 
+        // プレイヤーとステージ生成
+        instance.UsePlayer(Vector3.zero, Quaternion.Euler(0, 0, 0));
+
+        // ステージ生成
+        // プレイヤー取得
+        GameObject playerObj = instance.GetPlayerObject();
+        // GameObject型からTransform型に変換        
+        Transform playerF = playerObj.transform;
+        if (playerObj != null) {
+            // Stageにプレイヤーの情報を渡す
+            StageManager.instance.SetPlayer(playerF);
+        }
+
+        UniTask task = StageManager.instance.Initialize();
+
+        // 3秒クールタイムを待つ
+        await UniTask.Delay(6000);  // ミリ秒で指定
+
+        // プレイヤーのPlayerMoveスクリプトを取得し、移動開始を許可
+        PlayerMove moveScript = playerObj.GetComponent<PlayerMove>();
+        if (moveScript != null) {
+            moveScript.StopedReset();
+            moveScript.SetStartMoving(true);
+        }
 
         await UniTask.CompletedTask;
     }
 
+    /// <summary>
+    /// エンディングパートへの遷移
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask Execute() {
-        // ゲームの実行
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            endFlag = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.H)) {
-            clerFlag = true;
-        }
-        UniTask task;
-        if (endFlag) {
-            task = PartManager.Instance.TransitionPart(eGamePart.Title);
-        }
-        else if (clerFlag) {
-            task = PartManager.Instance.TransitionPart(eGamePart.Ending);
-        }
+        GameObject playerObj = instance.GetPlayerObject();
+        if (playerObj == null) return;
 
+        PlayerMove moveScript = playerObj.GetComponent<PlayerMove>();
+        if (moveScript == null) return;
 
+        // フラグ監視ループ
+        while (true) {
+            // 毎フレームチェック
+            await UniTask.Yield(); // 次のフレームを待つ
+
+            if (moveScript.GetIsStopped()) {
+                // エンディングパートへ遷移
+                await UniTask.Delay(3000);
+                await PartManager.Instance.TransitionPart(eGamePart.Ending);
+                break;
+            }
+        }
     }
 
     public override async UniTask Teardown() {

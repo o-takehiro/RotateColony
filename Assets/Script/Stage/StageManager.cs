@@ -95,4 +95,17 @@ public class StageManager : SystemObject {
     }
 
 
+    /// <summary>
+    /// すべてのステージPrefabを削除し、リストと生成位置をリセットする
+    /// </summary>
+    public void ClearAllSegments() {
+        foreach (GameObject segment in activeSegments) {
+            if (segment != null) {
+                Destroy(segment);
+            }
+        }
+        activeSegments.Clear();
+        spawnZ = 30f; // 初期位置にリセット
+    }
+
 }

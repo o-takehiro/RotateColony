@@ -53,10 +53,8 @@ public class PartMainGame : PartBase {
     /// <returns></returns>
     public override async UniTask Execute() {
         GameObject playerObj = instance.GetPlayerObject();
-        if (playerObj == null) return;
-
         PlayerMove moveScript = playerObj.GetComponent<PlayerMove>();
-        if (moveScript == null) return;
+        if (moveScript == null || playerObj == null) return;
 
         // フラグ監視ループ
         while (true) {
@@ -72,8 +70,17 @@ public class PartMainGame : PartBase {
         }
     }
 
+    /// <summary>
+    /// パート遷移時の片付け
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask Teardown() {
         await base.Teardown();
+        // プレイヤーを削除
+        instance.DestroyPlayer();
+        // ステージのPrefabを全部削除
+        StageManager.instance.ClearAllSegments();
+
         await UniTask.CompletedTask;
     }
 

@@ -32,6 +32,8 @@ public class PlayerManager : SystemObject {
     /// <returns></returns>
     public override async UniTask Initialize() {
         instance = this;
+        // ƒvƒŒƒCƒ„[‚Ì¶¬
+        //UsePlayer(Vector3.zero, Quaternion.Euler(0, 0, 0));
         await UniTask.CompletedTask;
     }
 
@@ -81,6 +83,4 @@ public class PlayerManager : SystemObject {
     /// </summary>
     /// <returns></returns>
     public GameObject GetPlayerObject() => playerInstance;
-
-
 }

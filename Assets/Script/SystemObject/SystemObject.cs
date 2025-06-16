@@ -7,4 +7,5 @@ using UnityEngine;
 public abstract class SystemObject : MonoBehaviour {
 
     public abstract UniTask Initialize();
+
 }

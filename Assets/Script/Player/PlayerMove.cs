@@ -13,6 +13,7 @@ public class PlayerMove : PlayerBase {
     // 移動開始判断用
     private bool isMoving = false;
 
+
     /// <summary>
     /// 更新
     /// </summary>
@@ -61,6 +62,7 @@ public class PlayerMove : PlayerBase {
     public void SetStartMoving(bool _moveFlag) {
         isMoving = _moveFlag;
     }
+
 
 
 }

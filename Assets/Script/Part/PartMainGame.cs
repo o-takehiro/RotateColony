@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Schema;
 using UnityEngine;
 
 using static PlayerManager;
@@ -17,14 +18,19 @@ public class PartMainGame : PartBase {
     public override async UniTask SetUp() {
         await base.SetUp();
         // フェードイン
-
+        
         // プレイヤーとステージ生成
-        instance.UsePlayer(Vector3.zero, Quaternion.Euler(0, 0, 0));
+        instance.UsePlayer(new Vector3(0f,-2f,0f), Quaternion.Euler(0, 0, 0));
         await FadeManager.instance.FadeIn();
 
         // ステージ生成
         // プレイヤー取得
         GameObject playerObj = instance.GetPlayerObject();
+        // アニメーションを再生
+        var animController = playerObj.GetComponent<PlayerAnimationController>();
+        if (animController != null) {
+            animController.PlayTransformAnimation();
+        }
         // GameObject型からTransform型に変換        
         Transform playerF = playerObj.transform;
         if (playerObj != null) {

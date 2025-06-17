@@ -5,7 +5,7 @@ using System.IO.IsolatedStorage;
 using UnityEngine;
 
 public class PlayerMove : PlayerBase {
-    private float playerSpeed = 3f;
+    private float playerSpeed = 7f;
 
     // è’ìÀåüímóp
     private bool isStopped = false;
@@ -62,7 +62,5 @@ public class PlayerMove : PlayerBase {
     public void SetStartMoving(bool _moveFlag) {
         isMoving = _moveFlag;
     }
-
-
 
 }

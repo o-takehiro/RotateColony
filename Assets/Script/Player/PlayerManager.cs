@@ -1,7 +1,4 @@
 using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Build.Content;
 using UnityEngine;
 
 public class PlayerManager : SystemObject {
@@ -52,8 +49,8 @@ public class PlayerManager : SystemObject {
 
                 // カメラ演出と追従
                 camera.StartCircularMove(
-                fromOffset: new Vector3(-3f, 5f, 3f),   // 円の半径と高さ初期値（例）
-                toOffset: new Vector3(0f, 3f, -6f),     // 高さを少し上げる
+                fromOffset: new Vector3(0f, 4f, -4f),   // 円の半径と高さ初期値（例）
+                toOffset: new Vector3(0f, 4f, -6f),     // 高さを少し上げる
                 fromAngleDeg: 0f,                      // スタート角度
                 toAngleDeg: 248f,                      // 360度一周させたい場合
                 duration: 3f

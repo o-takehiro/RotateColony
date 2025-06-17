@@ -9,9 +9,8 @@ using UnityEngine;
 public class FollowCamera : MonoBehaviour {
     [SerializeField]
     private Transform target;   // 追従対象
-    [SerializeField]
-    private Vector3 offset = new Vector3(-3, 0, 3);   // カメラ位置のオフセット
-    [SerializeField]
+
+    //private Vector3 offset = new Vector3(-3, 0, 3);   // カメラ位置のオフセット
     private float followSpeed = 2.5f;     // 追従時の滑らかさ
 
 
@@ -24,6 +23,9 @@ public class FollowCamera : MonoBehaviour {
     private Vector3 endOffset;
     private float startAngle;
     private float endAngle;
+
+    // 注視する場所 + ●●
+    private readonly float UP_EYE = 2.5f;
 
     /// <summary>
     /// 追従対象を設定
@@ -75,16 +77,25 @@ public class FollowCamera : MonoBehaviour {
             transform.position = target.position + offsetPosition;
 
             // 常にプレイヤーを見る
-            transform.LookAt(target);
-
+            //transform.LookAt(target);
+            transform.LookAt(target.position + Vector3.up * UP_EYE);
             // 補間完了したらフラグオフ
             if (t >= 1f) isStartMoving = false;
+
+
         }
         else {
             // 補間後、通所の追跡カメラになる。
             Vector3 desiredPosition = target.position + endOffset;
             transform.position = Vector3.Lerp(transform.position, desiredPosition, followSpeed * Time.deltaTime);
-            transform.LookAt(target);
+            //transform.LookAt(target);
+            // プレイヤーの少し上を向くようにする（例：1.5m上を注視）
+            Vector3 lookTarget = target.position + Vector3.up * UP_EYE;
+            // 正面方向から見て上に上げる
+            transform.rotation = Quaternion.LookRotation(lookTarget - transform.position);
+
+
+
         }
     }
 }

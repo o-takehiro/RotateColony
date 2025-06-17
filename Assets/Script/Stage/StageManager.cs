@@ -43,7 +43,7 @@ public class StageManager : SystemObject {
     private void SpawnSegment() {
         GameObject prefab = stagePrefabs[Random.Range(0, stagePrefabs.Count)];
         // Y²‚ğƒ‰ƒ“ƒ_ƒ€‚ÅŒˆ’è
-        float randamX = Random.Range(-90f,90f);
+        float randamX = Random.Range(-90f, 90f);
         // İ’è‚µ‚½‰ñ“]’l‚ÆˆÊ’u‚Éprefab‚ğ¶¬
         GameObject segment = Instantiate(prefab, new Vector3(0, 2.5f, spawnZ), Quaternion.Euler(randamX, 90, 90));
         activeSegments.Add(segment);

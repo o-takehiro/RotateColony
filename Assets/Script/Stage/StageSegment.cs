@@ -6,6 +6,7 @@ using UnityEngine;
 /// 各ステージにアタッチし、回転処理を行う
 /// </summary>
 public class StageSegment : MonoBehaviour {
+    
     private bool shouldRotate = false;
 
     private bool stopMove = false;
@@ -18,7 +19,8 @@ public class StageSegment : MonoBehaviour {
     }
 
     private void Update() {
-        if (!shouldRotate) return;
+        if (!shouldRotate) return; 
+
 
         float rotationSpeed = 60f; // 回転速度（度/秒）
         float rotationInput = 0f;

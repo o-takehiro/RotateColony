@@ -63,4 +63,13 @@ public class PlayerMove : PlayerBase {
         isMoving = _moveFlag;
     }
 
+
+    /// <summary>
+    /// ˆÚ“®‰Â”Û”»’è‚ÌŽæ“¾
+    /// </summary>
+    /// <returns></returns>
+    public bool GetIsMoving() {
+        return isMoving;
+    }
+
 }

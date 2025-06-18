@@ -4,26 +4,61 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour {
     public float flightDuration = 1f; // 飛行時間
-    public int damage = 10;
+    public int damage = 10;           // 与えるダメージ
 
+    // 撃ち始めの位置
     private Vector3 startPos;
+    // 撃った後の中間点
+    private Vector3 midPos;
+    // 狙う位置
     private Vector3 targetPos;
 
-    private float maxSpreadAngle; // 最大広がり角度（度）
+    // 広がる最大の角度
+    //private float maxSpreadAngle;
     private float elapsedTime = 0f;
 
     private bool initialized = false;
 
     // 初期化: 発射位置、目標位置、最大広がり角度を渡す
-    public void Initialize(Vector3 start, Vector3 target, float spreadAngle) {
-        startPos = start;
-        targetPos = target;
-        maxSpreadAngle = spreadAngle;
+    public void Initialize(Vector3 _start, Transform _targetTransform, float _spreadAngle, Vector3 _sideOffsetDirection) {
+        startPos = _start;
+        targetPos = _targetTransform.position;
+
+        Vector3 center = Vector3.Lerp(startPos, targetPos, 1f);
+
+        // 弾の軌道の広がる角度
+        float offsetAmount = 15f;
+
+        midPos = center + _sideOffsetDirection.normalized * offsetAmount;
+
         elapsedTime = 0f;
         initialized = true;
     }
 
     private void Update() {
+        if (!initialized) return;
+        // 経過時間をプラス
+        elapsedTime += Time.deltaTime;
+        float t = Mathf.Clamp01(elapsedTime / flightDuration);
+
+        // 二次ベジエで滑らかなカーブを描く
+        Vector3 bezierPos = Mathf.Pow(1 - t, 2) * startPos +
+                            2 * (1 - t) * t * midPos +
+                            Mathf.Pow(t, 2) * targetPos;
+
+        transform.position = bezierPos;
+
+        // 飛翔方向を補正
+        Vector3 tangent = 2 * (1 - t) * (midPos - startPos) + 2 * t * (targetPos - midPos);
+        transform.forward = tangent.normalized;
+
+        if (t >= 1f) {
+            //HitTarget();
+            Destroy(gameObject);
+        }
+
+#if false
+
         if (!initialized) return;
 
         elapsedTime += Time.deltaTime;
@@ -44,7 +79,7 @@ public class Projectile : MonoBehaviour {
         float currentSpreadAngle = maxSpreadAngle * angleFactor;
 
         // 放射状方向はY軸を中心に回転させる
-        float spreadRadians = currentSpreadAngle * Mathf.Deg2Rad;
+        // float spreadRadians = currentSpreadAngle * Mathf.Deg2Rad;
 
 
         Vector3 offset = Quaternion.Euler(0, currentSpreadAngle, 0) * direction * 0.5f * (1 - t);
@@ -57,21 +92,18 @@ public class Projectile : MonoBehaviour {
         if (t >= 1f) {
             HitTarget();
         }
+#endif
+
     }
-
-    private void HitTarget() {
-        // ダメージ処理
-        Collider[] hits = Physics.OverlapSphere(transform.position, 0.5f);
-        foreach (var col in hits) {
-            if (col.CompareTag("Obstacle")) {
-                // 使用しなくなった弾を削除する
-                Destructible destructible = col.GetComponent<Destructible>();
-                if (destructible != null) {
-                    destructible.TakeDamage(damage);
-                }
+    
+    // 障害物と弾の破棄
+    private void OnTriggerEnter(Collider other) {
+        if (other.CompareTag("Obstacle")) {
+            Destructible destructible = other.GetComponent<Destructible>();
+            if (destructible != null) {
+                destructible.TakeDamage(damage);
             }
+            Destroy(gameObject); // 衝突時に削除
         }
-
-        Destroy(gameObject);
     }
 }

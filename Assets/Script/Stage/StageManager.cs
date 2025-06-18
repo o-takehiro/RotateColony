@@ -6,9 +6,9 @@ using UnityEngine;
 public class StageManager : SystemObject {
     [SerializeField] private Transform player;                      // プレイヤーのTransform
     [SerializeField] private List<GameObject> stagePrefabs;         // ステージのプレハブ群
-    [SerializeField] private float segmentLength = 100f;            // 1ステージPrefabの長さ
-    [SerializeField] private int initialSegments = 5;               // 初期生成数
-    [SerializeField] private int maxSegments = 5;                   // 保持するステージPrefab最大数
+    [SerializeField] private float segmentLength = 30f;            // 1ステージPrefabの長さ
+    [SerializeField] private int initialSegments = 3;               // 初期生成数
+    [SerializeField] private int maxSegments = 3;                   // 保持するステージPrefab最大数
 
     private List<GameObject> activeSegments = new List<GameObject>();
     private float spawnZ = 30f;     // 初期生成位置

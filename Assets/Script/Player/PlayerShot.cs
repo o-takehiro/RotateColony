@@ -73,7 +73,7 @@ public class PlayerShot : MonoBehaviour {
         GameObject proj = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
         Projectile projScript = proj.GetComponent<Projectile>();
         projScript.damage = damage;
-        projScript.flightDuration = flightDuration;
+        //projScript.flightDuration = flightDuration;
 
         // 左右で方向を変える（FirePointの向きを使って決定）
         Vector3 forward = (shotTargetPoint.position - firePoint.position).normalized;

@@ -1,109 +1,92 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour {
-    public float flightDuration = 1f; // 飛行時間
-    public int damage = 10;           // 与えるダメージ
+    public int damage = 10;
 
-    // 撃ち始めの位置
     private Vector3 startPos;
-    // 撃った後の中間点
     private Vector3 midPos;
-    // 狙う位置
     private Vector3 targetPos;
 
-    // 広がる最大の角度
-    //private float maxSpreadAngle;
     private float elapsedTime = 0f;
-
     private bool initialized = false;
 
-    // 初期化: 発射位置、目標位置、最大広がり角度を渡す
+    private float individualFlightDuration;
+
+    // 軌道のふくらみ・加速風の変形の量
+    private const float midOffsetAmount = 8f;           // 中間点
+    private const float accelerationPullAmount = 9f;    // X軸
+    private const float verticalCurveAmount = 9f;       // Y軸
+
+
     public void Initialize(Vector3 _start, Transform _targetTransform, float _spreadAngle, Vector3 _sideOffsetDirection) {
         startPos = _start;
-        targetPos = _targetTransform.position;
 
-        Vector3 center = Vector3.Lerp(startPos, targetPos, 1f);
+        // 着弾点をランダムで少しずらす（X, Y方向）
+        Vector3 baseTargetPos = _targetTransform.position;
+        float xOffset = Random.Range(-3.5f, 3.5f);
+        float yOffset = Random.Range(-3.0f, 3.0f);
+        targetPos = baseTargetPos + new Vector3(xOffset, yOffset, 0f);
 
-        // 弾の軌道の広がる角度
-        float offsetAmount = 15f;
+        // 中間点（軌道のふくらみ）
+        Vector3 center = Vector3.Lerp(startPos, targetPos, 0.5f);
+        Vector3 offsetDir = _sideOffsetDirection.normalized;
 
-        midPos = center + _sideOffsetDirection.normalized * offsetAmount;
+        midPos = center + offsetDir * midOffsetAmount;
+
+        // 前方方向へ引っ張る（加速風）
+        Vector3 accelDir = (targetPos - startPos).normalized;
+        midPos += accelDir * accelerationPullAmount;
+
+        // Y軸方向にもオフセット（上下にふくらむ軌道）
+        midPos += Vector3.up * Random.Range(-verticalCurveAmount, verticalCurveAmount);
+
+        // ランダム飛行時間
+        individualFlightDuration = Random.Range(0.6f, 1.5f);
 
         elapsedTime = 0f;
         initialized = true;
     }
 
+    /// <summary>
+    /// 更新処理
+    /// </summary>
     private void Update() {
         if (!initialized) return;
-        // 経過時間をプラス
-        elapsedTime += Time.deltaTime;
-        float t = Mathf.Clamp01(elapsedTime / flightDuration);
 
-        // 二次ベジエで滑らかなカーブを描く
+        elapsedTime += Time.deltaTime;
+        float t = Mathf.Clamp01(elapsedTime / individualFlightDuration);
+
+        // 加速風（EaseIn）
+        t = t * t;
+
+        // 2次ベジエ補間
         Vector3 bezierPos = Mathf.Pow(1 - t, 2) * startPos +
                             2 * (1 - t) * t * midPos +
                             Mathf.Pow(t, 2) * targetPos;
 
         transform.position = bezierPos;
 
-        // 飛翔方向を補正
+        // 向き補正
         Vector3 tangent = 2 * (1 - t) * (midPos - startPos) + 2 * t * (targetPos - midPos);
         transform.forward = tangent.normalized;
 
+        // 不要になったら削除
         if (t >= 1f) {
-            //HitTarget();
             Destroy(gameObject);
         }
-
-#if false
-
-        if (!initialized) return;
-
-        elapsedTime += Time.deltaTime;
-        float t = Mathf.Clamp01(elapsedTime / flightDuration);
-
-        // t=0で最大広がり、t=1で中心（target方向）に収束するイメージ
-        // 放射角を時間経過で補間（広がり→収束）
-        float angleFactor = Mathf.Sin(Mathf.PI * t); // 0->1->0で波形
-
-        // 座標計算
-        Vector3 direction = (targetPos - startPos).normalized;
-
-        // 正面方向に沿った距離を球面補間
-        float distance = Vector3.Distance(startPos, targetPos);
-        Vector3 forwardPos = Vector3.Slerp(startPos, targetPos, t);
-
-        // 放射方向（最大角度に対して現在の拡散角度を設定）
-        float currentSpreadAngle = maxSpreadAngle * angleFactor;
-
-        // 放射状方向はY軸を中心に回転させる
-        // float spreadRadians = currentSpreadAngle * Mathf.Deg2Rad;
-
-
-        Vector3 offset = Quaternion.Euler(0, currentSpreadAngle, 0) * direction * 0.5f * (1 - t);
-
-        transform.position = forwardPos + offset;
-
-        // 最終的にtargetに向ける
-        transform.forward = (targetPos - transform.position).normalized;
-
-        if (t >= 1f) {
-            HitTarget();
-        }
-#endif
-
     }
-    
-    // 障害物と弾の破棄
+
+    /// <summary>
+    /// 衝突判定
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Obstacle")) {
-            Destructible destructible = other.GetComponent<Destructible>();
+            var destructible = other.GetComponent<Destructible>();
             if (destructible != null) {
                 destructible.TakeDamage(damage);
             }
-            Destroy(gameObject); // 衝突時に削除
+            Destroy(gameObject);
         }
     }
 }

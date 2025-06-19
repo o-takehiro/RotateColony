@@ -50,6 +50,7 @@ MonoBehaviour:
   - {fileID: 6652525120943421336, guid: a87a3a8d5d8822c44a39e1963cab2e8b, type: 3}
   - {fileID: 1179288937666087229, guid: 337e3fb3fa0d243408d4d337e743b4b5, type: 3}
   - {fileID: 9147466284315099572, guid: 97edffd7df649c24cb1cf723c98a5ff8, type: 3}
-  segmentLength: 30
+  - {fileID: 7169244261159566147, guid: daf241dbea3747f4cb2bbb5521fbcbf8, type: 3}
+  segmentLength: 50
   initialSegments: 5
   maxSegments: 7

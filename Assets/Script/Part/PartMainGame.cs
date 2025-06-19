@@ -26,11 +26,13 @@ public class PartMainGame : PartBase {
         // ステージ生成
         // プレイヤー取得
         GameObject playerObj = instance.GetPlayerObject();
+        
         // アニメーションを再生
         var animController = playerObj.GetComponent<PlayerAnimationController>();
         if (animController != null) {
             animController.PlayTransformAnimation();
         }
+
         // GameObject型からTransform型に変換        
         Transform playerF = playerObj.transform;
         if (playerObj != null) {

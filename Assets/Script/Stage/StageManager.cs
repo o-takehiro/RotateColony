@@ -6,12 +6,13 @@ using UnityEngine;
 public class StageManager : SystemObject {
     [SerializeField] private Transform player;                      // プレイヤーのTransform
     [SerializeField] private List<GameObject> stagePrefabs;         // ステージのプレハブ群
-    [SerializeField] private float segmentLength = 30f;            // 1ステージPrefabの長さ
-    [SerializeField] private int initialSegments = 3;               // 初期生成数
-    [SerializeField] private int maxSegments = 3;                   // 保持するステージPrefab最大数
+    
+   private float segmentLength = 70f;            // 1ステージPrefabの長さ
+   private int initialSegments = 5;               // 初期生成数
+   private int maxSegments = 5;                   // 保持するステージPrefab最大数
 
     private List<GameObject> activeSegments = new List<GameObject>();
-    private float spawnZ = 30f;     // 初期生成位置
+    private float spawnZ = 40;     // 初期生成位置
 
     public static StageManager instance { get; private set; } = null;
 
@@ -45,7 +46,7 @@ public class StageManager : SystemObject {
         // Y軸をランダムで決定
         float randamX = Random.Range(-90f, 90f);
         // 設定した回転値と位置にprefabを生成
-        GameObject segment = Instantiate(prefab, new Vector3(0, 2.5f, spawnZ), Quaternion.Euler(randamX, 90, 90));
+        GameObject segment = Instantiate(prefab, new Vector3(0, 0f, spawnZ), Quaternion.Euler(randamX, 90, 90));
         activeSegments.Add(segment);
         spawnZ += segmentLength;
     }
@@ -105,7 +106,7 @@ public class StageManager : SystemObject {
             }
         }
         activeSegments.Clear();
-        spawnZ = 30f; // 初期位置にリセット
+        spawnZ = 50f; // 初期位置にリセット
     }
 
 }

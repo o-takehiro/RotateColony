@@ -38,16 +38,13 @@ public class StageSegment : MonoBehaviour {
     /// スマホの傾き（ジャイロ）による回転入力
     /// </summary>
     private float GetGyroInput() {
-#if UNITY_EDITOR
-        return 0f; // エディタではジャイロ無効
-#else
+
         Quaternion att = Input.gyro.attitude;
         Quaternion corrected = new Quaternion(att.x, att.y, -att.z, -att.w);
         float roll = corrected.eulerAngles.z;
         if (roll > 180f) roll -= 360f;
 
         return Mathf.Clamp(roll / 30f, -1f, 1f);
-#endif
     }
 
     /// <summary>

@@ -66,6 +66,16 @@ public class PlayerShot : MonoBehaviour {
     }
 
     /// <summary>
+    /// ’e‚Ì“¯”­Ë
+    /// </summary>
+    public void FireBoth() {
+        if (playerMove == null || !playerMove.GetIsMoving()) return;
+
+        FireLeft();
+        FireRight();
+    }
+
+    /// <summary>
     /// ’e‚Ì’…’e“_‚ğ’T‚µA’e‚ğ¶¬‚·‚é
     /// </summary>
     /// <param name="firePoint"></param>

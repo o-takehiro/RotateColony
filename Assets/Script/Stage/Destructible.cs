@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class Destructible : MonoBehaviour {
-    [SerializeField] private int durability = 60;
+    private int durability = 200;
 
     // ”íƒ_ƒ
     public void TakeDamage(int amount) {

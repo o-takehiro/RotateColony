@@ -17,6 +17,8 @@ public class Projectile : MonoBehaviour {
     private const float accelerationPullAmount = 9f;    // X軸
     private const float verticalCurveAmount = 9f;       // Y軸
 
+    // エフェクト再生用
+    public GameObject effectPrefab;
 
     public void Initialize(Vector3 _start, Transform _targetTransform, float _spreadAngle, Vector3 _sideOffsetDirection) {
         startPos = _start;
@@ -83,7 +85,8 @@ public class Projectile : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Obstacle")) {
             var destructible = other.GetComponent<Destructible>();
-            if (destructible != null) {
+            if (destructible != null || effectPrefab != null) {
+                Instantiate(effectPrefab, transform.position, Quaternion.identity);
                 destructible.TakeDamage(damage);
             }
             Destroy(gameObject);

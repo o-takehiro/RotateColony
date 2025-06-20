@@ -121,6 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 10
+  effectPrefab: {fileID: 2150893837217643313, guid: e5a393ca0511839458036aaf32d8a1a6, type: 3}
 --- !u!54 &-8645459623980600672
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -200,7 +201,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.10592118
+        value: 0.07557678
         inSlope: 0
         outSlope: 0
         tangentMode: 0

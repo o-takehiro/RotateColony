@@ -1,0 +1,45 @@
+{
+    "name": "ButtonAction",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "450aa1e0-3b8c-4707-a164-2ec2eec5d06a",
+            "actions": [
+                {
+                    "name": "shoot",
+                    "type": "Button",
+                    "id": "79cf17bf-e2da-4b48-a865-7db923c65ca2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f99f19b0-2576-47b6-8bec-a5a59efcf009",
+                    "path": "<Keyboard>/space",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f1b12df7-c4c2-410e-b3a9-8ced100f8762",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

@@ -1,0 +1,45 @@
+{
+    "name": "MenuAction",
+    "maps": [
+        {
+            "name": "Menu",
+            "id": "09beb0cb-7073-4509-b88e-c3c16ede6539",
+            "actions": [
+                {
+                    "name": "Tap",
+                    "type": "Button",
+                    "id": "9916d589-3acf-48a4-8e41-bf88f9e68ecc",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "540184a9-112a-40dd-a969-4a6359a3f860",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "53083d2e-0ce4-452d-ad7a-86ee76fe51fa",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

@@ -5,6 +5,7 @@ using System.Xml.Schema;
 using UnityEngine;
 
 using static PlayerManager;
+using static ButtonManager;
 /// <summary>
 /// メインゲームパート
 /// </summary>
@@ -18,15 +19,15 @@ public class PartMainGame : PartBase {
     public override async UniTask SetUp() {
         await base.SetUp();
         // フェードイン
-        
-        // プレイヤーとステージ生成
-        instance.UsePlayer(new Vector3(0f,-2f,0f), Quaternion.Euler(0, 0, 0));
+
+        // プレイヤー生成
+        PlayerManager.instance.UsePlayer(new Vector3(0f, -2f, 0f), Quaternion.Euler(0, 0, 0));
         await FadeManager.instance.FadeIn();
 
         // ステージ生成
         // プレイヤー取得
-        GameObject playerObj = instance.GetPlayerObject();
-        
+        GameObject playerObj = PlayerManager.instance.GetPlayerObject();
+
         // アニメーションを再生
         var animController = playerObj.GetComponent<PlayerAnimationController>();
         if (animController != null) {
@@ -44,12 +45,14 @@ public class PartMainGame : PartBase {
 
         // 3秒クールタイムを待つ
         await UniTask.Delay(6000);  // ミリ秒で指定
+        // ボタン生成
 
         // プレイヤーのPlayerMoveスクリプトを取得し、移動開始を許可
         PlayerMove moveScript = playerObj.GetComponent<PlayerMove>();
         if (moveScript != null) {
             moveScript.StopedReset();
             moveScript.SetStartMoving(true);
+           ButtonManager.instance.UseButton();
         }
 
         await UniTask.CompletedTask;
@@ -60,7 +63,7 @@ public class PartMainGame : PartBase {
     /// </summary>
     /// <returns></returns>
     public override async UniTask Execute() {
-        GameObject playerObj = instance.GetPlayerObject();
+        GameObject playerObj = PlayerManager.instance.GetPlayerObject();
         PlayerMove moveScript = playerObj.GetComponent<PlayerMove>();
         if (moveScript == null || playerObj == null) return;
 
@@ -86,7 +89,8 @@ public class PartMainGame : PartBase {
     public override async UniTask Teardown() {
         await base.Teardown();
         // プレイヤーを削除
-        instance.DestroyPlayer();
+        PlayerManager.instance.DestroyPlayer();
+        ButtonManager.instance.DestroyButton();
         // ステージのPrefabを全部削除
         StageManager.instance.ClearAllSegments();
 

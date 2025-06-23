@@ -1,8 +1,10 @@
 using UnityEngine;
+using UnityEngine.Scripting;
 
 public class PlayerShot : MonoBehaviour {
     // PlayerMoveクラスを参照
     private PlayerMove playerMove;
+
 
     [SerializeField] private Transform leftFirePoint;
     [SerializeField] private Transform rightFirePoint;
@@ -18,13 +20,17 @@ public class PlayerShot : MonoBehaviour {
     private float leftFireTimer = 0f;
     private float rightFireTimer = 0f;
 
+    // 射撃可能フラグ
+    public bool isShot = false;
+
     /// <summary>
     /// 初期化処理
     /// </summary>
     private void Start() {
         playerMove = GetComponent<PlayerMove>();
+        isShot = false;
     }
-    
+
     /// <summary>
     /// 更新処理
     /// </summary>
@@ -32,20 +38,9 @@ public class PlayerShot : MonoBehaviour {
         // プレイヤーが移動開始していなければ撃てない
         if (playerMove == null || !playerMove.GetIsMoving()) return;
 
+        if (isShot) {
+            Fire();
 
-        // 経過時間を足す
-        leftFireTimer += Time.deltaTime;
-        rightFireTimer += Time.deltaTime;
-
-        // 0.3秒ごとに弾を発射 x 2
-        if (Input.GetKey(KeyCode.A) && leftFireTimer >= FIRE_INTERVAL) {
-            FireLeft();
-            leftFireTimer = 0f;
-        }
-
-        if (Input.GetKey(KeyCode.D) && rightFireTimer >= FIRE_INTERVAL) {
-            FireRight();
-            rightFireTimer = 0f;
         }
 
 
@@ -55,14 +50,18 @@ public class PlayerShot : MonoBehaviour {
     /// 左側から発射
     /// </summary>
     public void FireLeft() {
+        // if (leftFireTimer >= FIRE_INTERVAL) {
         FireFromPoint(leftFirePoint);
+        //}
     }
 
     /// <summary>
     /// 右側から発射
     /// </summary>
     public void FireRight() {
+        //  if (rightFireTimer >= FIRE_INTERVAL) {
         FireFromPoint(rightFirePoint);
+        // }
     }
 
     /// <summary>
@@ -94,7 +93,31 @@ public class PlayerShot : MonoBehaviour {
 
 
         // 弾を生成
-        projScript.Initialize(firePoint.position, shotTargetPoint, maxSpreadAngle,offsetDir);
+        projScript.Initialize(firePoint.position, shotTargetPoint, maxSpreadAngle, offsetDir);
 
     }
+
+    /// <summary>
+    /// 発射処理
+    /// </summary>
+    private void Fire() {
+        // 経過時間を足す
+        leftFireTimer += Time.deltaTime;
+        rightFireTimer += Time.deltaTime;
+
+        // 0.3秒ごとに弾を発射 x 2
+        if (leftFireTimer >= FIRE_INTERVAL) {
+            FireLeft();
+            leftFireTimer = 0f;
+        }
+
+        if (rightFireTimer >= FIRE_INTERVAL) {
+            FireRight();
+            rightFireTimer = 0f;
+        }
+
+    }
+
+
+
 }

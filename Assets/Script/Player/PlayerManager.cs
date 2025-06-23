@@ -78,4 +78,6 @@ public class PlayerManager : SystemObject {
     /// </summary>
     /// <returns></returns>
     public GameObject GetPlayerObject() => playerInstance;
+
+
 }

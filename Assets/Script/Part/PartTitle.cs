@@ -15,6 +15,8 @@ public class PartTitle : PartBase {
         await MenuManager.instance.Get<MenuTitle>().Open();
 
 
+
+        // フラグによって遷移かどうか決める
         // メインパートへ遷移
         UniTask task = PartManager.Instance.TransitionPart(eGamePart.MainGame);
         await UniTask.CompletedTask;

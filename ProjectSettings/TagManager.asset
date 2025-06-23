@@ -6,6 +6,7 @@ TagManager:
   tags:
   - HitBox
   - Obstacle
+  - UICanvas
   layers:
   - Default
   - TransparentFX

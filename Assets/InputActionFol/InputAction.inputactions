@@ -1,5 +1,5 @@
 {
-    "name": "ButtonAction",
+    "name": "InputAction",
     "maps": [
         {
             "name": "Player",
@@ -35,6 +35,45 @@
                     "processors": "",
                     "groups": "",
                     "action": "shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Menu",
+            "id": "c8631c64-b182-4669-bff0-2508c12168f1",
+            "actions": [
+                {
+                    "name": "Click",
+                    "type": "Button",
+                    "id": "dbfa718c-02df-4226-a465-b7f0cc1a63ed",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a748116d-f0e5-4d3d-9d38-19fdb7928dd0",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "aee46fb2-7307-492c-b7b7-6313d9b29981",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

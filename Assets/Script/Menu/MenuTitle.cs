@@ -2,16 +2,18 @@ using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MenuTitle : MenuBase {
+    // 画面切り替えの選択
+    private bool isCloseScene = false;
 
-    /// <summary>
-    /// 初期化
-    /// </summary>
-    /// <returns></returns>
+    // <summary>
+    // 初期化
+    // </summary>
+    // <returns></returns>
     public override async UniTask Initialize() {
         await base.Initialize();
-        
         await UniTask.CompletedTask;
     }
 
@@ -23,7 +25,7 @@ public class MenuTitle : MenuBase {
     public override async UniTask Open() {
         await base.Open();
         await FadeManager.instance.FadeIn();
-        // Zキーが押されるまで待つ(フラグ切り替え変更予定)
+        // Zキーが押されるまで待つ
         while (true) {
             // InputSystemに切り替え
             if (Input.GetKeyDown(KeyCode.Z)) break;
@@ -31,16 +33,6 @@ public class MenuTitle : MenuBase {
             await UniTask.Delay(1);
         }
         await FadeManager.instance.FadeOut();
-        await Close();
-    }
-
-
-    /// <summary>
-    /// メニューを閉じる
-    /// </summary>
-    /// <returns></returns>
-    public override async UniTask Close() {
-        
         await Close();
     }
 

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4134559308992849392}
   - component: {fileID: 7081773182497122929}
   - component: {fileID: 8376715389008890654}
+  - component: {fileID: 4126820044836383287}
   m_Layer: 5
   m_Name: TapToStart
   m_TagString: Untagged
@@ -89,6 +90,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ControlPath: <Gamepad>/buttonNorth
+--- !u!114 &4126820044836383287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 619699002377526007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8525a6767757a046bfb59da31253696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tap: {fileID: 3631073906589911078, guid: 858bc86f0e14103448b0091011ecd10e, type: 3}
 --- !u!1 &8028670754448254479
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,6 +220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _menuRoot: {fileID: 8028670754448254479}
+  isCloseScene: 0
 --- !u!1 &8190978015562382421
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,7 +286,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 49109770803ea604e9b8c2e8475f5138, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 03653abfd2c612540ac2d080b470aa70, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

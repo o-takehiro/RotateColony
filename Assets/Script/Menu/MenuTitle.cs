@@ -32,12 +32,12 @@ public class MenuTitle : MenuBase {
 
             await UniTask.Delay(1);
         }
+        await FadeManager.instance.FadeOut();
         await Close();
     }
 
     public override async UniTask Close() {
         await base.Close();
-        await FadeManager.instance.FadeOut();
         isCloseScene = false;
         await UniTask.CompletedTask;
     }

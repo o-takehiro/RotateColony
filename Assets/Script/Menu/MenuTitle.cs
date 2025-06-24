@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class MenuTitle : MenuBase {
     // ‰æ–ÊØ‚è‘Ö‚¦‚Ì‘I‘ğ
-    private bool isCloseScene = false;
+    public bool isCloseScene = false;
 
     // <summary>
     // ‰Šú‰»
@@ -28,12 +28,18 @@ public class MenuTitle : MenuBase {
         // ZƒL[‚ª‰Ÿ‚³‚ê‚é‚Ü‚Å‘Ò‚Â
         while (true) {
             // InputSystem‚ÉØ‚è‘Ö‚¦
-            if (Input.GetKeyDown(KeyCode.Z)) break;
+            if (isCloseScene) break;
 
             await UniTask.Delay(1);
         }
-        await FadeManager.instance.FadeOut();
         await Close();
+    }
+
+    public override async UniTask Close() {
+        await base.Close();
+        await FadeManager.instance.FadeOut();
+        isCloseScene = false;
+        await UniTask.CompletedTask;
     }
 
 }

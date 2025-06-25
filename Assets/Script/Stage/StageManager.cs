@@ -6,10 +6,10 @@ using UnityEngine;
 public class StageManager : SystemObject {
     [SerializeField] private Transform player;                      // プレイヤーのTransform
     [SerializeField] private List<GameObject> stagePrefabs;         // ステージのプレハブ群
-    
-   private float segmentLength = 70f;            // 1ステージPrefabの長さ
-   private int initialSegments = 5;               // 初期生成数
-   private int maxSegments = 5;                   // 保持するステージPrefab最大数
+
+    private const float _SEGMENT_LENGTH = 70f;            // ステージ間の距離(値が大きければ、隙間も大きくなる)
+    private const int _INITIAL_SEGMETNS = 5;            // 初期生成数
+    private const int _MAX_SEGMENTS = 5;                // 保持するステージPrefab最大数
 
     private List<GameObject> activeSegments = new List<GameObject>();
     private float spawnZ = 40;     // 初期生成位置
@@ -18,7 +18,7 @@ public class StageManager : SystemObject {
 
     public override async UniTask Initialize() {
         instance = this;
-        for (int i = 0; i < initialSegments; i++) {
+        for (int i = 0; i < _INITIAL_SEGMETNS; i++) {
             SpawnSegment();
         }
         await UniTask.CompletedTask;
@@ -27,7 +27,7 @@ public class StageManager : SystemObject {
     private void Update() {
         if (player == null) return;
         // プレイヤーが次のステージPrefabに近づいたら新しいステージを生成
-        if (player.position.z > spawnZ - segmentLength * (initialSegments - 1)) {
+        if (player.position.z > spawnZ - _SEGMENT_LENGTH * (_INITIAL_SEGMETNS - 1)) {
             // ステージ生成
             SpawnSegment();
             // ステージ削除
@@ -46,16 +46,16 @@ public class StageManager : SystemObject {
         // Y軸をランダムで決定
         float randamX = Random.Range(-90f, 90f);
         // 設定した回転値と位置にprefabを生成
-        GameObject segment = Instantiate(prefab, new Vector3(0, 0f, spawnZ), Quaternion.Euler(randamX, 90, 90));
+        GameObject segment = Instantiate(prefab, new Vector3(0, 5f, spawnZ), Quaternion.Euler(randamX, 90, 90));
         activeSegments.Add(segment);
-        spawnZ += segmentLength;
+        spawnZ += _SEGMENT_LENGTH;
     }
 
     /// <summary>
     /// 古いステージPrefabを削除し、リストから除外
     /// </summary>
     private void RemoveOldSegment() {
-        if (activeSegments.Count > maxSegments) {
+        if (activeSegments.Count > _MAX_SEGMENTS) {
             GameObject oldSegment = activeSegments[0];
             activeSegments.RemoveAt(0);
             Destroy(oldSegment);

@@ -1,5 +1,5 @@
 {
-    "name": "InputAction",
+    "name": "MyInputAction",
     "maps": [
         {
             "name": "Player",
@@ -20,7 +20,7 @@
                     "name": "",
                     "id": "f99f19b0-2576-47b6-8bec-a5a59efcf009",
                     "path": "<Keyboard>/space",
-                    "interactions": "Hold",
+                    "interactions": "Hold(duration=0.1,pressPoint=0.1)",
                     "processors": "",
                     "groups": "",
                     "action": "shoot",
@@ -31,7 +31,7 @@
                     "name": "",
                     "id": "f1b12df7-c4c2-410e-b3a9-8ced100f8762",
                     "path": "<Gamepad>/buttonEast",
-                    "interactions": "Hold",
+                    "interactions": "Hold(duration=0.1,pressPoint=0.1)",
                     "processors": "",
                     "groups": "",
                     "action": "shoot",

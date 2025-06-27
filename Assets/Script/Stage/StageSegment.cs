@@ -1,13 +1,22 @@
+using UnityEditor;
 using UnityEngine;
 
 public class StageSegment : MonoBehaviour {
     private bool shouldRotate = false;
-    private bool stopMove = false;
 
 
+    // プレイヤーの移動可否判定用に受け取る
+    [SerializeField]
+    private PlayerMove _playerMove = null;
 
     void Start() {
         Input.gyro.enabled = true;
+        // 動的にPlayerMoveを探す(例 : タグがPlayerのオブジェクトにアタッチされていたら)
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null) {
+            // PlayerMoveを受け取る
+            _playerMove = playerObj.GetComponent<PlayerMove>();
+        }
     }
 
     public void EnableRotation(bool _enable) {
@@ -33,8 +42,8 @@ public class StageSegment : MonoBehaviour {
     /// PCの左右キーによる回転入力
     /// </summary>
     private float GetPCInput() {
-        if (Input.GetKey(KeyCode.LeftArrow)) return 1f;
-        if (Input.GetKey(KeyCode.RightArrow)) return -1f;
+        if (Input.GetKey(KeyCode.LeftArrow)) return -1f;
+        if (Input.GetKey(KeyCode.RightArrow)) return 1f;
         return 0f;
     }
 
@@ -56,10 +65,4 @@ public class StageSegment : MonoBehaviour {
         return Mathf.Clamp(roll / 20f, -1f, 1f);
     }
 
-    /// <summary>
-    /// 衝突判定
-    /// </summary>
-    public void StopStageMoving() {
-        stopMove = true;
-    }
 }

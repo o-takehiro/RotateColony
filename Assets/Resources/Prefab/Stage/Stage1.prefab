@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbe3010248366e445b2566a63663eda2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerMove: {fileID: 7463830268062016002, guid: d8bb498bf53902042897e1564ca48212, type: 3}
 --- !u!1001 &1092110756560460878
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -372,7 +373,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a34822095b97d4f4bb9570f57a22c037, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  durability: 60
 --- !u!136 &2718659569303482342
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -11,7 +11,7 @@ public class PlayerMove : PlayerBase {
     private bool isStopped = false;
 
     // ˆÚ“®ŠJŽn”»’f—p
-    private bool isMoving = false;
+    public bool isMoving = false;
 
 
     /// <summary>

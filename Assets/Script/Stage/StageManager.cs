@@ -14,10 +14,16 @@ public class StageManager : SystemObject {
     private List<GameObject> activeSegments = new List<GameObject>();
     private float spawnZ = 40;     // 初期生成位置
 
+    // プレイヤーが通過したステージ数
+    private int passedStageCount = 0;
+    // 外部から参照する用のプロパティ
+    public int PassedStageCount => passedStageCount;
+
     public static StageManager instance { get; private set; } = null;
 
     public override async UniTask Initialize() {
         instance = this;
+        passedStageCount = 0;
         for (int i = 0; i < _INITIAL_SEGMETNS; i++) {
             SpawnSegment();
         }
@@ -32,8 +38,9 @@ public class StageManager : SystemObject {
             SpawnSegment();
             // ステージ削除
             RemoveOldSegment();
+            passedStageCount++;
+            Debug.Log("抜けたステージ数" + passedStageCount);
         }
-
         UpdateActiveSegment();
     }
 
@@ -107,6 +114,8 @@ public class StageManager : SystemObject {
         }
         activeSegments.Clear();
         spawnZ = 50f; // 初期位置にリセット
+        passedStageCount = 0;
+
     }
 
 }

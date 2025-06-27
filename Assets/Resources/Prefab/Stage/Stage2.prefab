@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2114183397928184883
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8547104190040525604}
+  m_Layer: 0
+  m_Name: Uipos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8547104190040525604
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2114183397928184883}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: -0.691, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5171493700957738757}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6652525120943421336
 GameObject:
   m_ObjectHideFlags: 0
@@ -47,6 +78,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerMove: {fileID: 7463830268062016002, guid: d8bb498bf53902042897e1564ca48212, type: 3}
+--- !u!1 &6989269721824187837
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4513718164634310822}
+  m_Layer: 0
+  m_Name: UIpos2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4513718164634310822
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6989269721824187837}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.263, y: -0.766, z: 0.157}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1712637556357119287}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &563414172629390171
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -184,7 +246,13 @@ PrefabInstance:
     - {fileID: 965699762297361166, guid: d013c4364aab6b1439a0365bba950554, type: 3}
     - {fileID: 5464045000513549474, guid: d013c4364aab6b1439a0365bba950554, type: 3}
     - {fileID: 8105143717509115292, guid: d013c4364aab6b1439a0365bba950554, type: 3}
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1158873147682221676, guid: d013c4364aab6b1439a0365bba950554, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4513718164634310822}
+    - targetCorrespondingSourceObject: {fileID: 4617720325059069022, guid: d013c4364aab6b1439a0365bba950554, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8547104190040525604}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3829145124397377092, guid: d013c4364aab6b1439a0365bba950554, type: 3}
       insertIndex: -1
@@ -199,6 +267,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 5512148409390746676}
   m_SourcePrefab: {fileID: 100100000, guid: d013c4364aab6b1439a0365bba950554, type: 3}
+--- !u!4 &1712637556357119287 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1158873147682221676, guid: d013c4364aab6b1439a0365bba950554, type: 3}
+  m_PrefabInstance: {fileID: 563414172629390171}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1942070603519802377 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2099302880287158098, guid: d013c4364aab6b1439a0365bba950554, type: 3}
@@ -221,6 +294,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a34822095b97d4f4bb9570f57a22c037, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageUIPrefab: {fileID: 7615110763138526665, guid: 76d0b340404b536499d70ee9ff4560a9, type: 3}
+  _uipos: {fileID: 4513718164634310822}
 --- !u!135 &8644730530456089583
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -242,6 +317,11 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.64008623
   m_Center: {x: -0.000000014901161, y: 0.00000035762787, z: -0.000000029802322}
+--- !u!4 &5171493700957738757 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4617720325059069022, guid: d013c4364aab6b1439a0365bba950554, type: 3}
+  m_PrefabInstance: {fileID: 563414172629390171}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8037009012666810433 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7518925780452152090, guid: d013c4364aab6b1439a0365bba950554, type: 3}
@@ -259,6 +339,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a34822095b97d4f4bb9570f57a22c037, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageUIPrefab: {fileID: 7615110763138526665, guid: 76d0b340404b536499d70ee9ff4560a9, type: 3}
+  _uipos: {fileID: 8547104190040525604}
 --- !u!135 &5512148409390746676
 SphereCollider:
   m_ObjectHideFlags: 0

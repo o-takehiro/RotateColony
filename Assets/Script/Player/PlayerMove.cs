@@ -13,12 +13,14 @@ public class PlayerMove : PlayerBase {
 
     // 加速検知用
     public bool boostFlag = false;
-
     // 衝突検知用
     private bool isStopped = false;
-
     // 移動開始判断用
     public bool isMoving = false;
+
+    // 時間計測用
+    public float gameClearTime = 0f;
+    private bool _isGameClear = false;
 
     private void Start() {
         // 現在のspeedに通常の移動速度を入れる
@@ -33,6 +35,10 @@ public class PlayerMove : PlayerBase {
         if (!isStopped && isMoving) {
             HandleSpeed();
             Move();
+            gameClearTime += Time.deltaTime;
+            if (gameClearTime < 0f) {
+                _isGameClear = true;
+            }
         }
     }
 
@@ -77,7 +83,7 @@ public class PlayerMove : PlayerBase {
     }
 
     /// <summary>
-    ///  フラグリセット
+    /// フラグリセット
     /// </summary>
     public void StopedReset() {
         isStopped = false;
@@ -98,6 +104,14 @@ public class PlayerMove : PlayerBase {
     /// <returns></returns>
     public bool GetIsMoving() {
         return isMoving;
+    }
+
+    /// <summary>
+    /// クリアフラグを渡す用
+    /// </summary>
+    /// <returns></returns>
+    public bool GetIsGameClear() {
+        return _isGameClear;
     }
 
 }

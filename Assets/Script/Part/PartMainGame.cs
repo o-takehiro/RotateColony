@@ -52,7 +52,7 @@ public class PartMainGame : PartBase {
         if (moveScript != null) {
             moveScript.StopedReset();
             moveScript.SetStartMoving(true);
-           ButtonManager.instance.UseButton();
+            ButtonManager.instance.UseAllButtons();
         }
 
         await UniTask.CompletedTask;
@@ -90,7 +90,7 @@ public class PartMainGame : PartBase {
         await base.Teardown();
         // プレイヤーを削除
         PlayerManager.instance.DestroyPlayer();
-        ButtonManager.instance.DestroyButton();
+        ButtonManager.instance.DestroyAllButtons();
         // ステージのPrefabを全部削除
         StageManager.instance.ClearAllSegments();
 

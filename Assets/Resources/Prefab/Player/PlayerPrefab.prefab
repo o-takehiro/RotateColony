@@ -273,6 +273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41886a68c0575b04f89f71e732bd04b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMoving: 0
 --- !u!114 &2177471185071866530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,8 +332,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2.87
-  m_Height: 6
+  m_Radius: 1.11
+  m_Height: 2.32
   m_Direction: 1
   m_Center: {x: 0, y: 6.9, z: 0}
 --- !u!114 &5550922280544127507
@@ -354,6 +355,7 @@ MonoBehaviour:
   maxSpreadAngle: 10
   damage: 10
   flightDuration: 1
+  isShot: 0
 --- !u!1 &7566512618388884631
 GameObject:
   m_ObjectHideFlags: 0

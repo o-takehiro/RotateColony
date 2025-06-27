@@ -8,17 +8,18 @@ public class ButtonManager : SystemObject {
 
     public static ButtonManager instance { get; private set; } = null;
 
-    // ボタンの親オブジェクト
+
+    // ボタンのプレハブリスト
     [SerializeField]
-    private GameObject buttonPrefab;
-    private GameObject buttonInstance;
+    private List<GameObject> buttonPrefabs = new List<GameObject>();
 
-
+    // 生成したボタンのインスタンス管理
+    private List<GameObject> buttonInstances = new List<GameObject>();
     /// <summary>
     /// 初期化
     /// </summary>
     private void Awake() {
-        if (instance != null && buttonInstance != this) {
+        if (instance != null && instance != this) {
             Destroy(this.gameObject);
             return;
         }
@@ -34,23 +35,42 @@ public class ButtonManager : SystemObject {
     /// <summary>
     /// ボタンの生成
     /// </summary>
-    public void UseButton() {
-        if (buttonInstance == null && buttonPrefab != null) {
-            // 生成
-            buttonInstance = Instantiate(buttonPrefab);
+    /// <param name="index">buttonPrefabs のインデックス</param>
+    public void UseButton(int index) {
+        if (index < 0 || index >= buttonPrefabs.Count) return;
 
+        var prefab = buttonPrefabs[index];
+        if (prefab != null) {
+            var instance = Instantiate(prefab);
+            buttonInstances.Add(instance);
         }
     }
 
 
     /// <summary>
-    /// ボタンを削除
+    /// すべてのボタンを削除
     /// </summary>
-    public void DestroyButton() {
-        if (buttonInstance != null) {
-            Destroy(buttonInstance);
-            buttonInstance = null;
+    public void DestroyAllButtons() {
+        foreach (var button in buttonInstances) {
+            if (button != null) {
+                Destroy(button);
+            }
+        }
+        buttonInstances.Clear();
+    }
+
+
+    /// <summary>
+    /// 登録済みのすべてのボタンを一度に生成する
+    /// </summary>
+    public void UseAllButtons() {
+        foreach (var prefab in buttonPrefabs) {
+            if (prefab != null) {
+                var instance = Instantiate(prefab);
+                buttonInstances.Add(instance);
+            }
         }
     }
+
 
 }

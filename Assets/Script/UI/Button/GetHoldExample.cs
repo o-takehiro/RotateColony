@@ -13,12 +13,12 @@ public class GetHoldExample : MonoBehaviour {
     private InputActionReference _hold;
     [SerializeField]
     private PlayerShot _playerShoot;
-    private Image _image = null;
+    // private Image _image = null;
 
     private void Start() {
         // 動的にPlayerShotを探す（例：タグが"Player"のオブジェクトにアタッチされているなら）
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        _image = gameObject.GetComponent<Image>();
+        // _image = gameObject.GetComponent<Image>();
         if (playerObj != null) {
             _playerShoot = playerObj.GetComponent<PlayerShot>();
         }
@@ -54,7 +54,7 @@ public class GetHoldExample : MonoBehaviour {
                 // ボタンが押された時の処理
                 // PlayerShotの射撃可能フラグをtrueにする
                 Debug.Log("isShot_true");
-                _image.color = Color.gray;
+                // _image.color = Color.gray;
                 _playerShoot.isShot = true;
 
                 break;
@@ -63,7 +63,7 @@ public class GetHoldExample : MonoBehaviour {
                 // ボタンが離された時の処理
                 // PlayerShotの射撃可能フラグをfalseにする
                 Debug.Log("isShot_false");
-                _image.color = Color.white;
+                // _image.color = Color.white;
                 _playerShoot.isShot = false;
 
                 break;

@@ -14,33 +14,10 @@ public class PartEnding : PartBase {
     public override async UniTask SetUp() {
         await base.SetUp();
 
-        // フェードイン
-        await FadeManager.instance.FadeIn();
-        // 通過したステージ数を見る
-        int stageCount = StageManager.instance.PassedStageCount;
-        // プレイヤー取得
-        GameObject playerObj = PlayerManager.instance.GetPlayerObject();
-        PlayerMove moveScript = playerObj.GetComponent<PlayerMove>();
-
-        if (moveScript.GetIsGameClear()) {
-            // クリア
-
-
-
-        }
-        else {
-            // ゲームオーバー
-
-
-
-        }
-
-
-
-
     }
 
     public override async UniTask Execute() {
+        // 今は何もせず最速でTitleに遷移する
         UniTask task = PartManager.Instance.TransitionPart(eGamePart.Title);
         await UniTask.CompletedTask;
     }

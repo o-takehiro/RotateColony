@@ -14,9 +14,10 @@ public enum eGamePart {
 
 }
 
-
-public enum eGameEndReason {
-    Invalid = -1,
-    Dead,
+/// <summary>
+/// ƒQ[ƒ€‚ÌƒNƒŠƒA
+/// </summary>
+public enum GameResultType {
     Clear,
+    GameOver
 }

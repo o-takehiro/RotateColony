@@ -56,14 +56,22 @@ public class PartMainGame : PartBase {
         while (true) {
             await UniTask.Yield();
 
+            // クリア時の遷移処理
             if (goalReached) {
+                GameResultData.ResultType = GameResultType.Clear;
+                GameResultData.StagePassedCount = StageManager.instance.PassedStageCount;
+
                 await UniTask.Delay(2000);
                 await FadeManager.instance.FadeOut();
                 await PartManager.Instance.TransitionPart(eGamePart.Ending);
                 break;
-            }
 
+            }
+            // ゲームオーバー時の遷移処理
             if (moveScript.GetIsStopped()) {
+                GameResultData.ResultType = GameResultType.GameOver;
+                GameResultData.StagePassedCount = StageManager.instance.PassedStageCount;
+
                 await UniTask.Delay(3000);
                 await FadeManager.instance.FadeOut();
                 await PartManager.Instance.TransitionPart(eGamePart.Ending);

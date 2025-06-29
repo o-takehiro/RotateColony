@@ -57,6 +57,9 @@ public class PartMainGame : PartBase {
             await UniTask.Yield();
 
             if (goalReached) {
+                GameResultData.ResultType = GameResultType.Clear;
+                GameResultData.StagePassedCount = StageManager.instance.PassedStageCount;
+
                 await UniTask.Delay(2000);
                 await FadeManager.instance.FadeOut();
                 await PartManager.Instance.TransitionPart(eGamePart.Ending);
@@ -64,6 +67,9 @@ public class PartMainGame : PartBase {
             }
 
             if (moveScript.GetIsStopped()) {
+                GameResultData.ResultType = GameResultType.GameOver;
+                GameResultData.StagePassedCount = StageManager.instance.PassedStageCount;
+
                 await UniTask.Delay(3000);
                 await FadeManager.instance.FadeOut();
                 await PartManager.Instance.TransitionPart(eGamePart.Ending);

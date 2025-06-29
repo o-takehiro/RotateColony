@@ -20,3 +20,9 @@ public enum eGameEndReason {
     Dead,
     Clear,
 }
+
+
+public enum GameResultType {
+    Clear,
+    GameOver
+}

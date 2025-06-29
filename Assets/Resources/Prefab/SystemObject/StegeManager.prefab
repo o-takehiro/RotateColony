@@ -51,6 +51,4 @@ MonoBehaviour:
   - {fileID: 1179288937666087229, guid: 337e3fb3fa0d243408d4d337e743b4b5, type: 3}
   - {fileID: 9147466284315099572, guid: 97edffd7df649c24cb1cf723c98a5ff8, type: 3}
   - {fileID: 7169244261159566147, guid: daf241dbea3747f4cb2bbb5521fbcbf8, type: 3}
-  segmentLength: 50
-  initialSegments: 5
-  maxSegments: 7
+  goalPrefab: {fileID: 7169244261159566147, guid: c1126430d9d37524d9b47b8abb18aaea, type: 3}

@@ -6,13 +6,16 @@ using UnityEngine;
 public class StageManager : SystemObject {
     [SerializeField] private Transform player;                      // プレイヤーのTransform
     [SerializeField] private List<GameObject> stagePrefabs;         // ステージのプレハブ群
+    [SerializeField] private GameObject goalPrefab;                 // 20個目に出すゴール用プレハブ
 
     private const float _SEGMENT_LENGTH = 70f;            // ステージ間の距離(値が大きければ、隙間も大きくなる)
     private const int _INITIAL_SEGMETNS = 5;            // 初期生成数
-    private const int _MAX_SEGMENTS = 5;                // 保持するステージPrefab最大数
+    private const int _MAX_SEGMENTS = 20;                // 保持するステージPrefab最大数
 
     private List<GameObject> activeSegments = new List<GameObject>();
     private float spawnZ = 40;     // 初期生成位置
+    // ステージの生成上限設定
+    private int totalGeneratedCount = 0;
 
     // プレイヤーが通過したステージ数
     private int passedStageCount = 0;
@@ -49,13 +52,24 @@ public class StageManager : SystemObject {
     /// 新しいステージPrefabを生成し、リストに追加
     /// </summary>
     private void SpawnSegment() {
-        GameObject prefab = stagePrefabs[Random.Range(0, stagePrefabs.Count)];
-        // Y軸をランダムで決定
+        if (totalGeneratedCount >= _MAX_SEGMENTS) return;
+
+        GameObject prefab;
+
+        if (totalGeneratedCount == _MAX_SEGMENTS - 1) {
+            // 最後の1個（20個目）はゴールPrefab
+            prefab = goalPrefab;
+        }
+        else {
+            prefab = stagePrefabs[Random.Range(0, stagePrefabs.Count)];
+        }
+
         float randamX = Random.Range(-90f, 90f);
-        // 設定した回転値と位置にprefabを生成
         GameObject segment = Instantiate(prefab, new Vector3(0, 5f, spawnZ), Quaternion.Euler(randamX, 90, 90));
         activeSegments.Add(segment);
         spawnZ += _SEGMENT_LENGTH;
+
+        totalGeneratedCount++;
     }
 
     /// <summary>
@@ -115,7 +129,7 @@ public class StageManager : SystemObject {
         activeSegments.Clear();
         spawnZ = 50f; // 初期位置にリセット
         passedStageCount = 0;
-
+        totalGeneratedCount = 0; // リセット追加
     }
 
 }

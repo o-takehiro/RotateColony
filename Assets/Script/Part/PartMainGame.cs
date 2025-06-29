@@ -41,7 +41,7 @@ public class PartMainGame : PartBase {
             StageManager.instance.SetPlayer(playerF);
         }
 
-        UniTask task = StageManager.instance.Initialize();
+        // UniTask task = StageManager.instance.Initialize();
 
         // 3秒クールタイムを待つ
         await UniTask.Delay(6000);  // ミリ秒で指定

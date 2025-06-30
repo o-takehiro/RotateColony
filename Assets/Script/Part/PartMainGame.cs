@@ -9,10 +9,18 @@ public class PartMainGame : PartBase {
         goalReached = true;
     }
 
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask Initialize() {
         await base.Initialize();
     }
 
+    /// <summary>
+    /// パートの準備
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask SetUp() {
         await base.SetUp();
 
@@ -38,7 +46,7 @@ public class PartMainGame : PartBase {
         // 安定するまで1秒待つ
         await UniTask.Delay(1000);
 
-        // ステージセグメントのキャリブレーション
+        // センサーの調整
         foreach (var segment in StageManager.instance.AllSegments) {
             segment.CalibrateGyro();
         }
@@ -55,6 +63,10 @@ public class PartMainGame : PartBase {
         await UniTask.CompletedTask;
     }
 
+    /// <summary>
+    /// 実行処理
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask Execute() {
         GameObject playerObj = PlayerManager.instance.GetPlayerObject();
         PlayerMove moveScript = playerObj.GetComponent<PlayerMove>();
@@ -85,6 +97,10 @@ public class PartMainGame : PartBase {
         }
     }
 
+    /// <summary>
+    /// パートの片付け
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask Teardown() {
         await base.Teardown();
 
@@ -93,6 +109,7 @@ public class PartMainGame : PartBase {
             StageManager.instance.OnGoalReached -= OnGoalReachedHandler;
         }
 
+        // それぞれのオブジェクトを破棄する
         PlayerManager.instance.DestroyPlayer();
         ButtonManager.instance.DestroyAllButtons();
         StageManager.instance.ClearAllSegments();

@@ -43,6 +43,9 @@ public class StageManager : SystemObject {
         UpdateActiveSegment();
     }
 
+    /// <summary>
+    /// 通過検知
+    /// </summary>
     private void CheckPassedSegments() {
         foreach (var segment in activeSegments) {
             var script = segment.GetComponent<StageSegment>();
@@ -51,11 +54,11 @@ public class StageManager : SystemObject {
 
             script.hasPassed = true;
             passedStageCount++;
-            Debug.Log("プレイヤーが通過したステージ数: " + passedStageCount);
+            Debug.Log("通過したステージ数: " + passedStageCount);
 
             // ゴール判定
             if (segment.CompareTag("Goal")) {
-                Debug.Log("ゴールに到達！");
+                Debug.Log("ゴールに到達");
                 OnGoalReached?.Invoke();
             }
         }

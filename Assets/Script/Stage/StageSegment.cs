@@ -9,6 +9,17 @@ public class StageSegment : MonoBehaviour {
     // 通過判定フラグ（StageManagerが使う）
     public bool hasPassed = false;
 
+    private Quaternion initialGyroAttitude;
+
+    /// <summary>
+    /// 横向き補正
+    /// </summary>
+    public void CalibrateGyro() {
+        // 横向き基準の補正
+        Quaternion referenceRotation = Quaternion.Euler(0, 0, 90);
+        initialGyroAttitude = referenceRotation * Input.gyro.attitude;
+    }
+
     void Start() {
         Input.gyro.enabled = true;
 
@@ -16,6 +27,9 @@ public class StageSegment : MonoBehaviour {
         if (playerObj != null) {
             _playerMove = playerObj.GetComponent<PlayerMove>();
         }
+
+        // 横向きの補正を掛ける
+        CalibrateGyro();
     }
 
     /// <summary>
@@ -32,11 +46,21 @@ public class StageSegment : MonoBehaviour {
         float rotationInput = GetPCInput() + GetGyroInput();
         float rota = rotationSpeed * rotationInput * Time.deltaTime;
 
-        transform.Rotate(0f, -rota, 0f);
+        // 回転を行う
+        transform.Rotate(0f, rota, 0f);
+
+        // 角度を見ておくb
+        float currentYAngle = transform.eulerAngles.y;
+        if (currentYAngle > 180f) currentYAngle -= 360f; // -180～+180 に正規化
+
+        if (Mathf.Abs(currentYAngle) < 5f) {
+            // 角度0°に近づいたら回転を止める
+            shouldRotate = false;
+        }
     }
 
     /// <summary>
-    /// PCの矢印キーによる回転入力
+    /// PC矢印キー操作
     /// </summary>
     private float GetPCInput() {
         if (Input.GetKey(KeyCode.LeftArrow)) return -1f;
@@ -45,11 +69,17 @@ public class StageSegment : MonoBehaviour {
     }
 
     /// <summary>
-    /// スマホの傾き（ジャイロ）による回転入力
+    /// ジャイロ入力
     /// </summary>
     private float GetGyroInput() {
-        Quaternion att = Input.gyro.attitude;
-        Quaternion corrected = new Quaternion(att.x, att.y, -att.z, -att.w);
+        // 横向きの基準
+        Quaternion referenceRotation = Quaternion.Euler(0, 0, 90);
+        Quaternion current = referenceRotation * Input.gyro.attitude;
+
+        // 初期姿勢との差
+        Quaternion corrected = Quaternion.Inverse(initialGyroAttitude) * current;
+
+        // オイラーに変換
         Vector3 euler = corrected.eulerAngles;
 
         float roll = euler.z;

@@ -131,4 +131,18 @@ public class StageManager : SystemObject {
         passedStageCount = 0;
         totalGeneratedCount = 0;
     }
+
+    public List<StageSegment> AllSegments {
+        get {
+            List<StageSegment> segments = new List<StageSegment>();
+            foreach (var obj in activeSegments) {
+                var script = obj.GetComponent<StageSegment>();
+                if (script != null) {
+                    segments.Add(script);
+                }
+            }
+            return segments;
+        }
+    }
+
 }

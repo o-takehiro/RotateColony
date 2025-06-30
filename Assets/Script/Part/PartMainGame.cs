@@ -22,7 +22,6 @@ public class PartMainGame : PartBase {
 
         GameObject playerObj = PlayerManager.instance.GetPlayerObject();
 
-        // アニメーション再生
         var animController = playerObj.GetComponent<PlayerAnimationController>();
         if (animController != null) {
             animController.PlayTransformAnimation();
@@ -33,8 +32,16 @@ public class PartMainGame : PartBase {
             StageManager.instance.SetPlayer(playerF);
         }
 
-        // ゴールイベント登録
+        // ゴールイベント
         StageManager.instance.OnGoalReached += OnGoalReachedHandler;
+
+        // 安定するまで1秒待つ
+        await UniTask.Delay(1000);
+
+        // ステージセグメントのキャリブレーション
+        foreach (var segment in StageManager.instance.AllSegments) {
+            segment.CalibrateGyro();
+        }
 
         await UniTask.Delay(6000);  // クールタイム
 

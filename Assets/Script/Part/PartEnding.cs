@@ -13,10 +13,14 @@ public class PartEnding : PartBase {
         // ゲーム結果に応じたログ出力
         switch (GameResultData.ResultType) {
             case GameResultType.Clear:
-                Debug.Log("ゲームクリア！");
+                Debug.Log("ゲームクリア");
+
+
                 break;
             case GameResultType.GameOver:
-                Debug.Log("ゲームオーバー...");
+                Debug.Log("ゲームオーバー");
+
+
                 break;
         }
 

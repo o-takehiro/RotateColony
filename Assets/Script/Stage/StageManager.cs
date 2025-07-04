@@ -9,7 +9,7 @@ public class StageManager : SystemObject {
 
     private const float _SEGMENT_LENGTH = 70f;
     private const int _INITIAL_SEGMETNS = 5;
-    private const int _MAX_SEGMENTS = 20;
+    private const int _MAX_SEGMENTS = 10;
 
     private List<GameObject> activeSegments = new List<GameObject>();
     private float spawnZ = 40f;

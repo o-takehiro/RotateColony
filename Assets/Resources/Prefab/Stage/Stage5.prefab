@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerMove: {fileID: 7463830268062016002, guid: d8bb498bf53902042897e1564ca48212, type: 3}
+  hasPassed: 0
 --- !u!1001 &23450663999858538
 PrefabInstance:
   m_ObjectHideFlags: 0

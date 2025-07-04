@@ -5,6 +5,7 @@ using System.IO.IsolatedStorage;
 using UnityEngine;
 
 public class PlayerMove : PlayerBase {
+
     private float _playerSpeed = 7f;                 // プレイヤーの通常の速度
     private const float _BOOST_MAX_SPEED = 15f;      // プレイヤーの最大加速時の速度
     private const float _BOOST_ACCELERATIUN = 15f;   // プレイヤーの加速率
@@ -21,10 +22,15 @@ public class PlayerMove : PlayerBase {
     // 時間計測用
     public float gameClearTime = 0f;
     private bool _isGameClear = false;
+    
+    // エフェクトをGameObjectに格納するよう
+    private GameObject _boostEffect = null;
 
     private void Start() {
         // 現在のspeedに通常の移動速度を入れる
         _currentSpeed = _playerSpeed;
+
+
     }
 
     /// <summary>
@@ -59,11 +65,25 @@ public class PlayerMove : PlayerBase {
             // ブースト中は加速
             _currentSpeed += _BOOST_ACCELERATIUN * Time.deltaTime;
             _currentSpeed = Mathf.Min(_currentSpeed, _BOOST_MAX_SPEED); // 上限を超えない
+            if (_boostEffect == null) {
+                // boostがONになった瞬間だけ
+                _boostEffect = EffectManager.Instance.Play("boost", transform.position, false);
+            }
+            else {
+                // エフェクトをプレイヤーに追従させる
+                _boostEffect.transform.position = transform.position;
+            }
         }
         else {
             // ブーストOFFなら通常速度に戻す
             _currentSpeed = Mathf.MoveTowards(_currentSpeed, _playerSpeed, _BOOST_ACCELERATIUN * Time.deltaTime);
+            if (_boostEffect != null) {
+                // boostがOFFになった瞬間に止める
+                EffectManager.Instance.Stop("boost", _boostEffect);
+                _boostEffect = null;
+            }
         }
+
     }
 
 

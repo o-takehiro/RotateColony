@@ -275,9 +275,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boostFlag: 0
   isMoving: 0
-  _LeftBoostPos: {fileID: 6991194534565244345}
-  _RigthBoostPos: {fileID: 3642050176866484283}
-  efffectPrefab: {fileID: 8400424712307853490, guid: 366377810aaf4fc4ab2be725a54c5712, type: 3}
+  gameClearTime: 0
+  effectPrefab: {fileID: 8101364517496853386, guid: c2281c6ba94fcab4c847a83119400ad9, type: 3}
 --- !u!114 &2177471185071866530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -538,15 +537,5 @@ MonoBehaviour:
 --- !u!4 &584716098403587469 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2ba1c046940bc1943b61bf7acc9f716e, type: 3}
-  m_PrefabInstance: {fileID: 1123627546843361894}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &3642050176866484283 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -4819761884922662307, guid: 2ba1c046940bc1943b61bf7acc9f716e, type: 3}
-  m_PrefabInstance: {fileID: 1123627546843361894}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &6991194534565244345 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -1255841086227030049, guid: 2ba1c046940bc1943b61bf7acc9f716e, type: 3}
   m_PrefabInstance: {fileID: 1123627546843361894}
   m_PrefabAsset: {fileID: 0}

@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour {
@@ -13,45 +14,39 @@ public class Projectile : MonoBehaviour {
     private float individualFlightDuration;
 
     // 軌道のふくらみ・加速風の変形の量
-    private const float midOffsetAmount = 8f;           // 中間点
-    private const float accelerationPullAmount = 9f;    // X軸
-    private const float verticalCurveAmount = 9f;       // Y軸
-
-    // エフェクト再生用
-    public GameObject effectPrefab;
+    private const float _MID_OFFSET_AMOUNT = 8f;           // 中間点
+    private const float _ACCELERATION_PULLAMOUNT = 9f;     // X軸
+    private const float _VERTICAL_CURVE_AMOUNT = 9f;       // Y軸
 
     public void Initialize(Vector3 _start, Transform _targetTransform, float _spreadAngle, Vector3 _sideOffsetDirection) {
         startPos = _start;
 
-        // 着弾点をランダムで少しずらす（X, Y方向）
+        // 着弾点をランダムで少しずらす
         Vector3 baseTargetPos = _targetTransform.position;
         float xOffset = Random.Range(-3.5f, 3.5f);
         float yOffset = Random.Range(-3.0f, 3.0f);
         targetPos = baseTargetPos + new Vector3(xOffset, yOffset, 0f);
 
-        // 中間点（軌道のふくらみ）
+        // 中間点
         Vector3 center = Vector3.Lerp(startPos, targetPos, 0.5f);
         Vector3 offsetDir = _sideOffsetDirection.normalized;
 
-        midPos = center + offsetDir * midOffsetAmount;
+        midPos = center + offsetDir * _MID_OFFSET_AMOUNT;
 
-        // 前方方向へ引っ張る（加速風）
+        // 前方方向へ引っ張る
         Vector3 accelDir = (targetPos - startPos).normalized;
-        midPos += accelDir * accelerationPullAmount;
+        midPos += accelDir * _ACCELERATION_PULLAMOUNT;
 
-        // Y軸方向にもオフセット（上下にふくらむ軌道）
-        midPos += Vector3.up * Random.Range(-verticalCurveAmount, verticalCurveAmount);
+        // Y軸方向にふくらむ
+        midPos += Vector3.up * Random.Range(-_VERTICAL_CURVE_AMOUNT, _VERTICAL_CURVE_AMOUNT);
 
-        // ランダム飛行時間
+        // 飛行時間
         individualFlightDuration = Random.Range(0.6f, 1.5f);
 
         elapsedTime = 0f;
         initialized = true;
     }
 
-    /// <summary>
-    /// 更新処理
-    /// </summary>
     private void Update() {
         if (!initialized) return;
 
@@ -72,7 +67,6 @@ public class Projectile : MonoBehaviour {
         Vector3 tangent = 2 * (1 - t) * (midPos - startPos) + 2 * t * (targetPos - midPos);
         transform.forward = tangent.normalized;
 
-        // 不要になったら削除
         if (t >= 1f) {
             Destroy(gameObject);
         }
@@ -81,15 +75,18 @@ public class Projectile : MonoBehaviour {
     /// <summary>
     /// 衝突判定
     /// </summary>
-    /// <param name="other"></param>
-    private void OnTriggerEnter(Collider other) {
+    private async void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Obstacle")) {
             var destructible = other.GetComponent<Destructible>();
-            if (destructible != null || effectPrefab != null) {
-                Instantiate(effectPrefab, transform.position, Quaternion.identity);
+            if (destructible != null) {
+                EffectManager.Instance.Play("ex", transform.position);
                 destructible.TakeDamage(damage);
             }
-            Destroy(gameObject);
+
+            // 1フレームだけ確実に待つ
+            await UniTask.Yield();
+            gameObject.SetActive(false);
+            // Destroy(gameObject);
         }
     }
 }

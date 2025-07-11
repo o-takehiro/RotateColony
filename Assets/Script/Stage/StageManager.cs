@@ -58,7 +58,7 @@ public class StageManager : SystemObject {
 
             // ゴール判定
             if (segment.CompareTag("Goal")) {
-                Debug.Log("ゴールに到達");
+                Debug.Log("ゴールに到達（CheckPassedSegmentsから）");
                 OnGoalReached?.Invoke();
             }
         }

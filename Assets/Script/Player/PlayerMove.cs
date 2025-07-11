@@ -9,20 +9,19 @@ public class PlayerMove : PlayerBase {
     private float _playerSpeed = 7f;                 // プレイヤーの通常の速度
     private const float _BOOST_MAX_SPEED = 15f;      // プレイヤーの最大加速時の速度
     private const float _BOOST_ACCELERATIUN = 15f;   // プレイヤーの加速率
-
     private float _currentSpeed;                     // プレイヤーの現在のスピード
 
     // 加速検知用
     public bool boostFlag = false;
     // 衝突検知用
-    private bool isStopped = false;
+    private bool _isStopped = false;
     // 移動開始判断用
     public bool isMoving = false;
 
     // 時間計測用
     public float gameClearTime = 0f;
     private bool _isGameClear = false;
-    
+
     // エフェクトをGameObjectに格納するよう
     private GameObject _boostEffect = null;
 
@@ -38,7 +37,7 @@ public class PlayerMove : PlayerBase {
     /// </summary>
     private void Update() {
         // 衝突してないときかつ、移動開始が許可されたとき
-        if (!isStopped && isMoving) {
+        if (!_isStopped && isMoving) {
             HandleSpeed();
             Move();
             gameClearTime += Time.deltaTime;
@@ -68,6 +67,7 @@ public class PlayerMove : PlayerBase {
             if (_boostEffect == null) {
                 // boostがONになった瞬間だけ
                 _boostEffect = EffectManager.Instance.Play("boost", transform.position, false);
+                // 壁破壊用のコライダーをONにする
             }
             else {
                 // エフェクトをプレイヤーに追従させる
@@ -77,6 +77,7 @@ public class PlayerMove : PlayerBase {
         else {
             // ブーストOFFなら通常速度に戻す
             _currentSpeed = Mathf.MoveTowards(_currentSpeed, _playerSpeed, _BOOST_ACCELERATIUN * Time.deltaTime);
+
             if (_boostEffect != null) {
                 // boostがOFFになった瞬間に止める
                 EffectManager.Instance.Stop("boost", _boostEffect);
@@ -91,7 +92,7 @@ public class PlayerMove : PlayerBase {
     /// 衝突可否判定
     /// </summary>
     public void StopMoving() {
-        isStopped = true;
+        _isStopped = true;
     }
 
     /// <summary>
@@ -99,14 +100,14 @@ public class PlayerMove : PlayerBase {
     /// </summary>
     /// <returns></returns>
     public bool GetIsStopped() {
-        return isStopped;
+        return _isStopped;
     }
 
     /// <summary>
     /// フラグリセット
     /// </summary>
     public void StopedReset() {
-        isStopped = false;
+        _isStopped = false;
     }
 
     /// <summary>

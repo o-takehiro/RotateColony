@@ -99,7 +99,4 @@ public class CommonModule {
             await UniTask.DelayFrame(1);
         }
     }
-
-
-
 }

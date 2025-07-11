@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 2993111132409647460}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 593.5458, y: 94.33544, z: -871.68744}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectEntries:
   - name: boost
-    prefab: {fileID: 8101364517496853386, guid: c2281c6ba94fcab4c847a83119400ad9, type: 3}
+    prefab: {fileID: 5749441552287667129, guid: ee71d8dfb36a7b048aef24b0bc8f9764, type: 3}
     initialPoolSize: 1
   - name: ex
     prefab: {fileID: 2150893837217643313, guid: e5a393ca0511839458036aaf32d8a1a6, type: 3}

@@ -46,9 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1440795885206560866, guid: d8bb498bf53902042897e1564ca48212, type: 3}
   stagePrefabs:
-  - {fileID: 3164851240507330111, guid: caa67d52d93cb1c4f890961e6c43aae2, type: 3}
-  - {fileID: 6652525120943421336, guid: a87a3a8d5d8822c44a39e1963cab2e8b, type: 3}
-  - {fileID: 1179288937666087229, guid: 337e3fb3fa0d243408d4d337e743b4b5, type: 3}
   - {fileID: 9147466284315099572, guid: 97edffd7df649c24cb1cf723c98a5ff8, type: 3}
-  - {fileID: 7169244261159566147, guid: daf241dbea3747f4cb2bbb5521fbcbf8, type: 3}
   goalPrefab: {fileID: 7169244261159566147, guid: c1126430d9d37524d9b47b8abb18aaea, type: 3}

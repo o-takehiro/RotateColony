@@ -6,6 +6,7 @@ public class PartMainGame : PartBase {
 
     // ゴール到達時に呼ばれるメソッド
     private void OnGoalReachedHandler() {
+        Debug.Log("OnGoalReachedHandler() 呼び出された");
         goalReached = true;
     }
 
@@ -15,6 +16,7 @@ public class PartMainGame : PartBase {
     /// <returns></returns>
     public override async UniTask Initialize() {
         await base.Initialize();
+        goalReached = false;          // フラグを必ず初期化
     }
 
     /// <summary>
@@ -22,6 +24,7 @@ public class PartMainGame : PartBase {
     /// </summary>
     /// <returns></returns>
     public override async UniTask SetUp() {
+        goalReached = false;
         await base.SetUp();
 
         // プレイヤー生成

@@ -59,7 +59,7 @@ public class PartManager : SystemObject {
         await _currentPart.SetUp();
 
         // 次のパートの実行
-        UniTask task = _currentPart.Execute();
+        await _currentPart.Execute();
     }
 
 }

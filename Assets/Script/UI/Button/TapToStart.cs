@@ -33,5 +33,6 @@ public class TapToStart : MonoBehaviour {
         _title.isCloseScene = true;
     }
 
+    
 
 }

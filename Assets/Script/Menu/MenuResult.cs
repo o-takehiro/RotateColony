@@ -83,6 +83,7 @@ public class MenuResult : MenuBase {
     public override async UniTask Close() {
         await base.Close();
         _state = ResultState.None;
+
         await UniTask.CompletedTask;
     }
 

@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Net.Sockets;
 
 /// <summary>
 /// タイトルパート
@@ -8,7 +9,7 @@ public class PartTitle : PartBase {
         await base.Initialize();
         // メニューの初期化
         await MenuManager.instance.Get<MenuTitle>("Prefab/Menu/CanvasTitle").Initialize();
-        
+        await MenuManager.instance.Get<MenuMode>("Prefab/Menu/CanvasModeMenu").Initialize();
     }
 
     public override async UniTask Execute() {
@@ -16,6 +17,7 @@ public class PartTitle : PartBase {
         await MenuManager.instance.Get<MenuTitle>().Open();
 
         // モード選択のMenuをタイトルメニューのあとに開く
+        await MenuManager.instance.Get<MenuMode>().Open();
 
         // メインパートへ遷移
         UniTask task = PartManager.Instance.TransitionPart(eGamePart.MainGame);

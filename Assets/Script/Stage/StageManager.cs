@@ -2,41 +2,64 @@ using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ステージの生成と管理を担当するクラス
+/// </summary>
 public class StageManager : SystemObject {
     [SerializeField] private Transform player;
     [SerializeField] private List<GameObject> stagePrefabs;
     [SerializeField] private GameObject goalPrefab;
 
-    private const float _SEGMENT_LENGTH = 70f;
-    private const int _INITIAL_SEGMETNS = 5;
-    private const int _MAX_SEGMENTS = 15;
+    private const float SEGMENT_LENGTH = 70f;
+    private const int INITIAL_SEGMENTS = 5;
+    private const int MAX_SEGMENTS = 15;
 
-    private List<GameObject> activeSegments = new List<GameObject>();
+    private readonly List<GameObject> activeSegments = new List<GameObject>();
     private float spawnZ = 40f;
     private int totalGeneratedCount = 0;
     private int passedStageCount = 0;
-    public int PassedStageCount => passedStageCount;
 
+    public int PassedStageCount => passedStageCount;
     public static StageManager instance { get; private set; } = null;
 
-    // ゴール到達イベント
     public event System.Action OnGoalReached;
 
+    private IStageGenerationStrategy stageGenerationStrategy;
+
     /// <summary>
-    /// 初期化
+    /// 初期化（モードに応じたステージ生成戦略を設定）
     /// </summary>
-    /// <returns></returns>
     public override async UniTask Initialize() {
         instance = this;
+
+        // デフォルトではノーマルモード
+        SetupStrategy(GameModeState.Normal);
+
         passedStageCount = 0;
         totalGeneratedCount = 0;
         spawnZ = 40f;
 
-        for (int i = 0; i < _INITIAL_SEGMETNS; i++) {
+        // 初期ステージ生成
+        for (int i = 0; i < INITIAL_SEGMENTS; i++) {
             SpawnSegment();
         }
 
         await UniTask.CompletedTask;
+    }
+
+    /// <summary>
+    /// モードに応じて、ステージの生成方法を変更する
+    /// </summary>
+    public void SetupStrategy(GameModeState mode) {
+        switch (mode) {
+            case GameModeState.Normal:
+                stageGenerationStrategy = new NormalStageMode(stagePrefabs, goalPrefab);
+                break;
+            case GameModeState.Endless:
+            default:
+                stageGenerationStrategy = new EndlessStageMode(stagePrefabs);
+                break;
+        }
     }
 
     /// <summary>
@@ -51,39 +74,41 @@ public class StageManager : SystemObject {
     }
 
     /// <summary>
-    /// 通過検知
+    /// プレイヤーが通過したステージを検知
     /// </summary>
     private void CheckPassedSegments() {
         foreach (var segment in activeSegments) {
             var script = segment.GetComponent<StageSegment>();
             if (script == null || script.hasPassed) continue;
-            if (player.position.z <= segment.transform.position.z + _SEGMENT_LENGTH / 2f) continue;
+            if (player.position.z <= segment.transform.position.z + SEGMENT_LENGTH / 2f) continue;
 
             script.hasPassed = true;
             passedStageCount++;
-            Debug.Log("通過したステージ数: " + passedStageCount);
 
-            // ゴール判定
             if (segment.CompareTag("Goal")) {
-                // ゴール判定を送る
                 OnGoalReached?.Invoke();
             }
         }
     }
 
+    /// <summary>
+    /// プレイヤーの進行に応じて新しいステージを生成
+    /// </summary>
     private void TrySpawnNewSegment() {
-        if (player.position.z > spawnZ - _SEGMENT_LENGTH * (_INITIAL_SEGMETNS - 1)) {
+        if (player.position.z > spawnZ - SEGMENT_LENGTH * (INITIAL_SEGMENTS - 1)) {
             SpawnSegment();
             RemoveOldSegment();
         }
     }
 
+    /// <summary>
+    /// ステージの生成処理
+    /// </summary>
     private void SpawnSegment() {
-        if (totalGeneratedCount >= _MAX_SEGMENTS) return;
+        if (stageGenerationStrategy == null) return;
 
-        GameObject prefab = (totalGeneratedCount == _MAX_SEGMENTS - 1)
-            ? goalPrefab
-            : stagePrefabs[Random.Range(0, stagePrefabs.Count)];
+        GameObject prefab = stageGenerationStrategy.GetNextStagePrefab(totalGeneratedCount, MAX_SEGMENTS);
+        if (prefab == null) return;
 
         float randomX = Random.Range(-90f, 90f);
         GameObject segment = Instantiate(
@@ -93,18 +118,24 @@ public class StageManager : SystemObject {
         );
 
         activeSegments.Add(segment);
-        spawnZ += _SEGMENT_LENGTH;
+        spawnZ += SEGMENT_LENGTH;
         totalGeneratedCount++;
     }
 
+    /// <summary>
+    /// 古いセグメントを破棄
+    /// </summary>
     private void RemoveOldSegment() {
-        if (activeSegments.Count > _INITIAL_SEGMETNS) {
-            GameObject oldSegment = activeSegments[0];
+        if (activeSegments.Count > INITIAL_SEGMENTS) {
+            GameObject old = activeSegments[0];
             activeSegments.RemoveAt(0);
-            Destroy(oldSegment);
+            Destroy(old);
         }
     }
 
+    /// <summary>
+    /// プレイヤーに一番近いステージの処理を更新
+    /// </summary>
     private void UpdateActiveSegment() {
         GameObject nearest = null;
         float minDistance = float.MaxValue;
@@ -118,41 +149,34 @@ public class StageManager : SystemObject {
         }
 
         foreach (GameObject segment in activeSegments) {
-            StageSegment script = segment.GetComponent<StageSegment>();
+            var script = segment.GetComponent<StageSegment>();
             if (script != null) {
                 script.EnableRotation(segment == nearest);
             }
         }
     }
 
-    public void SetPlayer(Transform _player) {
-        player = _player;
-    }
+    public void SetPlayer(Transform _player) => player = _player;
 
     public void ClearAllSegments() {
         foreach (GameObject segment in activeSegments) {
-            if (segment != null) {
-                Destroy(segment);
-            }
+            if (segment != null) Destroy(segment);
         }
 
         activeSegments.Clear();
-        spawnZ = 50f;
-        passedStageCount = 0;
+        spawnZ = 40f;
         totalGeneratedCount = 0;
+        passedStageCount = 0;
     }
 
     public List<StageSegment> AllSegments {
         get {
-            List<StageSegment> segments = new List<StageSegment>();
+            List<StageSegment> list = new();
             foreach (var obj in activeSegments) {
                 var script = obj.GetComponent<StageSegment>();
-                if (script != null) {
-                    segments.Add(script);
-                }
+                if (script != null) list.Add(script);
             }
-            return segments;
+            return list;
         }
     }
-
 }

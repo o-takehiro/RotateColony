@@ -1,12 +1,15 @@
 using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using UnityEngine;
 
 /// <summary>
 /// PartTitle→MenuTitle→MenuMode→PartTitleに戻る
 /// </summary>
 public class MenuMode : MenuBase {
+    public bool _isNormal = false;
+    public bool _isEndless = false;
 
     /// <summary>
     /// 初期化処理
@@ -20,7 +23,17 @@ public class MenuMode : MenuBase {
         await base.Open();
         // モードの選択
         // エンドレス or ノーマル
+        while (true) {
 
+            if (_isEndless) {
+                StageManager.instance.SetupStrategy(GameModeState.Endless);
+                break;
+            }
+            else if (_isNormal) {
+                StageManager.instance.SetupStrategy(GameModeState.Normal);
+                break;
+            }
+        }
 
         // フェードアウト
         await FadeManager.instance.FadeOut();

@@ -26,8 +26,6 @@ public class PartEnding : PartBase {
 
                 break;
         }
-
-        Debug.Log("通過したステージ数: " + GameResultData.StagePassedCount);
     }
 
     public override async UniTask Execute() {

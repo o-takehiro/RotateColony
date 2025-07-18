@@ -8,6 +8,7 @@ public class TapToMode : MonoBehaviour {
     // “ü—Í‚ðŽó‚¯Žæ‚éInputAction
     [SerializeField]
     private InputActionReference _normalButton;
+    [SerializeField]
     private InputActionReference _EndllesButton;
     private MenuMode _mode;
 

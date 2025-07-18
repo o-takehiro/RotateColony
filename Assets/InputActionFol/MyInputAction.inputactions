@@ -94,9 +94,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Mode",
+                    "name": "Normal",
                     "type": "Button",
                     "id": "0ac1e51d-fbaa-42d4-8272-b447d45a0994",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Endless",
+                    "type": "Button",
+                    "id": "d6739520-1641-4653-bbf9-719ce1f14f6d",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -155,7 +164,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Mode",
+                    "action": "Normal",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e86ba409-9a99-4d7a-b94e-a7bbad27da8a",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Endless",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

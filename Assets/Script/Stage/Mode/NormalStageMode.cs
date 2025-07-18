@@ -2,11 +2,13 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// ノーマルモードのステージ生成戦略
+/// ノーマルモードのステージ生成戦略（ゴールまでの有限ステージ）
 /// </summary>
 public class NormalStageMode : IStageGenerationStrategy {
     private readonly List<GameObject> stagePrefabs;
     private readonly GameObject goalPrefab;
+
+    private bool goalSpawned = false;
 
     public NormalStageMode(List<GameObject> stagePrefabs, GameObject goalPrefab) {
         this.stagePrefabs = stagePrefabs;
@@ -14,20 +16,20 @@ public class NormalStageMode : IStageGenerationStrategy {
     }
 
     public GameObject GetNextStagePrefab(int generatedCount, int maxSegments) {
-        if (generatedCount == maxSegments - 1) {
+        if (!goalSpawned && generatedCount >= maxSegments - 1) {
+            goalSpawned = true;
             return goalPrefab;
         }
-        return stagePrefabs[Random.Range(0, stagePrefabs.Count)];
+
+        if (goalSpawned && generatedCount >= maxSegments) {
+            return null; // もう生成しない
+        }
+
+        int index = Random.Range(0, stagePrefabs.Count);
+        return stagePrefabs[index];
     }
-    
-    /// <summary>
-    /// ノーマルモード
-    /// ゴールを生成する
-    /// </summary>
-    /// <param name="generatedCount"></param>
-    /// <param name="maxSegments"></param>
-    /// <returns></returns>
+
     public bool ShouldSpawnGoal(int generatedCount, int maxSegments) {
-        return generatedCount == maxSegments - 1;
+        return !goalSpawned && generatedCount >= maxSegments - 1;
     }
 }

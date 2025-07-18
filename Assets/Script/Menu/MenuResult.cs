@@ -50,10 +50,10 @@ public class MenuResult : MenuBase {
                     timeText.text = $"{FormatTime(time)}";
                     // リザルトテキスト表示
                     if (type == GameResultType.Clear) {
-                        Debug.Log("クリアだてばよ");
+                        Debug.Log("クリア");
                     }
                     else {
-                        Debug.Log("ゲームオーバーだてばよ");
+                        Debug.Log("ゲームオーバー");
 
                     }
                     break;

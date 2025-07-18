@@ -108,7 +108,7 @@ public class StageManager : SystemObject {
         if (stageGenerationStrategy == null) return;
 
         GameObject prefab = stageGenerationStrategy.GetNextStagePrefab(totalGeneratedCount, MAX_SEGMENTS);
-        if (prefab == null) return;
+        if (prefab == null) return; // ƒS[ƒ‹¶¬Œã‚Ínull‚É‚È‚é
 
         float randomX = Random.Range(-90f, 90f);
         GameObject segment = Instantiate(

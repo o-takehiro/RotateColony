@@ -11,6 +11,7 @@ public class MenuMode : MenuBase {
     public bool _isNormal = false;
     public bool _isEndless = false;
 
+
     /// <summary>
     /// 初期化処理
     /// </summary>
@@ -21,6 +22,8 @@ public class MenuMode : MenuBase {
 
     public override async UniTask Open() {
         await base.Open();
+        await FadeManager.instance.FadeIn();
+
         // モードの選択
         // エンドレス or ノーマル
         while (true) {
@@ -33,6 +36,7 @@ public class MenuMode : MenuBase {
                 StageManager.instance.SetupStrategy(GameModeState.Normal);
                 break;
             }
+            await UniTask.Delay(1);
         }
 
         // フェードアウト

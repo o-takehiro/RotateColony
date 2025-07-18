@@ -15,6 +15,7 @@ public class PartTitle : PartBase {
     public override async UniTask Execute() {
         // タイトルメニュー表示
         await MenuManager.instance.Get<MenuTitle>().Open();
+        await UniTask.DelayFrame(1);
 
         // モード選択のMenuをタイトルメニューのあとに開く
         await MenuManager.instance.Get<MenuMode>().Open();

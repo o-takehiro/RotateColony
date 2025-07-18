@@ -7,6 +7,8 @@ TagManager:
   - HitBox
   - Obstacle
   - UICanvas
+  - Goal
+  - BoostBreak
   layers:
   - Default
   - TransparentFX
@@ -14,7 +16,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Player
   - 
   - 
   - 

@@ -8,15 +8,13 @@ public class PartTitle : PartBase {
         await base.Initialize();
         // メニューの初期化
         await MenuManager.instance.Get<MenuTitle>("Prefab/Menu/CanvasTitle").Initialize();
+        
     }
 
     public override async UniTask Execute() {
         // タイトルメニュー表示
         await MenuManager.instance.Get<MenuTitle>().Open();
 
-
-
-        // フラグによって遷移かどうか決める
         // メインパートへ遷移
         UniTask task = PartManager.Instance.TransitionPart(eGamePart.MainGame);
         await UniTask.CompletedTask;

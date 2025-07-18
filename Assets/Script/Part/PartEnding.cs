@@ -5,6 +5,8 @@ public class PartEnding : PartBase {
 
     public override async UniTask Initialize() {
         await base.Initialize();
+        // メニューの初期化
+        await MenuManager.instance.Get<MenuResult>("Prefab/Menu/CanvasResult").Initialize();
     }
 
     public override async UniTask SetUp() {
@@ -13,13 +15,14 @@ public class PartEnding : PartBase {
         // ゲーム結果に応じたログ出力
         switch (GameResultData.ResultType) {
             case GameResultType.Clear:
-                Debug.Log("ゲームクリア");
-
-
+                //Debug.Log("ゲームクリア");
+                // MenuResultへ遷移
+                await MenuManager.instance.Get<MenuResult>().Open(GameResultType.Clear);
                 break;
             case GameResultType.GameOver:
-                Debug.Log("ゲームオーバー");
-
+                //Debug.Log("ゲームオーバー");
+                // ここで遷移
+                await MenuManager.instance.Get<MenuResult>().Open(GameResultType.GameOver);
 
                 break;
         }

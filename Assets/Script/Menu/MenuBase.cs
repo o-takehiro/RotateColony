@@ -26,6 +26,16 @@ public class MenuBase : MonoBehaviour {
     }
 
     /// <summary>
+    /// 開く
+    /// </summary>
+    /// <returns></returns>
+    public virtual async UniTask Open(GameResultType type) {
+        // メニューを表示
+        _menuRoot?.SetActive(true);
+        await UniTask.CompletedTask;
+    }
+
+    /// <summary>
     /// 閉じる
     /// </summary>
     /// <returns></returns>

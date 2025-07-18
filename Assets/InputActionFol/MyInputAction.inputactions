@@ -76,9 +76,18 @@
             "id": "c8631c64-b182-4669-bff0-2508c12168f1",
             "actions": [
                 {
-                    "name": "Click",
+                    "name": "Title",
                     "type": "Button",
                     "id": "dbfa718c-02df-4226-a465-b7f0cc1a63ed",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Result",
+                    "type": "Button",
+                    "id": "69f329d5-29b5-4f9e-9d07-13a175ae8857",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -93,7 +102,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Click",
+                    "action": "Title",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -104,7 +113,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Click",
+                    "action": "Title",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8fc28daa-28aa-4256-b941-e315f655cb43",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Result",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dbcfac5e-24be-4d26-9f95-77c449d143ea",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Result",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

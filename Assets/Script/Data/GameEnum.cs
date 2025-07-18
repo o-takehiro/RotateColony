@@ -26,3 +26,12 @@ public enum GameResultType {
     Clear,
     GameOver
 }
+
+
+// タップ状態を段階管理するための列挙体
+public enum ResultState {
+    None,
+    ShowImage,  // 画像のみ表示中
+    ShowRank,   // ランクなどの情報表示中
+    Finish      // 終了フェーズ
+}

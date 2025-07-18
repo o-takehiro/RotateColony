@@ -9,7 +9,7 @@ public class StageManager : SystemObject {
 
     private const float _SEGMENT_LENGTH = 70f;
     private const int _INITIAL_SEGMETNS = 5;
-    private const int _MAX_SEGMENTS = 10;
+    private const int _MAX_SEGMENTS = 15;
 
     private List<GameObject> activeSegments = new List<GameObject>();
     private float spawnZ = 40f;
@@ -22,6 +22,10 @@ public class StageManager : SystemObject {
     // ゴール到達イベント
     public event System.Action OnGoalReached;
 
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask Initialize() {
         instance = this;
         passedStageCount = 0;
@@ -35,6 +39,9 @@ public class StageManager : SystemObject {
         await UniTask.CompletedTask;
     }
 
+    /// <summary>
+    /// 更新処理
+    /// </summary>
     private void Update() {
         if (player == null) return;
 
@@ -58,7 +65,7 @@ public class StageManager : SystemObject {
 
             // ゴール判定
             if (segment.CompareTag("Goal")) {
-                Debug.Log("ゴールに到達（CheckPassedSegmentsから）");
+                // ゴール判定を送る
                 OnGoalReached?.Invoke();
             }
         }

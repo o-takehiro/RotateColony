@@ -18,12 +18,12 @@ public class PlayerMove : PlayerBase {
     // 移動開始判断用
     public bool isMoving = false;
 
-    // 時間計測用
-    public float gameClearTime = 0f;
     private bool _isGameClear = false;
 
     // エフェクトをGameObjectに格納するよう
     private GameObject _boostEffect = null;
+    // 時間計測開始用フラグ
+    private bool _hasTimerStarted = false;
 
     private void Start() {
         // 現在のspeedに通常の移動速度を入れる
@@ -40,9 +40,10 @@ public class PlayerMove : PlayerBase {
         if (!_isStopped && isMoving) {
             HandleSpeed();
             Move();
-            gameClearTime += Time.deltaTime;
-            if (gameClearTime < 0f) {
-                _isGameClear = true;
+            // 時間計測を開始する
+            if (!_hasTimerStarted) {
+                TimeManager.Instance.StartTimer();
+                _hasTimerStarted = true;
             }
         }
     }
@@ -86,12 +87,15 @@ public class PlayerMove : PlayerBase {
         }
 
     }
-    
+
 
     /// <summary>
     /// 衝突可否判定
     /// </summary>
     public void StopMoving() {
+
+        TimeManager.Instance.StopTimer();
+        GameResultData.ClearTime = TimeManager.Instance.GetTime();
         _isStopped = true;
     }
 
@@ -128,11 +132,12 @@ public class PlayerMove : PlayerBase {
     }
 
     /// <summary>
-    /// クリアフラグを渡す用
+    /// ゲームをクリアした際に呼ばれる
     /// </summary>
-    /// <returns></returns>
-    public bool GetIsGameClear() {
-        return _isGameClear;
+    public void ClearPlayer() {
+        // 時間を止めてセットする
+        TimeManager.Instance.StopTimer();
+        GameResultData.ClearTime = TimeManager.Instance.GetTime();
     }
 
 }

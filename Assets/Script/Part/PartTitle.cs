@@ -15,6 +15,8 @@ public class PartTitle : PartBase {
         // タイトルメニュー表示
         await MenuManager.instance.Get<MenuTitle>().Open();
 
+        // モード選択のMenuをタイトルメニューのあとに開く
+
         // メインパートへ遷移
         UniTask task = PartManager.Instance.TransitionPart(eGamePart.MainGame);
         await UniTask.CompletedTask;

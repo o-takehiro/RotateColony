@@ -8,6 +8,7 @@ public class PartMainGame : PartBase {
     private void OnGoalReachedHandler() {
         Debug.Log("OnGoalReachedHandler() 呼び出された");
         goalReached = true;
+        
     }
 
     /// <summary>
@@ -45,7 +46,7 @@ public class PartMainGame : PartBase {
 
         // ゴールイベント
         StageManager.instance.OnGoalReached += OnGoalReachedHandler;
-
+        
         // 安定するまで1秒待つ
         await UniTask.Delay(1000);
 

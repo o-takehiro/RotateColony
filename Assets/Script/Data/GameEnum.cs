@@ -35,3 +35,12 @@ public enum ResultState {
     ShowRank,   // ランクなどの情報表示中
     Finish      // 終了フェーズ
 }
+
+/// <summary>
+/// ゲーム開始時に選ぶモード
+/// </summary>
+public enum GameModeState {
+    Invalid,
+    Endless,    // エンドレスモード
+    Normal      // ノーマルモード
+}

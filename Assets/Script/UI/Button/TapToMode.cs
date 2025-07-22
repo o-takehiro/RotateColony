@@ -3,52 +3,48 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
+/// <summary>
+/// MenuからMainGameに行くためのモード選択入力制御クラス
+/// </summary>
 public class TapToMode : MonoBehaviour {
-    // 入力を受け取るInputAction
-    [SerializeField]
-    private InputActionReference _normalButton;
-    [SerializeField]
-    private InputActionReference _EndllesButton;
+    [SerializeField] private InputActionReference _normalButton;
+    [SerializeField] private InputActionReference _EndllesButton;
+
     private MenuMode _mode;
 
-
-    private void Start() {
-        // 親オブジェクトのスクリプトを取得
+    private void Awake() {
         _mode = GetComponentInParent<MenuMode>();
-        // ノーマルモード選択用ボタン
+    }
+
+    private void OnEnable() {
         if (_normalButton != null) {
             _normalButton.action.performed += OnTap;
-
-            // 有効化
             _normalButton.action.Enable();
         }
-        // エンドレスモード選択用ボタン
+
         if (_EndllesButton != null) {
             _EndllesButton.action.performed += OnTap2;
-
-            // 有効化
             _EndllesButton.action.Enable();
         }
     }
 
-    /// <summary>
-    /// ノーマルボタンが選ばれたときの処理
-    /// </summary>
-    /// <param name="context"></param>
+    private void OnDisable() {
+        if (_normalButton != null) {
+            _normalButton.action.performed -= OnTap;
+            _normalButton.action.Disable();
+        }
+
+        if (_EndllesButton != null) {
+            _EndllesButton.action.performed -= OnTap2;
+            _EndllesButton.action.Disable();
+        }
+    }
+
     private void OnTap(InputAction.CallbackContext context) {
-        // ノーマルモードに設定する
         _mode._isNormal = true;
     }
 
-
-    /// <summary>
-    /// エンドレスボタンが押されたときの処理
-    /// </summary>
-    /// <param name="context"></param>
     private void OnTap2(InputAction.CallbackContext context) {
-        // エンドレスモードに設定する
         _mode._isEndless = true;
     }
-
 }

@@ -45,11 +45,13 @@ public class MenuMode : MenuBase {
     }
 
 
-    /// <summary>
-    /// メニュークローズ処理（状態リセット）
-    /// </summary>
     public override async UniTask Close() {
         await base.Close();
+
+        // 状態をリセットしておく
+        _isNormal = false;
+        _isEndless = false;
+
         await UniTask.CompletedTask;
     }
 

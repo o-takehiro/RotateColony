@@ -17,7 +17,7 @@ public class TapToStart : MonoBehaviour {
         // 親オブジェクトのスクリプトを取得
         _title = GetComponentInParent<MenuTitle>();
         if (_tap != null) {
-            _tap.action.started += OnTap;
+            _tap.action.performed += OnTap;
 
             // 有効化
             _tap.action.Enable();
@@ -33,6 +33,6 @@ public class TapToStart : MonoBehaviour {
         _title.isCloseScene = true;
     }
 
-    
+
 
 }

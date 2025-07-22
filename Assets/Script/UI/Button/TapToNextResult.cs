@@ -24,7 +24,7 @@ public class TapToNextResult : MonoBehaviour {
 
         if (_tap != null) {
             // タップ開始時に OnTap を呼び出すよう登録
-            _tap.action.started += OnTap;
+            _tap.action.performed += OnTap;
 
             // タップ入力を有効化
             _tap.action.Enable();
@@ -43,7 +43,7 @@ public class TapToNextResult : MonoBehaviour {
     /// </summary>
     private void OnDestroy() {
         if (_tap != null) {
-            _tap.action.started -= OnTap;
+            _tap.action.performed -= OnTap;
             _tap.action.Disable();
         }
     }

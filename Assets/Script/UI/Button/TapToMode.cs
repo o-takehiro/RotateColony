@@ -18,14 +18,14 @@ public class TapToMode : MonoBehaviour {
         _mode = GetComponentInParent<MenuMode>();
         // ノーマルモード選択用ボタン
         if (_normalButton != null) {
-            _normalButton.action.started += OnTap;
+            _normalButton.action.performed += OnTap;
 
             // 有効化
             _normalButton.action.Enable();
         }
         // エンドレスモード選択用ボタン
         if (_EndllesButton != null) {
-            _EndllesButton.action.started += OnTap2;
+            _EndllesButton.action.performed += OnTap2;
 
             // 有効化
             _EndllesButton.action.Enable();

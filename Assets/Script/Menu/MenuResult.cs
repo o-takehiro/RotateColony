@@ -1,100 +1,105 @@
 using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 using static GameResultData;
-/// <summary>
-/// リザルトニューで使用するボタン
-/// </summary>
-public class MenuResult : MenuBase {
-    // テキスト
-    [SerializeField] private TextMeshProUGUI penetrationText = null;   // 突破
-    [SerializeField] private TextMeshProUGUI timeText = null;          // 時間
-    [SerializeField] private TextMeshProUGUI getText = null;           // 取得アイテム
-    [SerializeField] private TextMeshProUGUI rankText = null;          // クリア時のランク
-    // 現在の状態を保持
-    private ResultState _state = ResultState.None;
 
-    // タップ連打防止のフラグ（一定時間は無視）
+public class MenuResult : MenuBase {
+    [SerializeField] private TextMeshProUGUI penetrationText = null;   // 突破数テキスト
+    [SerializeField] private TextMeshProUGUI timeText = null;          // 時間テキスト
+    [SerializeField] private TextMeshProUGUI getText = null;           // 取得アイテムテキスト
+    [SerializeField] private TextMeshProUGUI rankText = null;          // ランクテキスト
+
+    // 内部状態管理
+    private enum ResultState {
+        None,
+        ShowImage,
+        ShowRank,
+        Finish
+    }
+
+    private ResultState _state = ResultState.None;
     private bool _isTapLocked = false;
+
+    private GameResultType _currentResult;
+
     RankCalculatorBase calculator = null;
+
     /// <summary>
-    /// 初期化処理
+    /// 初期化処理（毎回呼ぶ想定）
     /// </summary>
     public override async UniTask Initialize() {
         await base.Initialize();
-        _state = ResultState.ShowImage;
-        //await UniTask.CompletedTask;
+        _state = ResultState.None;
+        _isTapLocked = false;
+        _currentResult = GameResultType.None;
     }
 
     /// <summary>
-    /// メニューを開いたときの処理
+    /// メニューを開いたときの処理（結果タイプを受け取る）
     /// </summary>
-    public override async UniTask Open(GameResultType type) {
+    public async UniTask Open(GameResultType resultType) {
         await base.Open();
 
-        // フェードインで画面を表示
-        await FadeManager.instance.FadeIn();
+        _currentResult = resultType;
+        _state = ResultState.ShowImage;
+        _isTapLocked = false;
+
         calculator = new StageClearRankCalculator();
-        // テキストに必要なデータをここでキャッシュ
+
         int passed = StagePassedCount;
         float time = ClearTime;
-        // ステートが Finish になるまでループ
+
+        await FadeManager.instance.FadeIn();
+
         while (true) {
             switch (_state) {
                 case ResultState.ShowImage:
-                    // テキスト表示
                     penetrationText.text = $"{passed}";
-                    timeText.text = $"{FormatTime(time)}";
-                    // リザルトテキスト表示
-                    if (type == GameResultType.Clear) {
-                        Debug.Log("クリア");
+                    timeText.text = FormatTime(time);
+
+                    // 必要なら取得アイテムやその他テキストもここでセット
+
+                    if (_currentResult == GameResultType.Clear) {
+                        Debug.Log("ゲームクリア表示");
                     }
                     else {
-                        Debug.Log("ゲームオーバー");
-
+                        Debug.Log("ゲームオーバー表示");
                     }
                     break;
 
                 case ResultState.ShowRank:
-                    // ランク・スコアなどのUI表示処理を呼び出し
                     ShowRankText(passed, time);
                     break;
 
                 case ResultState.Finish:
-                    // 終了処理：フェードアウト後にメニューを閉じる
                     await FadeManager.instance.FadeOut();
                     await Close();
                     return;
             }
 
-            // 0.1秒待機（ループ速度制御）
             await UniTask.Delay(100);
         }
-
-
     }
 
     /// <summary>
-    /// メニュークローズ処理（状態リセット）
+    /// メニュー閉じるときのリセット処理
     /// </summary>
     public override async UniTask Close() {
         await base.Close();
         _state = ResultState.None;
-
-        await UniTask.CompletedTask;
+        _isTapLocked = false;
+        _currentResult = GameResultType.None;
     }
 
-
     /// <summary>
-    /// 外部から呼ばれるステート遷移関数（タップ時に呼ばれる）
+    /// 外部から呼ばれるタップ入力により状態を進める関数
     /// </summary>
     public async void NextState() {
-        if (_isTapLocked) return; // 連続タップを制限する
+        if (_isTapLocked) return;
+
         _isTapLocked = true;
-        // タップに応じたリザルトの遷移
+
         switch (_state) {
             case ResultState.ShowImage:
                 _state = ResultState.ShowRank;
@@ -105,24 +110,15 @@ public class MenuResult : MenuBase {
                 break;
         }
 
-        // タップ可能になるまで待つ
         await UniTask.Delay(500);
         _isTapLocked = false;
     }
 
-    /// <summary>
-    /// ランク・スコアなどのUI表示処理（表示アニメーションなどもここに）
-    /// </summary>
-    private void ShowRankText(int possed, float time) {
-        string rank = calculator.CalculateRank(possed, time);
+    private void ShowRankText(int passed, float time) {
+        string rank = calculator.CalculateRank(passed, time);
         rankText.text = rank;
     }
 
-    /// <summary>
-    /// 時間に補正を書ける
-    /// </summary>
-    /// <param name="seconds"></param>
-    /// <returns></returns>
     private string FormatTime(float seconds) {
         int min = Mathf.FloorToInt(seconds / 60f);
         int sec = Mathf.FloorToInt(seconds % 60f);

@@ -23,6 +23,7 @@ public enum eGameEndReason {
 
 
 public enum GameResultType {
+    None,
     Clear,
     GameOver
 }

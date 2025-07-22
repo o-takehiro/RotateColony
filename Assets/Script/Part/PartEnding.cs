@@ -12,18 +12,14 @@ public class PartEnding : PartBase {
     public override async UniTask SetUp() {
         await base.SetUp();
 
-        // ゲーム結果に応じたログ出力
+        var menuResult = MenuManager.instance.Get<MenuResult>();
+
         switch (GameResultData.ResultType) {
             case GameResultType.Clear:
-                //Debug.Log("ゲームクリア");
-                // MenuResultへ遷移
-                await MenuManager.instance.Get<MenuResult>().Open(GameResultType.Clear);
+                await menuResult.Open(GameResultType.Clear);
                 break;
             case GameResultType.GameOver:
-                //Debug.Log("ゲームオーバー");
-                // ここで遷移
-                await MenuManager.instance.Get<MenuResult>().Open(GameResultType.GameOver);
-
+                await menuResult.Open(GameResultType.GameOver);
                 break;
         }
     }

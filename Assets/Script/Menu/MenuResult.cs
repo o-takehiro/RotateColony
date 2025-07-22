@@ -38,7 +38,7 @@ public class MenuResult : MenuBase {
     /// <summary>
     /// メニューを開いたときの処理（結果タイプを受け取る）
     /// </summary>
-    public async UniTask Open(GameResultType resultType) {
+    public override async UniTask Open(GameResultType resultType) {
         await base.Open();
 
         _currentResult = resultType;

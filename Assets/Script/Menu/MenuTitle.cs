@@ -23,6 +23,8 @@ public class MenuTitle : MenuBase {
     /// </summary>
     /// <returns></returns>
     public override async UniTask Open() {
+        // ここで必ず初期化する（２周目以降も必須）
+        isCloseScene = false;
         await base.Open();
         await FadeManager.instance.FadeIn();
         // Zキーが押されるまで待つ

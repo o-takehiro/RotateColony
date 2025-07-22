@@ -26,7 +26,7 @@ public class PartEnding : PartBase {
 
     public override async UniTask Execute() {
         // ‰‰o‚È‚Ç‚ğ‹²‚Ş—]’n‚ ‚è
-        await UniTask.Delay(3000);
+        //await UniTask.Delay(3000);
         await FadeManager.instance.FadeOut();
         await PartManager.Instance.TransitionPart(eGamePart.Title);
     }

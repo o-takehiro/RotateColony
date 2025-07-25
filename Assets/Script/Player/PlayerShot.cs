@@ -13,7 +13,7 @@ public class PlayerShot : MonoBehaviour {
 
     [SerializeField] private float maxSpreadAngle = 30f;
     [SerializeField] private int damage = 10;
-    [SerializeField] private float flightDuration = 1f;
+    // [SerializeField] private float flightDuration = 1f;
 
     // ’e‚Ì”­ŽËŠÔŠu
     private readonly float FIRE_INTERVAL = 0.1f;

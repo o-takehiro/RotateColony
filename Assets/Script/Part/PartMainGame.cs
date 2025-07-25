@@ -1,100 +1,120 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
+/// <summary>
+/// ゲーム本編（メインパート）を制御するクラス
+/// </summary>
 public class PartMainGame : PartBase {
-    private bool goalReached = false;
+    private bool goalReached = false;                 // ゴールに到達したかどうかを示すフラグ
+    private const int _MAIN_BGM_ID = 0;               // 使用するBGMのID
 
-    // ゴール到達時に呼ばれるメソッド
+    /// <summary>
+    /// ゴールに到達した際に呼び出されるイベント
+    /// </summary>
     private void OnGoalReachedHandler() {
         Debug.Log("OnGoalReachedHandler() 呼び出された");
-        goalReached = true;
-        
+        goalReached = true; // ゴール到達フラグを立てる
     }
 
     /// <summary>
-    /// 初期化
+    /// 初期化処理（パート開始前の一度だけ呼ばれる）
     /// </summary>
-    /// <returns></returns>
     public override async UniTask Initialize() {
         await base.Initialize();
-        goalReached = false;          // フラグを必ず初期化
+        goalReached = false; // フラグ初期化（安全策として念のためここでも）
     }
 
     /// <summary>
-    /// パートの準備
+    /// セットアップ処理（パート開始時に毎回呼ばれる）
     /// </summary>
-    /// <returns></returns>
     public override async UniTask SetUp() {
-        goalReached = false;
+        goalReached = false; // セットアップ時にもフラグ初期化
         await base.SetUp();
 
-        // プレイヤー生成
+        // BGM再生
+        SoundManager.instance.PlayBGM(_MAIN_BGM_ID);
+
+        // プレイヤーキャラクターを初期位置に生成
         PlayerManager.instance.UsePlayer(new Vector3(0f, -2f, 0f), Quaternion.Euler(0, 0, 0));
+
+        // 画面フェードイン演出
         await FadeManager.instance.FadeIn();
 
+        // プレイヤーのゲームオブジェクト取得
         GameObject playerObj = PlayerManager.instance.GetPlayerObject();
 
+        // アニメーション再生
         var animController = playerObj.GetComponent<PlayerAnimationController>();
         if (animController != null) {
             animController.PlayTransformAnimation();
         }
 
+        // プレイヤーTransformをステージマネージャーに登録
         Transform playerF = playerObj.transform;
         if (playerObj != null) {
             StageManager.instance.SetPlayer(playerF);
         }
 
-        // ゴールイベント
+        // ゴールイベント登録（ゴールに到達したときの処理を追加）
         StageManager.instance.OnGoalReached += OnGoalReachedHandler;
-        
-        // 安定するまで1秒待つ
+
+        // 適当に待つ
         await UniTask.Delay(1000);
 
-        // センサーの調整
+        // 各ステージの要素のジャイロキャリブレーション実行
         foreach (var segment in StageManager.instance.AllSegments) {
             segment.CalibrateGyro();
         }
 
-        await UniTask.Delay(6000);  // クールタイム
+        // 適当に待つ
+        await UniTask.Delay(6000);
 
+        // プレイヤーの移動スクリプト取得
         PlayerMove moveScript = playerObj.GetComponent<PlayerMove>();
         if (moveScript != null) {
-            moveScript.StopedReset();
-            moveScript.SetStartMoving(true);
-            ButtonManager.instance.UseAllButtons();
+            moveScript.StopedReset();                // 停止状態のリセット
+            moveScript.SetStartMoving(true);         // 移動開始
+            ButtonManager.instance.UseAllButtons();  // 全ボタン使用可能に
         }
 
         await UniTask.CompletedTask;
     }
 
     /// <summary>
-    /// 実行処理
+    /// 実行処理（プレイ中のループ。ゴール or ゲームオーバーまで待機）
     /// </summary>
-    /// <returns></returns>
     public override async UniTask Execute() {
         GameObject playerObj = PlayerManager.instance.GetPlayerObject();
         PlayerMove moveScript = playerObj.GetComponent<PlayerMove>();
         if (moveScript == null || playerObj == null) return;
 
         while (true) {
+            // 非同期のループを行う
             await UniTask.Yield();
 
+            // ゴール到達処理
             if (goalReached) {
+                // クリア情報を記録
                 GameResultData.ResultType = GameResultType.Clear;
                 GameResultData.StagePassedCount = StageManager.instance.PassedStageCount;
-
+                // 適当に待つ
                 await UniTask.Delay(2000);
+                // フェードアウト
                 await FadeManager.instance.FadeOut();
+                // エンディングパートに遷移
                 await PartManager.Instance.TransitionPart(eGamePart.Ending);
                 break;
             }
 
+            // ゲームオーバーだった場合
             if (moveScript.GetIsStopped()) {
                 GameResultData.ResultType = GameResultType.GameOver;
                 GameResultData.StagePassedCount = StageManager.instance.PassedStageCount;
-
+                // 適当に待つ
                 await UniTask.Delay(3000);
+                // フェードアウト
                 await FadeManager.instance.FadeOut();
+                // エンディングパートに遷移
                 await PartManager.Instance.TransitionPart(eGamePart.Ending);
                 break;
             }
@@ -102,22 +122,23 @@ public class PartMainGame : PartBase {
     }
 
     /// <summary>
-    /// パートの片付け
+    /// パート終了時の後片付け
     /// </summary>
-    /// <returns></returns>
     public override async UniTask Teardown() {
         await base.Teardown();
+        // BGMの再生停止
+        SoundManager.instance.StopBGM();
 
-        // イベントの解除
+        // ゴールイベントの登録解除（メモリリーク防止）
         if (StageManager.instance != null) {
             StageManager.instance.OnGoalReached -= OnGoalReachedHandler;
         }
 
-        // それぞれのオブジェクトを破棄する
-        PlayerManager.instance.DestroyPlayer();
-        ButtonManager.instance.DestroyAllButtons();
-        StageManager.instance.ClearAllSegments();
-
+        // 使用していたオブジェクトの破棄処理
+        PlayerManager.instance.DestroyPlayer();       // プレイヤーオブジェクト削除
+        ButtonManager.instance.DestroyAllButtons();   // ボタンの削除
+        StageManager.instance.ClearAllSegments();     // ステージ要素クリア
+        EffectManager.Instance.StopAll();             // 全エフェクト停止
         await UniTask.CompletedTask;
     }
 }

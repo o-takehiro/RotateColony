@@ -18,7 +18,7 @@ public class PlayerMove : PlayerBase {
     // 移動開始判断用
     public bool isMoving = false;
 
-    private bool _isGameClear = false;
+    //private bool _isGameClear = false;
 
     // エフェクトをGameObjectに格納するよう
     private GameObject _boostEffect = null;
@@ -46,6 +46,7 @@ public class PlayerMove : PlayerBase {
                 _hasTimerStarted = true;
             }
         }
+
     }
 
     /// <summary>
@@ -68,7 +69,7 @@ public class PlayerMove : PlayerBase {
             if (_boostEffect == null) {
                 // boostがONになった瞬間だけ
                 _boostEffect = EffectManager.Instance.Play("boost", transform.position, false);
-                // 壁破壊用のコライダーをONにする
+                
             }
             else {
                 // エフェクトをプレイヤーに追従させる

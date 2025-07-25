@@ -19,8 +19,7 @@ public class TimeManager : SystemObject {
     private void Awake() {
         if (Instance == null) {
             Instance = this;
-            // –œ‚ªˆêÁ‚³‚ê‚È‚¢‚æ‚¤‚É
-            DontDestroyOnLoad(gameObject);
+
         }
         else {
             // Á‚·

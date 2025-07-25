@@ -7,7 +7,7 @@ using static GameResultData;
 public class MenuResult : MenuBase {
     [SerializeField] private TextMeshProUGUI penetrationText = null;   // 突破数テキスト
     [SerializeField] private TextMeshProUGUI timeText = null;          // 時間テキスト
-    [SerializeField] private TextMeshProUGUI getText = null;           // 取得アイテムテキスト
+    // [SerializeField] private TextMeshProUGUI getText = null;           // 取得アイテムテキスト
     [SerializeField] private TextMeshProUGUI rankText = null;          // ランクテキスト
 
     // 内部状態管理
@@ -57,9 +57,6 @@ public class MenuResult : MenuBase {
                 case ResultState.ShowImage:
                     penetrationText.text = $"{passed}";
                     timeText.text = FormatTime(time);
-
-                    // 必要なら取得アイテムやその他テキストもここでセット
-
                     if (_currentResult == GameResultType.Clear) {
                         Debug.Log("ゲームクリア表示");
                     }
@@ -69,6 +66,7 @@ public class MenuResult : MenuBase {
                     break;
 
                 case ResultState.ShowRank:
+                    // ランクを表示
                     ShowRankText(passed, time);
                     break;
 

@@ -113,11 +113,14 @@ public class Projectile : MonoBehaviour {
         if (other.CompareTag("Obstacle")) {
             var destructible = other.GetComponent<Destructible>();
             if (destructible != null) {
+                // エフェクト再生
                 EffectManager.Instance.Play("ex", transform.position);
                 destructible.TakeDamage(damage);
             }
 
             // 1フレーム待機してから無効化
+            // フラグ追加
+
             await UniTask.Yield();
             gameObject.SetActive(false);
         }

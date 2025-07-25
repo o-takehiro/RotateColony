@@ -4,13 +4,15 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using UnityEngine;
 
+using static SoundManager;
 /// <summary>
 /// PartTitle¨MenuTitle¨MenuMode¨PartTitle‚É–ß‚é
 /// </summary>
 public class MenuMode : MenuBase {
     public bool _isNormal = false;
     public bool _isEndless = false;
-
+    // g—p‚·‚éSE‚ÌID
+    private const int _MENU_SE_ID = 0;
 
     /// <summary>
     /// ‰Šú‰»ˆ—
@@ -29,10 +31,14 @@ public class MenuMode : MenuBase {
         while (true) {
 
             if (_isEndless) {
+                // SEÄ¶
+                await instance.PlaySE(_MENU_SE_ID);
                 StageManager.instance.SetupStrategy(GameModeState.Endless);
                 break;
             }
             else if (_isNormal) {
+                // SEÄ¶
+                await instance.PlaySE(_MENU_SE_ID);
                 StageManager.instance.SetupStrategy(GameModeState.Normal);
                 break;
             }

@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 public class MenuTitle : MenuBase {
     // 画面切り替えの選択
     public bool isCloseScene = false;
+    // 使用するSEのID
+    private const int _TITLE_SE_ID = 1;
 
     // <summary>
     // 初期化
@@ -30,8 +32,11 @@ public class MenuTitle : MenuBase {
         // Zキーが押されるまで待つ
         while (true) {
             // InputSystemに切り替え
-            if (isCloseScene) break;
-
+            if (isCloseScene) {
+                // SE再生
+                await SoundManager.instance.PlaySE(_TITLE_SE_ID);
+                break;
+            }
             await UniTask.Delay(1);
         }
         await FadeManager.instance.FadeOut();

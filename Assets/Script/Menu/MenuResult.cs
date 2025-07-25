@@ -9,6 +9,8 @@ public class MenuResult : MenuBase {
     [SerializeField] private TextMeshProUGUI timeText = null;          // 時間テキスト
     // [SerializeField] private TextMeshProUGUI getText = null;           // 取得アイテムテキスト
     [SerializeField] private TextMeshProUGUI rankText = null;          // ランクテキスト
+    // 使用するSEのID
+    private const int _RESULT_SE_ID = 0;
 
     // 内部状態管理
     private enum ResultState {

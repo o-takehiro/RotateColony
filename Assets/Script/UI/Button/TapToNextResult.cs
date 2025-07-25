@@ -31,7 +31,8 @@ public class TapToNextResult : MonoBehaviour {
         }
     }
 
-    private void OnTap(InputAction.CallbackContext context) {
+    private async void OnTap(InputAction.CallbackContext context) {
+        await SoundManager.instance.PlaySE(0);
         _menu?.NextState();
     }
 }

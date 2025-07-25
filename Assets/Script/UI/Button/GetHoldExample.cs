@@ -13,7 +13,7 @@ public class GetHoldExample : MonoBehaviour {
     private InputActionReference _hold;
     [SerializeField]
     private PlayerShot _playerShoot;
-    // private Image _image = null;
+    private const int _FIRE_SE_ID = 2;
 
     private void Start() {
         // 動的にPlayerShotを探す（例：タグが"Player"のオブジェクトにアタッチされているなら）

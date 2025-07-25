@@ -30,6 +30,7 @@ public class TapToStart : MonoBehaviour {
     /// </summary>
     /// <param name="context"></param>
     private void OnTap(InputAction.CallbackContext context) {
+        
         _title.isCloseScene = true;
     }
 

@@ -22,6 +22,8 @@ public class PlayerShot : MonoBehaviour {
 
     // 射撃可能フラグ
     public bool isShot = false;
+    // 使用するSEのID
+    private const int _FIRE_SE_ID = 2;
 
     /// <summary>
     /// 初期化処理
@@ -34,13 +36,13 @@ public class PlayerShot : MonoBehaviour {
     /// <summary>
     /// 更新処理
     /// </summary>
-    private void Update() {
+    private async void Update() {
         // プレイヤーが移動開始していなければ撃てない
         if (playerMove == null || !playerMove.GetIsMoving()) return;
 
         if (isShot) {
             Fire();
-
+            await SoundManager.instance.PlaySE(_FIRE_SE_ID);
         }
 
 
@@ -50,18 +52,16 @@ public class PlayerShot : MonoBehaviour {
     /// 左側から発射
     /// </summary>
     public void FireLeft() {
-        // if (leftFireTimer >= FIRE_INTERVAL) {
         FireFromPoint(leftFirePoint);
-        //}
+
     }
 
     /// <summary>
     /// 右側から発射
     /// </summary>
     public void FireRight() {
-        //  if (rightFireTimer >= FIRE_INTERVAL) {
         FireFromPoint(rightFirePoint);
-        // }
+
     }
 
     /// <summary>
@@ -82,7 +82,6 @@ public class PlayerShot : MonoBehaviour {
         GameObject proj = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
         Projectile projScript = proj.GetComponent<Projectile>();
         projScript.damage = damage;
-        //projScript.flightDuration = flightDuration;
 
         // 左右で方向を変える（FirePointの向きを使って決定）
         Vector3 forward = (shotTargetPoint.position - firePoint.position).normalized;

@@ -8,7 +8,8 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class TapToMode : MonoBehaviour {
     [SerializeField] private InputActionReference _normalButton;
-    [SerializeField] private InputActionReference _EndllesButton;
+    [SerializeField] private InputActionReference _endlessButton;
+    [SerializeField] private InputActionReference _howToPlayButton; // Å© í«â¡
 
     private MenuMode _mode;
 
@@ -22,9 +23,15 @@ public class TapToMode : MonoBehaviour {
             _normalButton.action.Enable();
         }
 
-        if (_EndllesButton != null) {
-            _EndllesButton.action.performed += OnTap2;
-            _EndllesButton.action.Enable();
+        if (_endlessButton != null) {
+            _endlessButton.action.performed += OnTap2;
+            _endlessButton.action.Enable();
+        }
+        
+        // ëÄçÏê‡ñæâÊëúï\é¶
+        if (_howToPlayButton != null) {
+            _howToPlayButton.action.performed += OnTapHowToPlay;
+            _howToPlayButton.action.Enable();
         }
     }
 
@@ -34,9 +41,14 @@ public class TapToMode : MonoBehaviour {
             _normalButton.action.Disable();
         }
 
-        if (_EndllesButton != null) {
-            _EndllesButton.action.performed -= OnTap2;
-            _EndllesButton.action.Disable();
+        if (_endlessButton != null) {
+            _endlessButton.action.performed -= OnTap2;
+            _endlessButton.action.Disable();
+        }
+        // ëÄçÏê‡ñæâÊëúÇï¬Ç∂ÇÈ
+        if (_howToPlayButton != null) {
+            _howToPlayButton.action.performed -= OnTapHowToPlay;
+            _howToPlayButton.action.Disable();
         }
     }
 
@@ -46,5 +58,9 @@ public class TapToMode : MonoBehaviour {
 
     private void OnTap2(InputAction.CallbackContext context) {
         _mode._isEndless = true;
+    }
+
+    private void OnTapHowToPlay(InputAction.CallbackContext context) {
+        _mode.ToggleHowToPlay();
     }
 }

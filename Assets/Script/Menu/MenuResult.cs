@@ -7,7 +7,7 @@ using static GameResultData;
 public class MenuResult : MenuBase {
     [SerializeField] private TextMeshProUGUI penetrationText = null;   // 突破数テキスト
     [SerializeField] private TextMeshProUGUI timeText = null;          // 時間テキスト
-    // [SerializeField] private TextMeshProUGUI getText = null;           // 取得アイテムテキスト
+    // [SerializeField] private TextMeshProUGUI getText = null;        // 取得アイテムテキスト
     [SerializeField] private TextMeshProUGUI rankText = null;          // ランクテキスト
     // 使用するSEのID
     private const int _RESULT_SE_ID = 0;
@@ -28,7 +28,7 @@ public class MenuResult : MenuBase {
     RankCalculatorBase calculator = null;
 
     /// <summary>
-    /// 初期化処理（毎回呼ぶ想定）
+    /// 初期化処理
     /// </summary>
     public override async UniTask Initialize() {
         await base.Initialize();
@@ -38,7 +38,7 @@ public class MenuResult : MenuBase {
     }
 
     /// <summary>
-    /// メニューを開いたときの処理（結果タイプを受け取る）
+    /// メニューを開いたときの処理
     /// </summary>
     public override async UniTask Open(GameResultType resultType) {
         await base.Open();

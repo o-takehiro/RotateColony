@@ -12,7 +12,6 @@ public class PartMainGame : PartBase {
     /// ゴールに到達した際に呼び出されるイベント
     /// </summary>
     private void OnGoalReachedHandler() {
-        Debug.Log("OnGoalReachedHandler() 呼び出された");
         goalReached = true; // ゴール到達フラグを立てる
     }
 

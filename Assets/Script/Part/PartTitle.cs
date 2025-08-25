@@ -7,7 +7,7 @@ using System.Net.Sockets;
 public class PartTitle : PartBase {
     // 使用するBGMのID
     private const int _TITLE_BGM_ID = 1;
-
+    public WaveTextManager waveText;
     /// <summary>
     /// 初期化処理
     /// </summary>
@@ -17,6 +17,7 @@ public class PartTitle : PartBase {
         // メニューの初期化
         await MenuManager.instance.Get<MenuTitle>("Prefab/Menu/CanvasTitle").Initialize();
         await MenuManager.instance.Get<MenuMode>("Prefab/Menu/CanvasModeMenu").Initialize();
+        if (waveText != null) waveText.gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -34,6 +35,7 @@ public class PartTitle : PartBase {
 
         // モード選択画面を表示
         await MenuManager.instance.Get<MenuMode>().Open();
+        if (waveText != null) waveText.gameObject.SetActive(false);
         //await FadeManager.instance.FadeIn();
 
         // メインパートへ遷移

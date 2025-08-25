@@ -9,6 +9,7 @@ public class MenuTitle : MenuBase {
     public bool isCloseScene = false;
     // g—p‚·‚éSE‚ÌID
     private const int _TITLE_SE_ID = 1;
+    public WaveTextManager waveText;
 
     // <summary>
     // ‰Šú‰»

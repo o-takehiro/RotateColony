@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class CountdownManager : SystemObject {
     [SerializeField] private TMP_Text countdownText; // インスペクターで設定
-    [SerializeField] private float displayTime = 1f; // 1 数字あたりの表示時間
+    [SerializeField] private float displayTime = 1f; // 数字あたりの表示時間
 
     public override async UniTask Initialize() {
-        // 初期化処理（特に無し）
+        // 初期化処理
         await UniTask.CompletedTask;
     }
 

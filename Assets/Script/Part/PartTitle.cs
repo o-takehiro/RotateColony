@@ -17,7 +17,9 @@ public class PartTitle : PartBase {
         // ƒƒjƒ…[‚Ì‰Šú‰»
         await MenuManager.instance.Get<MenuTitle>("Prefab/Menu/CanvasTitle").Initialize();
         await MenuManager.instance.Get<MenuMode>("Prefab/Menu/CanvasModeMenu").Initialize();
-        if (waveText != null) waveText.gameObject.SetActive(true);
+        if (waveText != null) {
+            waveText.gameObject.SetActive(true);
+        }
     }
 
     /// <summary>

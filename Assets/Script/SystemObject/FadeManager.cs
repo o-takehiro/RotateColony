@@ -14,7 +14,7 @@ public class FadeManager : SystemObject {
     public static FadeManager instance { get; private set; } = null;
 
     // デフォルトのフェード時間
-    private const float _DEFAULT_FADE_DURAITION = 0.1f;
+    private const float _DEFAULT_FADE_DURAITION = 1.0f;
 
     /// <summary>
     /// 初期化
@@ -61,12 +61,16 @@ public class FadeManager : SystemObject {
             float t = elapsedTime / duration;
             targetColor.a = Mathf.Lerp(startAlpha, targetAlpha, t);
             _fadeImage.color = targetColor;
-            // 1フレーム待ち1
-            await UniTask.DelayFrame(3);
+            // 3フレーム待ち
+            // await UniTask.DelayFrame(3);
+            await UniTask.Yield();
         }
         targetColor.a = targetAlpha;
         _fadeImage.color = targetColor;
-        _fadeImage.gameObject.SetActive(false);
+        // フェードインの時のみ解除する
+        if (Mathf.Approximately(targetAlpha, 0f)) {
+            _fadeImage.gameObject.SetActive(false);
+        }
     }
 
 

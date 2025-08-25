@@ -24,16 +24,21 @@ public class PartTitle : PartBase {
     /// </summary>
     /// <returns></returns>
     public override async UniTask Execute() {
+        // フェードイン
+        await FadeManager.instance.FadeIn();
         // BGM再生
         SoundManager.instance.PlayBGM(_TITLE_BGM_ID);
         // タイトルメニュー表示
         await MenuManager.instance.Get<MenuTitle>().Open();
         await UniTask.DelayFrame(1);
 
-        // モード選択のMenuをタイトルメニューのあとに開く
+        // モード選択画面を表示
         await MenuManager.instance.Get<MenuMode>().Open();
+        //await FadeManager.instance.FadeIn();
 
         // メインパートへ遷移
+        // 画面遷移時にフェードアウト
+        await FadeManager.instance.FadeOut();
         UniTask task = PartManager.Instance.TransitionPart(eGamePart.MainGame);
         await UniTask.CompletedTask;
     }

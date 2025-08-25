@@ -16,6 +16,7 @@ public class MenuTitle : MenuBase {
     // <returns></returns>
     public override async UniTask Initialize() {
         await base.Initialize();
+        gameObject.SetActive(true);
         await UniTask.CompletedTask;
     }
 
@@ -25,7 +26,6 @@ public class MenuTitle : MenuBase {
     /// </summary>
     /// <returns></returns>
     public override async UniTask Open() {
-        // ‚±‚±‚Å•K‚¸‰Šú‰»‚·‚éi‚Qü–ÚˆÈ~‚à•K{j
         isCloseScene = false;
         await base.Open();
         await FadeManager.instance.FadeIn();

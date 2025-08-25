@@ -50,7 +50,11 @@ public class PartManager : SystemObject {
         await CommonModule.WaitTask(taskList);
     }
 
-
+    /// <summary>
+    /// パートの切り替え
+    /// </summary>
+    /// <param name="nextPart"></param>
+    /// <returns></returns>
     public async UniTask TransitionPart(eGamePart nextPart) {
         // 現在のパートの切り替え
         if(_currentPart != null)await _currentPart.Teardown();

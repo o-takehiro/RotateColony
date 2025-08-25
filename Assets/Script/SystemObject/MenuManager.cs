@@ -14,16 +14,16 @@ public class MenuManager : SystemObject {
         _menuList = new List<MenuBase>(256);
         await UniTask.CompletedTask;
     }
-    
-    
+
+
     /// <summary>
     /// メニューの取得
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="name"></param>
     /// <returns></returns>
-    public T Get<T>(string name = null)where T: MenuBase {
-        for(int i = 0,max = _menuList.Count; i < max; i++) {
+    public T Get<T>(string name = null) where T : MenuBase {
+        for (int i = 0, max = _menuList.Count; i < max; i++) {
             T menu = _menuList[i] as T;
             if (menu == null) continue;
             return menu;
@@ -44,6 +44,12 @@ public class MenuManager : SystemObject {
 
         T createMenu = Instantiate(menu, transform);
         if (createMenu == null) return null;
+
+        // タイトルメニュー以外のメニュー
+        if (!(createMenu is MenuTitle)) {
+            // ロード時には非表示にしておく
+            createMenu.gameObject.SetActive(false);
+        }
 
         _menuList.Add(createMenu);
         return createMenu;

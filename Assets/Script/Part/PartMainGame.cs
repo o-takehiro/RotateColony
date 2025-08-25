@@ -66,8 +66,14 @@ public class PartMainGame : PartBase {
             segment.CalibrateGyro();
         }
 
-        // 適当に待つ
-        await UniTask.Delay(6000);
+        // カウントダウンを実行
+        CountdownManager countdownManager = FindObjectOfType<CountdownManager>();
+        if (countdownManager != null) {
+            await countdownManager.StartCountdown(3);
+        }
+        else {
+            await UniTask.Delay(6000);
+        }
 
         // プレイヤーの移動スクリプト取得
         PlayerMove moveScript = playerObj.GetComponent<PlayerMove>();
@@ -129,7 +135,7 @@ public class PartMainGame : PartBase {
         // BGMの再生停止
         SoundManager.instance.StopBGM();
 
-        // ゴールイベントの登録解除（メモリリーク防止）
+        // ゴールイベントの登録解除
         if (StageManager.instance != null) {
             StageManager.instance.OnGoalReached -= OnGoalReachedHandler;
         }

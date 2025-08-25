@@ -26,6 +26,9 @@ public class PartEnding : PartBase {
 
     public override async UniTask Execute() {
         await FadeManager.instance.FadeOut();
+        // タイトル画面を事前にロードしておく
+        var menuTitle = MenuManager.instance.Get<MenuTitle>("Prefab/Menu/CanvasTitle");
+        await menuTitle.Initialize();
         await PartManager.Instance.TransitionPart(eGamePart.Title);
     }
 

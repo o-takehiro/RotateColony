@@ -121,7 +121,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 10
-  effectPrefab: {fileID: 2150893837217643313, guid: e5a393ca0511839458036aaf32d8a1a6, type: 3}
+  trail: {fileID: 3123114437695705989}
+  visual: {fileID: 4174790864696216816}
 --- !u!54 &-8645459623980600672
 Rigidbody:
   m_ObjectHideFlags: 0

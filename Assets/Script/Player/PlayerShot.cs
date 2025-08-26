@@ -1,51 +1,45 @@
 using UnityEngine;
-using UnityEngine.Scripting;
+using Cysharp.Threading.Tasks;
 
+/// <summary>
+/// プレイヤーの射撃処理（プール対応版）
+/// </summary>
 public class PlayerShot : MonoBehaviour {
-    // PlayerMoveクラスを参照
-    private PlayerMove playerMove;
+    private PlayerMove playerMove; // プレイヤー移動スクリプト参照
 
-
+    [Header("Fire Points")]
     [SerializeField] private Transform leftFirePoint;
     [SerializeField] private Transform rightFirePoint;
-    [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private Transform shotTargetPoint;
 
-    [SerializeField] private float maxSpreadAngle = 30f;
+    [Header("Projectile Settings")]
     [SerializeField] private int damage = 10;
-    // [SerializeField] private float flightDuration = 1f;
+    [SerializeField] private float maxSpreadAngle = 30f;
 
-    // 弾の発射間隔
-    private readonly float FIRE_INTERVAL = 0.1f;
+    [Header("Pooling")]
+    [SerializeField] private ProjectilePool projectilePool; // 弾のプール
+
+    [Header("Fire Settings")]
+    private readonly float FIRE_INTERVAL = 0.1f; // 発射間隔
     private float leftFireTimer = 0f;
     private float rightFireTimer = 0f;
 
-    // 射撃可能フラグ
-    public bool isShot = false;
-    // 使用するSEのID
-    private const int _FIRE_SE_ID = 2;
-    [SerializeField] private ProjectilePool projectilePool; // プール参照
-    /// <summary>
-    /// 初期化処理
-    /// </summary>
+    public bool isShot = false; // 射撃可能フラグ
+    private const int _FIRE_SE_ID = 2; // 発射音ID
+
     private void Start() {
         playerMove = GetComponent<PlayerMove>();
         isShot = false;
     }
 
-    /// <summary>
-    /// 更新処理
-    /// </summary>
     private async void Update() {
-        // プレイヤーが移動開始していなければ撃てない
+        // 移動開始していなければ撃てない
         if (playerMove == null || !playerMove.GetIsMoving()) return;
 
         if (isShot) {
             Fire();
             await SoundManager.instance.PlaySE(_FIRE_SE_ID);
         }
-
-
     }
 
     /// <summary>
@@ -53,7 +47,6 @@ public class PlayerShot : MonoBehaviour {
     /// </summary>
     public void FireLeft() {
         FireFromPoint(leftFirePoint);
-
     }
 
     /// <summary>
@@ -61,11 +54,10 @@ public class PlayerShot : MonoBehaviour {
     /// </summary>
     public void FireRight() {
         FireFromPoint(rightFirePoint);
-
     }
 
     /// <summary>
-    /// 弾の同時発射
+    /// 左右同時発射
     /// </summary>
     public void FireBoth() {
         if (playerMove == null || !playerMove.GetIsMoving()) return;
@@ -75,11 +67,9 @@ public class PlayerShot : MonoBehaviour {
     }
 
     /// <summary>
-    /// 弾の着弾点を探し、弾を生成する
+    /// プールから弾を取得して初期化・発射
     /// </summary>
-    /// <param name="firePoint"></param>
     private void FireFromPoint(Transform firePoint) {
-        // プールから弾を取得
         GameObject proj = projectilePool.GetProjectile();
         proj.transform.position = firePoint.position;
         proj.transform.rotation = Quaternion.identity;
@@ -87,24 +77,21 @@ public class PlayerShot : MonoBehaviour {
         Projectile projScript = proj.GetComponent<Projectile>();
         projScript.damage = damage;
 
-        // 弾の方向などを初期化
+        // 左右で方向を変える
         Vector3 forward = (shotTargetPoint.position - firePoint.position).normalized;
         Vector3 rightDir = Vector3.Cross(Vector3.up, forward);
         Vector3 offsetDir = firePoint == leftFirePoint ? -rightDir : rightDir;
 
         projScript.Initialize(firePoint.position, shotTargetPoint, maxSpreadAngle, offsetDir);
-
     }
 
     /// <summary>
-    /// 発射処理
+    /// 発射処理（インターバル管理）
     /// </summary>
     private void Fire() {
-        // 経過時間を足す
         leftFireTimer += Time.deltaTime;
         rightFireTimer += Time.deltaTime;
 
-        // 0.3秒ごとに弾を発射 x 2
         if (leftFireTimer >= FIRE_INTERVAL) {
             FireLeft();
             leftFireTimer = 0f;
@@ -114,9 +101,5 @@ public class PlayerShot : MonoBehaviour {
             FireRight();
             rightFireTimer = 0f;
         }
-
     }
-
-
-
 }

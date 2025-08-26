@@ -80,4 +80,12 @@ public class PlayerManager : SystemObject {
     public GameObject GetPlayerObject() => playerInstance;
 
 
+    /// <summary>
+    /// プレイヤーの座標を取得
+    /// </summary>
+    /// <returns></returns>
+    public Vector3 GetPlayerPos() {
+        return playerPrefab.transform.position;
+    }
+
 }

@@ -48,6 +48,17 @@ MonoBehaviour:
   - name: boost
     prefab: {fileID: 5749441552287667129, guid: ee71d8dfb36a7b048aef24b0bc8f9764, type: 3}
     initialPoolSize: 1
+    autoReturnTime: -1
   - name: ex
     prefab: {fileID: 2150893837217643313, guid: e5a393ca0511839458036aaf32d8a1a6, type: 3}
     initialPoolSize: 30
+    autoReturnTime: -1
+  - name: playerEx
+    prefab: {fileID: 5162910912013668194, guid: cf82839c411151342a7b2337bda9fb34, type: 3}
+    initialPoolSize: 1
+    autoReturnTime: -1
+  - name: fire
+    prefab: {fileID: 100000, guid: 06a7735096a49064bac4963673c4f0b3, type: 3}
+    initialPoolSize: 1
+    autoReturnTime: 6
+  poolRoot: {fileID: 0}

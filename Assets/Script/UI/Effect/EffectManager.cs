@@ -3,53 +3,60 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 
 /// <summary>
-/// プール型の汎用エフェクトマネージャ
-/// ・エフェクトの再利用によるパフォーマンス向上
-/// ・エフェクトの再生・停止・一括停止を制御
+/// エフェクトをゲーム全体で共通管理するマネージャ
+/// プール方式で再利用することで処理を軽くする
 /// </summary>
 public class EffectManager : SystemObject {
-    // シングルトンインスタンス
+    // 唯一のインスタンスを保持する
     public static EffectManager Instance { get; private set; }
 
     [System.Serializable]
     public class EffectEntry {
-        public string name;              // 識別用のエフェクト名
-        public GameObject prefab;        // エフェクトのプレハブ
-        public int initialPoolSize = 5;  // プールに確保する初期個数
+        public string name;                // 識別用の名前
+        public GameObject prefab;          // 実際のエフェクトのひな型
+        public int initialPoolSize = 5;    // あらかじめ確保しておく数
+        public float autoReturnTime = -1f; // プールに戻すタイミング
     }
 
     [SerializeField]
-    private EffectEntry[] effectEntries; // インスペクタで設定するエフェクトリスト
+    private EffectEntry[] effectEntries; // インスペクタで設定するリスト
 
-    // エフェクト名 → プレハブ
+    [SerializeField]
+    private Transform poolRoot; // プールをまとめる親のオブジェクト
+
+    // 名前とひな型の対応表
     private readonly Dictionary<string, GameObject> effectPrefabs = new Dictionary<string, GameObject>();
 
-    // エフェクト名 → 非アクティブなエフェクトのプール
+    // 名前とプールの対応表
     private readonly Dictionary<string, Queue<GameObject>> effectPools = new Dictionary<string, Queue<GameObject>>();
 
-    // 現在アクティブな（再生中の）エフェクト一覧
+    // 現在動いているエフェクトを記録するリスト
     private readonly List<(string effectName, GameObject obj)> activeEffects = new List<(string, GameObject)>();
 
     private void Awake() {
-        // シングルトン重複防止
+        // インスタンスが重複していたら削除する
         if (Instance != null) {
             Destroy(gameObject);
             return;
         }
         Instance = this;
+        DontDestroyOnLoad(gameObject); // ゲーム全体で保持する
+
+        // 親が設定されていなければ自動で作成する
+        if (poolRoot == null) {
+            var poolRootObj = new GameObject("EffectPoolRoot");
+            poolRootObj.transform.SetParent(transform);
+            poolRoot = poolRootObj.transform;
+        }
     }
 
-    /// <summary>
-    /// 初期化処理（SystemObjectの抽象メソッドの実装）
-    /// </summary>
     public override async UniTask Initialize() {
+        // プールの初期化
         InitializePools();
         await UniTask.CompletedTask;
     }
 
-    /// <summary>
-    /// 登録されたエフェクトをもとにオブジェクトプールを構築
-    /// </summary>
+    // エフェクトリストをもとにプールを作成する
     private void InitializePools() {
         foreach (var entry in effectEntries) {
             if (string.IsNullOrEmpty(entry.name) || entry.prefab == null) {
@@ -58,10 +65,16 @@ public class EffectManager : SystemObject {
 
             effectPrefabs[entry.name] = entry.prefab;
 
-            var queue = new Queue<GameObject>();
+            // すでにプールがあるなら作らない
+            if (effectPools.ContainsKey(entry.name)) continue;
 
+            var queue = new Queue<GameObject>();
+            var effectParent = new GameObject($"Pool_{entry.name}");
+            effectParent.transform.SetParent(poolRoot);
+
+            // あらかじめ指定された数だけ生成して無効化しておく
             for (int i = 0; i < entry.initialPoolSize; i++) {
-                var obj = Instantiate(entry.prefab);
+                var obj = Instantiate(entry.prefab, effectParent.transform);
                 obj.SetActive(false);
                 queue.Enqueue(obj);
             }
@@ -70,64 +83,50 @@ public class EffectManager : SystemObject {
         }
     }
 
-    /// <summary>
-    /// エフェクトを再生
-    /// </summary>
-    /// <param name="effectName">識別名</param>
-    /// <param name="position">再生位置</param>
-    /// <param name="autoReturn">自動停止するか</param>
+    // エフェクトを指定位置で再生する
     public GameObject Play(string effectName, Vector3 position, bool autoReturn = true) {
         if (!effectPools.ContainsKey(effectName)) {
             return null;
         }
 
         GameObject obj;
-
-        // プールから取得または新規生成
+        // プールから取り出す
         if (effectPools[effectName].Count > 0) {
             obj = effectPools[effectName].Dequeue();
         }
         else {
-            obj = Instantiate(effectPrefabs[effectName]);
+            // 新しく生成する
+            obj = Instantiate(effectPrefabs[effectName], poolRoot);
         }
 
         obj.transform.position = position;
         obj.SetActive(true);
-
-        // 再生中リストに登録
         activeEffects.Add((effectName, obj));
 
-        // 一定時間後に自動で停止
+        // 一定時間後にエフェクト停止
         if (autoReturn) {
-            _ = ReturnToPoolAfterTime(effectName, obj, 2f);
+            // EffectEntry から時間を取る
+            var entry = System.Array.Find(effectEntries, e => e.name == effectName);
+            float delay = entry != null && entry.autoReturnTime > 0 ? entry.autoReturnTime : 2f; // 2秒をデフォルト
+            _ = ReturnToPoolAfterTime(effectName, obj, delay);
         }
 
         return obj;
     }
 
-    /// <summary>
-    /// 指定時間経過後にエフェクトを停止してプールに戻す
-    /// </summary>
+    // 一定時間後に自動でプールへ戻す
     private async UniTaskVoid ReturnToPoolAfterTime(string effectName, GameObject obj, float delay) {
         await UniTask.Delay(System.TimeSpan.FromSeconds(delay));
-
         if (obj == null || obj.Equals(null)) return;
-
         Stop(effectName, obj);
     }
 
-    /// <summary>
-    /// 指定したエフェクトを明示的に停止
-    /// </summary>
-    /// <param name="effectName">識別名</param>
-    /// <param name="obj">停止対象のオブジェクト</param>
+    // 指定のエフェクトを停止してプールへ戻す
     public void Stop(string effectName, GameObject obj) {
+        if (obj == null) return;
         obj.SetActive(false);
-
-        // 再生中リストから削除
         activeEffects.RemoveAll(e => e.obj == obj);
 
-        // プールに戻す or 破棄
         if (effectPools.ContainsKey(effectName)) {
             effectPools[effectName].Enqueue(obj);
         }
@@ -136,13 +135,10 @@ public class EffectManager : SystemObject {
         }
     }
 
-    /// <summary>
-    /// 再生中のすべてのエフェクトを停止し、プールに戻す
-    /// </summary>
+    // 再生中のすべてのエフェクトを停止してプールへ戻す
     public void StopAll() {
         foreach (var (effectName, obj) in activeEffects) {
             if (obj == null || obj.Equals(null)) continue;
-
             obj.SetActive(false);
 
             if (effectPools.ContainsKey(effectName)) {
@@ -152,8 +148,6 @@ public class EffectManager : SystemObject {
                 Destroy(obj);
             }
         }
-
-        // 再生中リストをクリア
         activeEffects.Clear();
     }
 }

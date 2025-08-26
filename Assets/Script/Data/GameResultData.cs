@@ -3,4 +3,7 @@ public static class GameResultData {
     public static int StagePassedCount { get; set; }
 
     public static float ClearTime { get; set; }
+    
+    public static GameModeState SelectedMode { get; set; }
+
 }

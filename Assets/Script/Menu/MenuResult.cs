@@ -7,7 +7,7 @@ using static GameResultData;
 public class MenuResult : MenuBase {
     [SerializeField] private TextMeshProUGUI penetrationText = null;   // 突破数テキスト
     [SerializeField] private TextMeshProUGUI timeText = null;          // 時間テキスト
-    // [SerializeField] private TextMeshProUGUI getText = null;        // 取得アイテムテキスト
+    [SerializeField] private TextMeshProUGUI modeText = null;          // モードテキスト
     [SerializeField] private TextMeshProUGUI rankText = null;          // ランクテキスト
     // 使用するSEのID
     private const int _RESULT_SE_ID = 0;
@@ -47,8 +47,13 @@ public class MenuResult : MenuBase {
         _state = ResultState.ShowImage;
         _isTapLocked = false;
 
-        calculator = new StageClearRankCalculator();
-
+        
+        if (GameResultData.SelectedMode == GameModeState.Normal) {
+            calculator = new StageClearRankCalculator();
+        }
+        else {
+            calculator = new EndlessModeRankCalculator();
+        }
         int passed = StagePassedCount;
         float time = ClearTime;
 
@@ -59,12 +64,8 @@ public class MenuResult : MenuBase {
                 case ResultState.ShowImage:
                     penetrationText.text = $"{passed}";
                     timeText.text = FormatTime(time);
-                    if (_currentResult == GameResultType.Clear) {
-                        Debug.Log("ゲームクリア表示");
-                    }
-                    else {
-                        Debug.Log("ゲームオーバー表示");
-                    }
+                    modeText.text = GetModeString(GameResultData.SelectedMode);
+
                     break;
 
                 case ResultState.ShowRank:
@@ -90,6 +91,12 @@ public class MenuResult : MenuBase {
         _state = ResultState.None;
         _isTapLocked = false;
         _currentResult = GameResultType.None;
+
+        // テキストをクリア
+        if (penetrationText != null) penetrationText.text = "";
+        if (timeText != null) timeText.text = "";
+        if (modeText != null) modeText.text = "";
+        if (rankText != null) rankText.text = "";
     }
 
     /// <summary>
@@ -123,5 +130,15 @@ public class MenuResult : MenuBase {
         int min = Mathf.FloorToInt(seconds / 60f);
         int sec = Mathf.FloorToInt(seconds % 60f);
         return $"{min:D2}:{sec:D2}";
+    }
+
+
+
+    private string GetModeString(GameModeState mode) {
+        switch (mode) {
+            case GameModeState.Normal: return "Normal";
+            case GameModeState.Endless: return "Endless";
+            default: return "不明";
+        }
     }
 }

@@ -99,9 +99,15 @@ public class PartMainGame : PartBase {
 
             // ゴール到達処理
             if (goalReached) {
+                if (playerObj != null) {
+                    moveScript?.ClearPlayer();  // ←ここで時間をセット
+                }
+
                 // クリア情報を記録
                 GameResultData.ResultType = GameResultType.Clear;
                 GameResultData.StagePassedCount = StageManager.instance.PassedStageCount;
+                GameResultData.SelectedMode = StageManager.instance.CurrentMode;
+
                 // 適当に待つ
                 await UniTask.Delay(2000);
                 // フェードアウト
@@ -115,6 +121,7 @@ public class PartMainGame : PartBase {
             if (moveScript.GetIsStopped()) {
                 GameResultData.ResultType = GameResultType.GameOver;
                 GameResultData.StagePassedCount = StageManager.instance.PassedStageCount;
+                GameResultData.SelectedMode = StageManager.instance.CurrentMode;
                 // 適当に待つ
                 await UniTask.Delay(3000);
                 // フェードアウト

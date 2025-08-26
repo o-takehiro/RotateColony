@@ -27,10 +27,10 @@ public class PartTitle : PartBase {
     /// </summary>
     /// <returns></returns>
     public override async UniTask Execute() {
-        // フェードイン
-        await FadeManager.instance.FadeIn();
         // BGM再生
         SoundManager.instance.PlayBGM(_TITLE_BGM_ID);
+        // フェードイン
+        await FadeManager.instance.FadeIn();
         // タイトルメニュー表示
         await MenuManager.instance.Get<MenuTitle>().Open();
         await UniTask.DelayFrame(1);

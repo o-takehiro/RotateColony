@@ -17,13 +17,31 @@ public abstract class RankCalculatorBase {
     }
 
     /// <summary>
-    /// ランクの文字列を表示する
+    /// ステージスコア計算
+    /// </summary>
+    protected int EndlessStageScore(int stageCount) {
+        return Mathf.Min(stageCount * 5, 150); // 30ステージ以上で50点満点
+    }
+
+    /// <summary>
+    /// ノーマルモードのランク
     /// </summary>
     protected string ScoreToRank(int totalScore) {
-        if (totalScore >= 90) return "S";
-        if (totalScore >= 70) return "A";
+        if (totalScore >= 100) return "S";
+        if (totalScore >= 80) return "A";
         if (totalScore >= 50) return "B";
         if (totalScore >= 30) return "C";
+        return "D";
+    }
+
+    /// <summary>
+    /// エンドレスモードのランク
+    /// </summary>
+    protected string EndlessToScoreRank (int totalScore) {
+        if (totalScore >= 200) return "S";
+        if (totalScore >= 140) return "A";
+        if (totalScore >= 80) return "B";
+        if (totalScore >= 20) return "C";
         return "D";
     }
 }
@@ -61,11 +79,11 @@ public class StageClearRankCalculator : RankCalculatorBase {
 /// </summary>
 public class EndlessModeRankCalculator : RankCalculatorBase {
     public override string CalculateRank(int stageCount, float timeInSeconds) {
-        int stageScore = CalculateStageScore(stageCount);
+        int stageScore = EndlessStageScore(stageCount);
         int timeScore = CalculateTimeScore(timeInSeconds);
         int totalScore = stageScore + timeScore;
 
-        return ScoreToRank(totalScore);
+        return EndlessToScoreRank(totalScore);
     }
 
     /// <summary>
@@ -73,11 +91,11 @@ public class EndlessModeRankCalculator : RankCalculatorBase {
     /// 長ければ長いほどスコアを高くする
     /// </summary>
     private int CalculateTimeScore(float time) {
-        if (time >= 300f) return 50;
-        if (time >= 240f) return 40;
-        if (time >= 180f) return 30;
-        if (time >= 120f) return 20;
-        if (time >= 60f) return 10;
+        if (time >= 180f) return 50;
+        if (time >= 120f) return 40;
+        if (time >= 90f) return 30;
+        if (time >= 40f) return 20;
+        if (time >= 20f) return 10;
         return 0;
     }
 }

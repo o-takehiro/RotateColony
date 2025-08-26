@@ -25,6 +25,7 @@ public class StageManager : SystemObject {
     public event System.Action OnGoalReached;
 
     private IStageGenerationStrategy stageGenerationStrategy;
+    public GameModeState CurrentMode { get; private set; } = GameModeState.Normal;
 
     /// <summary>
     /// 初期化（モードに応じたステージ生成戦略を設定）
@@ -51,6 +52,7 @@ public class StageManager : SystemObject {
     /// モードに応じて、ステージの生成方法を変更する
     /// </summary>
     public void SetupStrategy(GameModeState mode) {
+        CurrentMode = mode;
         switch (mode) {
             case GameModeState.Normal:
                 stageGenerationStrategy = new NormalStageMode(stagePrefabs, goalPrefab);

@@ -57,15 +57,20 @@ public class SoundManager : SystemObject {
         if (!IsEnableIndex(_seAssign.seArray, seID)) return;
 
         // 再生中ではないオーディオソースを探してそれで再生
-        for (int i = 0, max = _seAudioSource.Length; i < max; i++) {
+        for (int i = 0; i < _seAudioSource.Length; i++) {
             AudioSource audioSource = _seAudioSource[i];
-            if (audioSource == null ||
-                audioSource.isPlaying) continue;
-            // 再生中でないオーディオソースが見つかったので再生
+
+            // AudioSource が null または再生中ならスキップ
+            if (audioSource == null || audioSource.isPlaying) continue;
+
+            // clip をセットして再生
             audioSource.clip = _seAssign.seArray[seID];
             audioSource.Play();
-            // SEの終了待ち
-            while (audioSource.isPlaying) await UniTask.DelayFrame(1);
+
+            // SEの終了待ち（途中で AudioSource が破棄された場合も安全）
+            while (audioSource != null && audioSource.isPlaying) {
+                await UniTask.DelayFrame(1);
+            }
 
             return;
         }

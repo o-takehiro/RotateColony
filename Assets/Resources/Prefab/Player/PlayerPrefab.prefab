@@ -31,100 +31,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1440795885206560866}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2230234411022670869
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4417306844177843735}
-  - component: {fileID: 4213922292020122577}
-  m_Layer: 0
-  m_Name: playerLight (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4417306844177843735
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2230234411022670869}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 516.5, y: 8.01, z: 15.42}
-  m_LocalScale: {x: 3.333333, y: 3.333333, z: 3.333333}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1440795885206560866}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!108 &4213922292020122577
-Light:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2230234411022670869}
-  m_Enabled: 1
-  serializedVersion: 10
-  m_Type: 0
-  m_Shape: 0
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 3
-  m_Range: 5.9142733
-  m_SpotAngle: 84
-  m_InnerSpotAngle: 20
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 0
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 1
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-    m_CullingMatrixOverride:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingLayerMask: 1
-  m_Lightmapping: 4
-  m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 3
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
-  m_UseBoundingSphereOverride: 0
-  m_UseViewFrustumForShadowCasterCull: 1
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
 --- !u!1 &6303233346403105607
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,7 +161,6 @@ Transform:
   m_Children:
   - {fileID: 584716098403587469}
   - {fileID: 4382614619009104957}
-  - {fileID: 4417306844177843735}
   - {fileID: 4628487355528419452}
   - {fileID: 8722842834333585266}
   - {fileID: 8467192911991399194}
@@ -275,7 +180,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boostFlag: 0
   isMoving: 0
-  gameClearTime: 0
+  _playerBoostPosRight: {fileID: 3642050176866484283}
+  _playerBoostPosLeft: {fileID: 6991194534565244345}
 --- !u!114 &2177471185071866530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,7 +262,6 @@ MonoBehaviour:
   shotTargetPoint: {fileID: 8467192911991399194}
   maxSpreadAngle: 10
   damage: 10
-  flightDuration: 1
   isShot: 0
 --- !u!1 &7566512618388884631
 GameObject:
@@ -540,5 +445,15 @@ MonoBehaviour:
 --- !u!4 &584716098403587469 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2ba1c046940bc1943b61bf7acc9f716e, type: 3}
+  m_PrefabInstance: {fileID: 1123627546843361894}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3642050176866484283 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4819761884922662307, guid: 2ba1c046940bc1943b61bf7acc9f716e, type: 3}
+  m_PrefabInstance: {fileID: 1123627546843361894}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6991194534565244345 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -1255841086227030049, guid: 2ba1c046940bc1943b61bf7acc9f716e, type: 3}
   m_PrefabInstance: {fileID: 1123627546843361894}
   m_PrefabAsset: {fileID: 0}

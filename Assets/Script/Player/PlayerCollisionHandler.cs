@@ -34,6 +34,7 @@ public class PlayerCollisionHandler : MonoBehaviour {
         // エフェクト再生関数を呼ぶ
         if (shouldStop) {
             Vector3 pos =  playerMove.transform.position;
+            pos += playerMove.transform.right * -2f;
             playerMove.StopMoving();
             PlayHitEffect(pos);
         }

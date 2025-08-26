@@ -25,6 +25,13 @@ public class PlayerMove : PlayerBase {
     // 時間計測開始用フラグ
     private bool _hasTimerStarted = false;
 
+    [SerializeField]
+    private Transform _playerBoostPosRight;     // 加速時エフェクトの右側
+    [SerializeField]
+    private Transform _playerBoostPosLeft;      // 加速時エフェクトの左側
+    private GameObject _boosterEffectRight = null;    // エフェクト格納用
+    private GameObject _boosterEffectLeft = null;     // エフェクト格納用
+
     private void Start() {
         // 現在のspeedに通常の移動速度を入れる
         _currentSpeed = _playerSpeed;
@@ -67,13 +74,17 @@ public class PlayerMove : PlayerBase {
             _currentSpeed += _BOOST_ACCELERATIUN * Time.deltaTime;
             _currentSpeed = Mathf.Min(_currentSpeed, _BOOST_MAX_SPEED); // 上限を超えない
             if (_boostEffect == null) {
-                // boostがONになった瞬間だけ
+                // boostがOnになった時
+                // エフェクトを格納
                 _boostEffect = EffectManager.Instance.Play("boost", transform.position, false);
-                
+                _boosterEffectRight = EffectManager.Instance.Play("booster", _playerBoostPosRight.transform.position, false);
+                _boosterEffectLeft = EffectManager.Instance.Play("booster", _playerBoostPosLeft.transform.position, false);
             }
             else {
                 // エフェクトをプレイヤーに追従させる
                 _boostEffect.transform.position = transform.position;
+                _boosterEffectRight.transform.position = _playerBoostPosRight.transform.position;
+                _boosterEffectLeft.transform.position = _playerBoostPosLeft.transform.position;
             }
         }
         else {

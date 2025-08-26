@@ -61,4 +61,8 @@ MonoBehaviour:
     prefab: {fileID: 100000, guid: 06a7735096a49064bac4963673c4f0b3, type: 3}
     initialPoolSize: 1
     autoReturnTime: 6
+  - name: booster
+    prefab: {fileID: 100002, guid: 06d796ccd85dc4c4b9c98270196715ae, type: 3}
+    initialPoolSize: 2
+    autoReturnTime: -1
   poolRoot: {fileID: 0}

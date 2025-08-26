@@ -24,7 +24,7 @@ public class PlayerShot : MonoBehaviour {
     public bool isShot = false;
     // 使用するSEのID
     private const int _FIRE_SE_ID = 2;
-
+    [SerializeField] private ProjectilePool projectilePool; // プール参照
     /// <summary>
     /// 初期化処理
     /// </summary>
@@ -79,19 +79,19 @@ public class PlayerShot : MonoBehaviour {
     /// </summary>
     /// <param name="firePoint"></param>
     private void FireFromPoint(Transform firePoint) {
-        GameObject proj = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
+        // プールから弾を取得
+        GameObject proj = projectilePool.GetProjectile();
+        proj.transform.position = firePoint.position;
+        proj.transform.rotation = Quaternion.identity;
+
         Projectile projScript = proj.GetComponent<Projectile>();
         projScript.damage = damage;
 
-        // 左右で方向を変える（FirePointの向きを使って決定）
+        // 弾の方向などを初期化
         Vector3 forward = (shotTargetPoint.position - firePoint.position).normalized;
-        Vector3 rightDir = Vector3.Cross(Vector3.up, forward); // 「右方向」
-
-        // 左なら右方向を反転
+        Vector3 rightDir = Vector3.Cross(Vector3.up, forward);
         Vector3 offsetDir = firePoint == leftFirePoint ? -rightDir : rightDir;
 
-
-        // 弾を生成
         projScript.Initialize(firePoint.position, shotTargetPoint, maxSpreadAngle, offsetDir);
 
     }

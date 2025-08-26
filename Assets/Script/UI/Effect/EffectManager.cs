@@ -40,7 +40,6 @@ public class EffectManager : SystemObject {
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject); // ƒQ[ƒ€‘S‘Ì‚Å•Û‚·‚é
 
         // e‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î©“®‚Åì¬‚·‚é
         if (poolRoot == null) {

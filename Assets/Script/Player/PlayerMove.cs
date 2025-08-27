@@ -70,6 +70,8 @@ public class PlayerMove : PlayerBase {
     /// </summary>
     private void HandleSpeed() {
         if (boostFlag) {
+            // SE再生
+            PlayerPlaySE();
             // ブースト中は加速
             _currentSpeed += _BOOST_ACCELERATIUN * Time.deltaTime;
             _currentSpeed = Mathf.Min(_currentSpeed, _BOOST_MAX_SPEED); // 上限を超えない
@@ -150,6 +152,13 @@ public class PlayerMove : PlayerBase {
         // 時間を止めてセットする
         TimeManager.Instance.StopTimer();
         GameResultData.ClearTime = TimeManager.Instance.GetTime();
+    }
+
+    /// <summary>
+    /// 音を再生
+    /// </summary>
+    private async void PlayerPlaySE() {
+        await SoundManager.instance.PlaySE(4);
     }
 
 }

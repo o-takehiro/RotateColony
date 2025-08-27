@@ -7,6 +7,7 @@ using UnityEngine;
 public class PartMainGame : PartBase {
     private bool goalReached = false;                 // ゴールに到達したかどうかを示すフラグ
     private const int _MAIN_BGM_ID = 0;               // 使用するBGMのID
+    private const int _MAIN_SE_ID_7 = 7;                // 使用するSEのID
 
     /// <summary>
     /// ゴールに到達した際に呼び出されるイベント
@@ -68,11 +69,14 @@ public class PartMainGame : PartBase {
         // カウントダウンを実行
         CountdownManager countdownManager = FindObjectOfType<CountdownManager>();
         if (countdownManager != null) {
+            await SoundManager.instance.PlaySE(_MAIN_SE_ID_7);
             await countdownManager.StartCountdown(3);
         }
         else {
             await UniTask.Delay(6000);
         }
+
+        // SE再生
 
         // プレイヤーの移動スクリプト取得
         PlayerMove moveScript = playerObj.GetComponent<PlayerMove>();
@@ -100,7 +104,8 @@ public class PartMainGame : PartBase {
             // ゴール到達処理
             if (goalReached) {
                 if (playerObj != null) {
-                    moveScript?.ClearPlayer();  // ←ここで時間をセット
+                    // クリア時間を取得
+                    moveScript?.ClearPlayer();  
                 }
 
                 // クリア情報を記録

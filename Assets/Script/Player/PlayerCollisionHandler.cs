@@ -33,10 +33,15 @@ public class PlayerCollisionHandler : MonoBehaviour {
 
         // エフェクト再生関数を呼ぶ
         if (shouldStop) {
-            Vector3 pos =  playerMove.transform.position;
+            Vector3 pos = playerMove.transform.position;
+            // エフェクト再生位置をずらす
             pos += playerMove.transform.right * -2f;
+            // プレイヤーの動きを停止させる
             playerMove.StopMoving();
+            // エフェクトを指定した位置で再生
             PlayHitEffect(pos);
+            // 衝突時のSEを再生
+            PlayerPlaySE(shouldStop);
         }
     }
 
@@ -47,5 +52,15 @@ public class PlayerCollisionHandler : MonoBehaviour {
     private void PlayHitEffect(Vector3 pos) {
         // エフェクト再生
         EffectManager.Instance.Play("fire", pos);
+    }
+
+    /// <summary>
+    /// フラグが立っていればSEを再生する
+    /// </summary>
+    /// <param name="flag"></param>
+    private async void PlayerPlaySE(bool flag) {
+        if (flag) {
+            await SoundManager.instance.PlaySE(5);
+        }
     }
 }

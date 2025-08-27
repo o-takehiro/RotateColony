@@ -50,8 +50,8 @@ MonoBehaviour:
     initialPoolSize: 1
     autoReturnTime: -1
   - name: ex
-    prefab: {fileID: 2150893837217643313, guid: e5a393ca0511839458036aaf32d8a1a6, type: 3}
-    initialPoolSize: 30
+    prefab: {fileID: 358637981425055526, guid: 8eb503696b886e04faff8fc0f480d473, type: 3}
+    initialPoolSize: 50
     autoReturnTime: -1
   - name: playerEx
     prefab: {fileID: 5162910912013668194, guid: cf82839c411151342a7b2337bda9fb34, type: 3}
@@ -64,5 +64,9 @@ MonoBehaviour:
   - name: booster
     prefab: {fileID: 100002, guid: 06d796ccd85dc4c4b9c98270196715ae, type: 3}
     initialPoolSize: 2
+    autoReturnTime: -1
+  - name: Nuke
+    prefab: {fileID: 4809171458859421548, guid: 4e91ed1a8efe7044785b9bd97a47d87f, type: 3}
+    initialPoolSize: 1
     autoReturnTime: -1
   poolRoot: {fileID: 0}

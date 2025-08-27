@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Triggers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,9 +25,10 @@ public class FollowCamera : MonoBehaviour {
     private float startAngle;
     private float endAngle;
 
-    // 注視する場所 + ●●
+    // 注視する場所
     private readonly float UP_EYE = 2.5f;
-
+    private bool _isClear;
+    private Vector3 clearPosition; // 固定する位置
     /// <summary>
     /// 追従対象を設定
     /// </summary>
@@ -53,6 +55,13 @@ public class FollowCamera : MonoBehaviour {
     /// </summary>
     private void LateUpdate() {
         if (target == null) return;
+
+        if (_isClear) {
+            // 位置固定視点工程
+            transform.position = clearPosition;
+            transform.LookAt(target.position + Vector3.up * UP_EYE);
+            return;
+        }
 
         // 補間開始
         if (isStartMoving) {
@@ -89,14 +98,26 @@ public class FollowCamera : MonoBehaviour {
             Vector3 desiredPosition = target.position + endOffset;
             transform.position = Vector3.Lerp(transform.position, desiredPosition, followSpeed * Time.deltaTime);
             //transform.LookAt(target);
-            // プレイヤーの少し上を向くようにする（例：1.5m上を注視）
+            // プレイヤーの少し上を向くようにする
             Vector3 lookTarget = target.position + Vector3.up * UP_EYE;
             // 正面方向から見て上に上げる
             transform.rotation = Quaternion.LookRotation(lookTarget - transform.position);
 
-
-
         }
+    }
+
+    /// <summary>
+    /// ゲームクリア時の処理
+    /// </summary>
+    public void ClearCameraAngle() {
+        // 現在位置を保存して固定
+        clearPosition = transform.position;
+        _isClear = true;
+
+    }
+    // 片付け処理
+    public void ExitCamera() {
+        _isClear = false;
     }
 }
 

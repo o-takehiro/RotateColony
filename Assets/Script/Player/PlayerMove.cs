@@ -152,6 +152,8 @@ public class PlayerMove : PlayerBase {
         // ŽžŠÔ‚ðŽ~‚ß‚ÄƒZƒbƒg‚·‚é
         TimeManager.Instance.StopTimer();
         GameResultData.ClearTime = TimeManager.Instance.GetTime();
+        FollowCamera camera = Camera.main?.GetComponent<FollowCamera>();
+        camera.ClearCameraAngle();
     }
 
     /// <summary>

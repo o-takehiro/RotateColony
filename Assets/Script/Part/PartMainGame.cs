@@ -156,6 +156,8 @@ public class PartMainGame : PartBase {
         ButtonManager.instance.DestroyAllButtons();   // ボタンの削除
         StageManager.instance.ClearAllSegments();     // ステージ要素クリア
         EffectManager.Instance.StopAll();             // 全エフェクト停止
+        FollowCamera camera = Camera.main?.GetComponent<FollowCamera>();
+        camera.ExitCamera();
         await UniTask.CompletedTask;
     }
 }

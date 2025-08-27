@@ -11,7 +11,7 @@ public class Destructible : MonoBehaviour {
         if (durability <= 0) {
             // エフェクト再生
             Vector3 efPos = transform.position;
-            efPos.y += transform.position.y * -3f;
+            efPos.y += transform.position.y * -4f;
             EffectManager.Instance.Play("Nuke",efPos);
             // SE再生
             DestroySE();

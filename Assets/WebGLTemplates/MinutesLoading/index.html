@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | {{{ PRODUCT_NAME }}}</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    #if SHOW_DIAGNOSTICS
+    <link rel="stylesheet" href="<<<TemplateData/diagnostics.css>>>">
+    <script src="<<<TemplateData/diagnostics.js>>>"></script>
+    #endif
+</head>
+<body>
+    <div id="unity-container" class="unity-desktop">
+        <canvas id="unity-canvas" width={{{ WIDTH }}} height={{{ HEIGHT }}} tabindex="-1"></canvas>
+        <div id="unity-loading-bar">
+            <div id="unity-logo"></div>
+            <div id="unity-progress-bar-empty">
+                <div id="unity-progress-bar-full"></div>
+            </div>
+        </div>
+        <div id="unity-warning"> </div>
+        <div id="unity-footer">
+            <div id="unity-webgl-logo"></div>
+            <div id="unity-fullscreen-button"></div>
+            #if SHOW_DIAGNOSTICS
+            <img id="diagnostics-icon" src="TemplateData/webmemd-icon.png">
+            #endif
+            <div id="unity-build-title">{{{ PRODUCT_NAME }}}</div>
+        </div>
+    </div>
+    <script>
+
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var warningBanner = document.querySelector("#unity-warning");
+#if SHOW_DIAGNOSTICS
+      var diagnostics_icon = document.getElementById("diagnostics-icon");
+#endif
+
+      // Shows a temporary message banner/ribbon for a few seconds, or
+      // a permanent error message on top of the canvas if type=='error'.
+      // If type=='warning', a yellow highlight color is used.
+      // Modify or remove this function to customize the visually presented
+      // way that non-critical warnings and error messages are presented to the
+      // user.
+      function unityShowBanner(msg, type) {
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
+      var config = {
+        dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
+        frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
+#if USE_THREADS
+        workerUrl: buildUrl + "/{{{ WORKER_FILENAME }}}",
+#endif
+#if USE_WASM
+        codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+#endif
+#if MEMORY_FILENAME
+        memoryUrl: buildUrl + "/{{{ MEMORY_FILENAME }}}",
+#endif
+#if SYMBOLS_FILENAME
+        symbolsUrl: buildUrl + "/{{{ SYMBOLS_FILENAME }}}",
+#endif
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: {{{ JSON.stringify(COMPANY_NAME) }}},
+        productName: {{{ JSON.stringify(PRODUCT_NAME) }}},
+        productVersion: {{{ JSON.stringify(PRODUCT_VERSION) }}},
+        showBanner: unityShowBanner,
+      };
+
+      // By default, Unity keeps WebGL canvas render target size matched with
+      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+      // Set this to false if you want to decouple this synchronization from
+      // happening inside the engine, and you would instead like to size up
+      // the canvas DOM size and WebGL render target sizes yourself.
+      // config.matchWebGLToCanvasSize = false;
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        container.className = "unity-mobile";
+        canvas.className = "unity-mobile";
+
+        // To lower canvas resolution on mobile devices to gain some
+        // performance, uncomment the following line:
+        // config.devicePixelRatio = 1;
+
+#if SHOW_DIAGNOSTICS
+        // position the diagnostics icon in the corner on the canvas
+        diagnostics_icon.style.position = "fixed";
+        diagnostics_icon.style.bottom = "10px";
+        diagnostics_icon.style.right = "0px";
+        canvas.after(diagnostics_icon);
+#endif
+
+      } else {
+        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+
+        canvas.style.width = "{{{ WIDTH }}}px";
+        canvas.style.height = "{{{ HEIGHT }}}px";
+      }
+
+#if BACKGROUND_FILENAME
+      canvas.style.background = "url('" + buildUrl + "/{{{ BACKGROUND_FILENAME.replace(/'/g, '%27') }}}') center / cover";
+#endif
+      loadingBar.style.display = "block";
+
+        var lastProgressReport = 0; // 前回の進行度報告値
+
+        var script = document.createElement("script");
+        script.src = loaderUrl;
+        script.onload = () => {
+            createUnityInstance(canvas, config, (progress) => {
+                // ロード進行状況をリアルタイムで更新
+                progressBarFull.style.width = 100 * progress + "%";
+
+                // 進行度が前回から10%以上進んだ場合にのみ更新を報告
+                if (progress >= lastProgressReport + 0.1) {
+                    lastProgressReport = progress; // 前回の進行度を更新
+                    updateProgress(100 * progress);
+                }
+            }).then((unityInstance) => {
+                window.unityInstance = unityInstance; // グローバル変数として設定
+                loadingBar.style.display = "none";
+                fullscreenButton.onclick = () => {
+                    unityInstance.SetFullscreen(1);
+                };
+
+                // ゲームのロード完了後にgameLoadedを呼び出す
+                gameLoaded();
+            }).catch((message) => {
+            }).catch((message) => {
+                alert("An error occurred: " + message);
+            });
+        };
+        document.body.appendChild(script);
+
+        function updateProgress(progress) {
+            let progressRounded = Math.floor(progress * 100) / 100;
+            console.log("Current progress: " + progressRounded + "%");
+            sendUnityProgress(progressRounded);
+        }
+        function gameLoaded() {
+            console.log("Unity WebGL game is fully loaded and ready.");
+            notifyGameLoaded();
+            MountingConfirmation();
+        }
+
+        // UnityのPauseGameメソッドを呼び出してゲームを停止
+        function pauseUnityGame() {
+            if (window.unityInstance) {
+                unityInstance.SendMessage('MinutesClient', 'PauseGame');
+            }
+        }
+
+        // UnityのResumeGameメソッドを呼び出してゲームを再開
+        function resumeUnityGame() {
+            if (window.unityInstance) {
+                unityInstance.Module.resumeMainLoop();
+                unityInstance.SendMessage('MinutesClient', 'ResumeGame');
+            }
+        }
+
+
+        function isMobileWebView() {
+            const ua = window.navigator.userAgent || "";
+            const isAndroid = /Android/i.test(ua);
+            const isIOS = /iPhone|iPad|iPod/i.test(ua);
+            return (
+                (isIOS && !/Safari/i.test(ua)) ||
+                (isAndroid && (/wv/.test(ua) || /; wv/.test(ua) || /Crosswalk/.test(ua)))
+            );
+        }
+
+        function sendUnityWebViewMessage(key, value = "") {
+            if (isMobileWebView()) {
+                const message = value ? `unity:${key}:${value}` : `unity:${key}`;
+                window.location.href = message;
+            }
+        }
+
+        function sendUnityProgress(progress) {
+            sendUnityWebViewMessage("progress", progress);
+        }
+
+        function notifyGameLoaded() {
+            sendUnityWebViewMessage("gameLoaded");
+        }
+
+        function notifyAlreadyMounted() {
+            sendUnityWebViewMessage("AlreadyMounted");
+        }
+
+        function notifyPluginVersion(version) {
+            sendUnityWebViewMessage("Plugin Version", version);
+        }
+
+        function AlreadyMounted() {
+            notifyAlreadyMounted();
+        }
+
+        function checkPluginVersion() {
+            if (typeof window.pluginVersion !== 'undefined') {
+                console.log("Plugin Version: " + window.pluginVersion);
+                notifyPluginVersion(window.pluginVersion);
+            }
+        }
+
+        function MountingConfirmation() {
+            if (window.unityInstance) {
+                unityInstance.SendMessage('MinutesClient', 'MountingConfirmation');
+            }
+        }
+
+        function UnityInitialized() {
+            console.log("Unity WebGL player initialized.");
+            if (typeof unityInstance !== "undefined") {
+                unityInstance.SendMessage('MinutesClient', 'MountingConfirmation');
+            }
+        }
+
+        function OnSoundPauseComplete() {
+            if (window.unityInstance) {
+                setTimeout(function () {
+                    unityInstance.Module.pauseMainLoop();
+                    console.log('Main loop paused after sound stopped');
+                }, 0);
+            }
+        }
+
+        function OnSoundResumeComplete() {
+            if (window.unityInstance) {
+                setTimeout(function () {
+                    // unityInstance.Module.resumeMainLoop();
+                    console.log('Main loop resumed after sound started');
+                }, 0);
+            }
+        }
+    </script>
+</body>
+</html>

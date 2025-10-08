@@ -46,11 +46,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectEntries:
   - name: boost
-    prefab: {fileID: 5749441552287667129, guid: ee71d8dfb36a7b048aef24b0bc8f9764, type: 3}
+    prefab: {fileID: 8101364517496853386, guid: c2281c6ba94fcab4c847a83119400ad9, type: 3}
     initialPoolSize: 1
     autoReturnTime: -1
   - name: ex
-    prefab: {fileID: 358637981425055526, guid: 8eb503696b886e04faff8fc0f480d473, type: 3}
+    prefab: {fileID: 2150893837217643313, guid: e5a393ca0511839458036aaf32d8a1a6, type: 3}
     initialPoolSize: 50
     autoReturnTime: -1
   - name: playerEx

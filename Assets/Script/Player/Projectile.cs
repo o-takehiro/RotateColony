@@ -43,7 +43,8 @@ public class Projectile : MonoBehaviour {
         _midPos = CalculateMidPoint(_startPos, _targetPos, sideOffsetDirection);
 
         // 飛行時間をランダムに設定（動きにバラつきを出す）
-        _flightDuration = Random.Range(0.6f, 1.5f);
+        //_flightDuration = Random.Range(0.6f, 1.5f);
+        _flightDuration = 1.5f;
 
         // 有効化
         gameObject.SetActive(true);

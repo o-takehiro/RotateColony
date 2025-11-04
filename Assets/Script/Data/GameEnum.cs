@@ -1,31 +1,32 @@
-/**
+
+
+/*
  * @file GameEnum.cs
  * @brief 列挙体定義
+ * @author oorui
  */
 
-// ゲームのパート
+/// <summary>
+/// ゲームのパート
+/// <summary>
 public enum eGamePart {
     Invalid = -1,
-    Standby,
-    Title,
-    MainGame,
-    Ending,
+    Standby,        // 待機
+    Title,          // タイトル
+    MainGame,       // メインゲーム
+    Ending,         // エンディング
     Max,
 
 }
 
 
-public enum eGameEndReason {
-    Invalid = -1,
-    Dead,
-    Clear,
-}
-
-
+/// <summary>
+/// ゲームの経過状態
+/// </summary>
 public enum GameResultType {
     None,
-    Clear,
-    GameOver
+    Clear,      // ゲームクリア
+    GameOver    // ゲームオーバー
 }
 
 

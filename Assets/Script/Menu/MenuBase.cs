@@ -1,8 +1,14 @@
+/*
+ *  @file   MenuBase.cs
+ *  @author oorui
+ */
+
 using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// メニューの基底クラス
+/// </summary>
 public class MenuBase : MonoBehaviour {
     [SerializeField]
     private GameObject _menuRoot = null;

@@ -1,3 +1,8 @@
+/*
+ *  @file   SystemManager.cs
+ *  @author oorui
+ */
+
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -25,17 +30,17 @@ public class SystemManager : MonoBehaviour {
     /// <returns></returns>
     private async UniTask Initialize() {
         // 全システムオブジェクトの生成、初期化
-        for(int i = 0,max = _systemObjectList.Length; i < max; i++) {
+        for (int i = 0, max = _systemObjectList.Length; i < max; i++) {
             SystemObject origin = _systemObjectList[i];
             if (origin == null) continue;
             // システムオブジェクト生成
-            SystemObject createObject = Instantiate(origin,transform);
+            SystemObject createObject = Instantiate(origin, transform);
             // 初期化
             await createObject.Initialize();
         }
         // スタンバイパートの実行
         UniTask task = PartManager.Instance.TransitionPart(eGamePart.Standby);
-    
+
     }
 
 

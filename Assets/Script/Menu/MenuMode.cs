@@ -1,3 +1,8 @@
+/*
+ *  @file   MenuMode.cs
+ *  @author oorui
+ */
+
 using Cysharp.Threading.Tasks;
 using System.Collections;
 using UnityEngine;
@@ -8,13 +13,14 @@ using static SoundManager;
 /// メモード選択画面
 /// </summary>
 public class MenuMode : MenuBase {
-    public bool _isNormal = false;   // ノーマルモード選択フラグ
-    public bool _isEndless = false;  // エンドレスモード選択フラグ
+    public bool _isNormal = false;                              // ノーマルモード選択フラグ
+    public bool _isEndless = false;                             // エンドレスモード選択フラグ
 
-    [SerializeField] private GameObject _howToPlayPanel; // 操作説明UI
-    private RectTransform _howToPlayRect;                // スケール制御用
-    private bool _isHowToPlayVisible = false;            // 表示状態
-    private Coroutine _animCoroutine;                    // アニメ管理
+    [SerializeField] private GameObject _howToPlayPanel;        // 操作説明UI
+    private RectTransform _howToPlayRect;                       // スケール制御用
+    private bool _isHowToPlayVisible = false;                   // 表示状態
+    private Coroutine _animCoroutine;                           // アニメ管理
+
 
     [SerializeField] private Vector3 _targetScale = Vector3.one; // 表示サイズ
     private const int _MENU_SE_ID = 0; // 効果音ID
@@ -42,20 +48,27 @@ public class MenuMode : MenuBase {
         while (true) {
             // エンドレスモードに遷移
             if (_isEndless) {
+                // SE再生
                 await instance.PlaySE(_MENU_SE_ID);
+                // エンドレスモードに遷移
                 StageManager.instance.SetupStrategy(GameModeState.Endless);
                 break;
             }
             // ノーマルモードに遷移
             else if (_isNormal) {
+                // SE再生
                 await instance.PlaySE(_MENU_SE_ID);
+                // ノーマルモードに遷移
                 StageManager.instance.SetupStrategy(GameModeState.Normal);
                 break;
             }
+            // 待つ
             await UniTask.Delay(1);
         }
-        
+
+        // フェードアウトを行う
         await FadeManager.instance.FadeOut();
+        // メニューを閉じる
         await Close();
     }
     /// <summary>
@@ -79,8 +92,10 @@ public class MenuMode : MenuBase {
 
         _isHowToPlayVisible = !_isHowToPlayVisible;
 
+        // 説明描画
         if (_isHowToPlayVisible) {
             _howToPlayPanel.SetActive(true);
+            // アニメーションで画像を表示する
             _animCoroutine = StartCoroutine(AnimateScale(Vector3.zero, _targetScale, 0.3f));
         }
         else {

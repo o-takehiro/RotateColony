@@ -1,16 +1,27 @@
+/*
+ *  @file   MenuResult.cs
+ *  @author oorui
+ */
+
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using static GameResultData;
 
+/// <summary>
+/// リザルトメニュー
+/// </summary>
 public class MenuResult : MenuBase {
     [SerializeField] private TextMeshProUGUI penetrationText = null;   // 突破数テキスト
     [SerializeField] private TextMeshProUGUI timeText = null;          // 時間テキスト
     [SerializeField] private TextMeshProUGUI modeText = null;          // モードテキスト
     [SerializeField] private TextMeshProUGUI rankText = null;          // ランクテキスト
 
-    private const int _RESULT_SE_ID = 0;
+    private const int _RESULT_SE_ID = 0;                               // SEのID
 
+    /// <summary>
+    /// リザルト時の状態
+    /// </summary>
     private enum ResultState {
         None,
         Showing,
@@ -87,7 +98,7 @@ public class MenuResult : MenuBase {
     }
 
     /// <summary>
-    /// スコア演出シーケンス
+    /// スコア演出
     /// </summary>
     private async UniTask PlayScoreSequence(int passed, float time) {
         // 最初は全て非表示にしておく

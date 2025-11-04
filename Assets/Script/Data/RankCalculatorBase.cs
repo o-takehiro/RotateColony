@@ -1,7 +1,12 @@
+/*
+ *  @file   RankCalculatorBase.cs
+ *  @author oorui
+ */
+
 using UnityEngine;
 
 /// <summary>
-/// ランク計算の共通インターフェース
+/// リザルト時のスコア計算
 /// </summary>
 public abstract class RankCalculatorBase {
     /// <summary>
@@ -37,7 +42,7 @@ public abstract class RankCalculatorBase {
     /// <summary>
     /// エンドレスモードのランク
     /// </summary>
-    protected string EndlessToScoreRank (int totalScore) {
+    protected string EndlessToScoreRank(int totalScore) {
         if (totalScore >= 200) return "S";
         if (totalScore >= 140) return "A";
         if (totalScore >= 80) return "B";

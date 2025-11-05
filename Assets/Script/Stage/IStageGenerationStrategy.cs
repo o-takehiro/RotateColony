@@ -1,3 +1,8 @@
+/*
+ *  @file    IstageGenerationStrategy.cs
+ *  @author  oorui
+ */
+
 using UnityEngine;
 /// <summary>
 /// モードごとのインターフェース

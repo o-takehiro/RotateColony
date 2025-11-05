@@ -1,3 +1,8 @@
+/*
+ *  @file    StageSegment.cs
+ *  @author  oorui
+ */
+
 using UnityEngine;
 
 public class StageSegment : MonoBehaviour {
@@ -17,9 +22,13 @@ public class StageSegment : MonoBehaviour {
     public void CalibrateGyro() {
         // ‰¡Œü‚«Šî€‚Ì•â³
         Quaternion referenceRotation = Quaternion.Euler(0, 0, 90);
+        // ƒWƒƒƒCƒ‘€ì
         initialGyroAttitude = referenceRotation * Input.gyro.attitude;
     }
 
+    /// <summary>
+    /// ‰Šú‰»ˆ—
+    /// </summary>
     void Start() {
         Input.gyro.enabled = true;
 
@@ -28,7 +37,7 @@ public class StageSegment : MonoBehaviour {
             _playerMove = playerObj.GetComponent<PlayerMove>();
         }
 
-        // ‰¡Œü‚«‚Ì•â³‚ğŠ|‚¯‚é
+        // ƒXƒ}ƒz‚ÌŒü‚«‚Ì•â³‚ğŠ|‚¯‚é
         CalibrateGyro();
     }
 
@@ -39,6 +48,9 @@ public class StageSegment : MonoBehaviour {
         shouldRotate = enable;
     }
 
+    /// <summary>
+    /// XVˆ—
+    /// </summary>
     private void Update() {
         if (!shouldRotate) return;
 
@@ -49,9 +61,9 @@ public class StageSegment : MonoBehaviour {
         // ‰ñ“]‚ğs‚¤
         transform.Rotate(0f, rota, 0f);
 
-        // Šp“x‚ğŒ©‚Ä‚¨‚­b
+        // Šp“x
         float currentYAngle = transform.eulerAngles.y;
-        if (currentYAngle > 180f) currentYAngle -= 360f; // -180`+180 ‚É³‹K‰»
+        if (currentYAngle > 180f) currentYAngle -= 360f;
 
         if (Mathf.Abs(currentYAngle) < 5f) {
             // Šp“x0‹‚É‹ß‚Ã‚¢‚½‚ç‰ñ“]‚ğ~‚ß‚é

@@ -12,6 +12,10 @@ using System.Collections.Generic;
 public class EndlessStageMode : IStageGenerationStrategy {
     private readonly List<GameObject> stagePrefabs;
 
+    /// <summary>
+    /// エンドレスモード
+    /// </summary>
+    /// <param name="stagePrefabs"></param>
     public EndlessStageMode(List<GameObject> stagePrefabs) {
         this.stagePrefabs = stagePrefabs;
     }
@@ -21,7 +25,6 @@ public class EndlessStageMode : IStageGenerationStrategy {
     }
 
     /// <summary>
-    /// エンドレスモード
     /// ゴールは出現しない
     /// </summary>
     /// <param name="generatedCount"></param>

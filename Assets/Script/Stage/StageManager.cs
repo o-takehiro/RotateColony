@@ -1,14 +1,19 @@
+/*
+ *  @file    StageManager.cs
+ *  @author  oorui
+ */
+
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ステージの生成と管理を担当するクラス
+/// ステージ管理クラス
 /// </summary>
 public class StageManager : SystemObject {
-    [SerializeField] private Transform player;
-    [SerializeField] private List<GameObject> stagePrefabs;
-    [SerializeField] private GameObject goalPrefab;
+    [SerializeField] private Transform player;                  // プレイヤー
+    [SerializeField] private List<GameObject> stagePrefabs;     // ステージのPrefabを保管するリスト
+    [SerializeField] private GameObject goalPrefab;             // ゴールステージのPrefab
 
     private const float SEGMENT_LENGTH = 70f;
     private const int INITIAL_SEGMENTS = 5;
@@ -52,11 +57,15 @@ public class StageManager : SystemObject {
     /// モードに応じて、ステージの生成方法を変更する
     /// </summary>
     public void SetupStrategy(GameModeState mode) {
+        // 現在のモードに選択されたモードを追加
         CurrentMode = mode;
+        // 選択されたモード毎に処理を分ける
         switch (mode) {
+            // ノーマルモード : ゴールを生成
             case GameModeState.Normal:
                 stageGenerationStrategy = new NormalStageMode(stagePrefabs, goalPrefab);
                 break;
+            // エンドレスモード : ゴールは生成しない
             case GameModeState.Endless:
             default:
                 stageGenerationStrategy = new EndlessStageMode(stagePrefabs);
@@ -70,8 +79,11 @@ public class StageManager : SystemObject {
     private void Update() {
         if (player == null) return;
 
+        // 通過したステージを検知
         CheckPassedSegments();
+        // 進行状況に応じてステージを生成
         TrySpawnNewSegment();
+        // プレイヤーに一番近いステージの処理を実行
         UpdateActiveSegment();
     }
 

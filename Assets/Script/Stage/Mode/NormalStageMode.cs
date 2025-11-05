@@ -10,15 +10,21 @@ using System.Collections.Generic;
 /// ノーマルモードのステージ生成
 /// </summary>
 public class NormalStageMode : IStageGenerationStrategy {
-    private readonly List<GameObject> stagePrefabs;
-    private readonly GameObject goalPrefab;
+    private readonly List<GameObject> stagePrefabs;     // 生成されたステージのプレファブリスト
+    private readonly GameObject goalPrefab;             // 最後に生成されるゴールステージのプレファブ
 
-    private bool goalSpawned = false;
-
+    private bool goalSpawned = false;                   // ゴールが出現したかどうか
+    
+    /// <summary>
+    /// ノーマルモード
+    /// </summary>
+    /// <param name="stagePrefabs"></param>
+    /// <param name="goalPrefab"></param>
     public NormalStageMode(List<GameObject> stagePrefabs, GameObject goalPrefab) {
         this.stagePrefabs = stagePrefabs;
         this.goalPrefab = goalPrefab;
     }
+
 
     public GameObject GetNextStagePrefab(int generatedCount, int maxSegments) {
         if (!goalSpawned && generatedCount >= maxSegments - 1) {

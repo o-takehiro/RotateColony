@@ -1,14 +1,21 @@
+/*
+ *  @file   PartMainGame.cs
+ *  @author oorui
+ */
+
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
-/// ゲーム本編（メインパート）を制御するクラス
+/// メインゲームシーン制御
 /// </summary>
 public class PartMainGame : PartBase {
-    private bool goalReached = false;                 // ゴールに到達したかどうかを示すフラグ
-    private const int _MAIN_BGM_ID = 0;               // 使用するBGMのID
-    private const int _MAIN_SE_ID_7 = 7;                // 使用するSEのID
+    private bool goalReached = false;                 // ゴールに到達したかどうかを示すフラグ]
 
+    private const int _MAIN_BGM_ID = 0;               // 使用するBGMのID
+    private const int _MAIN_SE_ID_7 = 7;              // 使用するSEのID
+
+    private const int _COUNTDOWN_TIME = 3;            // カウントダウンの秒数
     /// <summary>
     /// ゴールに到達した際に呼び出されるイベント
     /// </summary>
@@ -17,18 +24,19 @@ public class PartMainGame : PartBase {
     }
 
     /// <summary>
-    /// 初期化処理（パート開始前の一度だけ呼ばれる）
+    /// 初期化処理
     /// </summary>
     public override async UniTask Initialize() {
         await base.Initialize();
-        goalReached = false; // フラグ初期化（安全策として念のためここでも）
+        goalReached = false; // フラグ初期化
     }
 
     /// <summary>
-    /// セットアップ処理（パート開始時に毎回呼ばれる）
+    /// セットアップ処理
     /// </summary>
     public override async UniTask SetUp() {
-        goalReached = false; // セットアップ時にもフラグ初期化
+        // フラグ初期化
+        goalReached = false;
         await base.SetUp();
 
         // BGM再生
@@ -69,14 +77,13 @@ public class PartMainGame : PartBase {
         // カウントダウンを実行
         CountdownManager countdownManager = FindObjectOfType<CountdownManager>();
         if (countdownManager != null) {
+            // SE再生
             await SoundManager.instance.PlaySE(_MAIN_SE_ID_7);
-            await countdownManager.StartCountdown(3);
+            await countdownManager.StartCountdown(_COUNTDOWN_TIME);
         }
         else {
             await UniTask.Delay(6000);
         }
-
-        // SE再生
 
         // プレイヤーの移動スクリプト取得
         PlayerMove moveScript = playerObj.GetComponent<PlayerMove>();
@@ -105,7 +112,7 @@ public class PartMainGame : PartBase {
             if (goalReached) {
                 if (playerObj != null) {
                     // クリア時間を取得
-                    moveScript?.ClearPlayer();  
+                    moveScript?.ClearPlayer();
                 }
 
                 // クリア情報を記録

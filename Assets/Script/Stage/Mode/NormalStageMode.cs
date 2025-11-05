@@ -1,8 +1,13 @@
+/*
+ *  @file   NormalStageMode.cs
+ *  @author oorui
+ */
+
 using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// ノーマルモードのステージ生成戦略（ゴールまでの有限ステージ）
+/// ノーマルモードのステージ生成
 /// </summary>
 public class NormalStageMode : IStageGenerationStrategy {
     private readonly List<GameObject> stagePrefabs;

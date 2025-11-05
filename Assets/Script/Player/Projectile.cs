@@ -1,15 +1,20 @@
+/*
+ *  @file   Prihectile.cs
+ *  @author oorui
+ */
+
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 
 /// <summary>
-/// 弾の動作（オブジェクトプール対応）
+/// 弾の動作
 /// ベジエ曲線でターゲットに向かって飛ぶ
 /// </summary>
 public class Projectile : MonoBehaviour {
     [Header("Projectile Settings")]
-    public int damage = 10;                      // 与えるダメージ
-    [SerializeField] private TrailRenderer trail; // 軌跡エフェクト
-    [SerializeField] private GameObject visual;   // 弾の見た目部分（非表示で再利用する）
+    public int damage = 10;                              // 与えるダメージ
+    [SerializeField] private TrailRenderer trail;        // 軌跡エフェクト
+    [SerializeField] private GameObject visual;          // 弾の見た目部分（非表示で再利用する）
 
     // 曲線を作る際の調整用定数
     private const float _MID_OFFSET_AMOUNT = 8f;         // 中間点の横方向オフセット
@@ -22,9 +27,9 @@ public class Projectile : MonoBehaviour {
     private Vector3 _targetPos;
 
     private float _elapsedTime = 0f;   // 経過時間
-    private float _flightDuration;     // 飛行時間（ランダム）
+    private float _flightDuration;     // 飛行時間
     private bool _initialized = false; // 発射済みかどうか
-    private ProjectilePool _pool;      // 所属プール（再利用のため）
+    private ProjectilePool _pool;      // 所属プール
 
     /// <summary>
     /// 弾を初期化して発射する
@@ -145,6 +150,6 @@ public class Projectile : MonoBehaviour {
     private void Deactivate() {
         _initialized = false;
         if (visual != null) visual.SetActive(false);
-        _pool?.ReturnProjectile(this);               
+        _pool?.ReturnProjectile(this);
     }
 }

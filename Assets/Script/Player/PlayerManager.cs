@@ -1,18 +1,30 @@
+/*
+ *  @file   PlayerManager.cs
+ *  @author oorui
+ */
+
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
+/// <summary>
+/// プレイヤーの管理クラス
+/// </summary>
 public class PlayerManager : SystemObject {
 
-    public static PlayerManager instance { get; private set; } = null;
+    public static PlayerManager instance { get; private set; } = null;  // 自身の参照
 
     // プレイヤーの親オブジェクト
     [SerializeField]
     private GameObject playerPrefab;
     private GameObject playerInstance;
 
+    private const float _DURATION = 3f;         // 移動に掛ける時間
+    private const float _TO_ANGLE_DEG = 248f;   // カメラ軌道の回転
+    private const float _FROM_ANGLE_DEG = 0f;   // カメラ軌道スタート時の角度
+
 
     /// <summary>
-    /// シングルトンの初期化
+    /// 初期化
     /// </summary>
     private void Awake() {
         if (instance != null && instance != this) {
@@ -38,9 +50,9 @@ public class PlayerManager : SystemObject {
     /// <param name="_rotation"></param>
     public void UsePlayer(Vector3 _position, Quaternion _rotation) {
         if (playerInstance == null && playerPrefab != null) {
-            // 生成
+            // プレイヤーを生成
             playerInstance = Instantiate(playerPrefab, _position, _rotation);
-
+            // カメラの取得
             FollowCamera camera = Camera.main?.GetComponent<FollowCamera>();
             // カメラをセット
             if (camera != null) {
@@ -51,9 +63,9 @@ public class PlayerManager : SystemObject {
                 camera.StartCircularMove(
                 fromOffset: new Vector3(0f, 4f, -4f),   // 円の半径と高さ初期値（例）
                 toOffset: new Vector3(0f, 4f, -6f),     // 高さを少し上げる
-                fromAngleDeg: 0f,                      // スタート角度
-                toAngleDeg: 248f,                      // 360度一周させたい場合
-                duration: 3f
+                fromAngleDeg: _FROM_ANGLE_DEG,                      // スタート角度
+                toAngleDeg: _TO_ANGLE_DEG,                      // 360度一周させたい場合
+                duration: _DURATION
                 );
             }
 

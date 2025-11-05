@@ -17,7 +17,11 @@ public class MenuResult : MenuBase {
     [SerializeField] private TextMeshProUGUI modeText = null;          // モードテキスト
     [SerializeField] private TextMeshProUGUI rankText = null;          // ランクテキスト
 
-    private const int _RESULT_SE_ID = 0;                               // SEのID
+    private const int _RESULT_SE_ID = 3;                               // SEのID
+    private const int _RESULT_SE_ID02 = 4;                             // SEのID
+
+    private const int _DELAY_TIME01 = 500;                               // 待機時間
+    private const int _DELAY_TIME02 = 300;                               // 待機時間
 
     /// <summary>
     /// リザルト時の状態
@@ -115,22 +119,22 @@ public class MenuResult : MenuBase {
         // 順番に表示演出
         await AnimateText(penetrationText);
         // SE再生
-        await SoundManager.instance.PlaySE(3);
-        await UniTask.Delay(300);
+        await SoundManager.instance.PlaySE(_RESULT_SE_ID);
+        await UniTask.Delay(_DELAY_TIME02);
         await AnimateText(timeText);
         // SE再生
-        await SoundManager.instance.PlaySE(3);
-        await UniTask.Delay(300);
+        await SoundManager.instance.PlaySE(_RESULT_SE_ID);
+        await UniTask.Delay(_DELAY_TIME02);
         await AnimateText(modeText);
         // SE再生
-        await SoundManager.instance.PlaySE(3);
+        await SoundManager.instance.PlaySE(_RESULT_SE_ID);
 
         // 少し待ってランク表示
-        await UniTask.Delay(500);
+        await UniTask.Delay(_DELAY_TIME01);
         ShowRankText(passed, time);
         await AnimateText(rankText);
         // SE再生
-        await SoundManager.instance.PlaySE(4);
+        await SoundManager.instance.PlaySE(_RESULT_SE_ID02);
     }
 
     /// <summary>

@@ -1,8 +1,13 @@
+/*
+ *  @file   EndlessStageMode.cs
+ *  @author oorui
+ */
+
 using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// エンドレスモードのステージ生成戦略
+/// エンドレスモードのステージ生成
 /// </summary>
 public class EndlessStageMode : IStageGenerationStrategy {
     private readonly List<GameObject> stagePrefabs;

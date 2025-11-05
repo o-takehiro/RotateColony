@@ -1,22 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
+
+/*
+ *  @file   PlayerCollisionHandler.cs
+ *  @author oorui
+ */
+
 using UnityEngine;
 
+/// <summary>
+/// プレイヤーが当たったときの処理
+/// </summary>
 public class PlayerCollisionHandler : MonoBehaviour {
-    // プレイヤーの移動クラスを取得
-    private PlayerMove playerMove;
-    // プレイヤー停止フラグ
-    bool shouldStop = false;
+
+    private PlayerMove playerMove;      // プレイヤーの移動クラスを取得
+    bool shouldStop = false;            // プレイヤーの停止フラグ
+    private const int _PLAYER_SE_ID = 5;// 使用するSEのID
+
+
     /// <summary>
     /// 初期化処理
     /// </summary>
     private void Awake() {
+        // プレイヤーの移動を取得
         playerMove = GetComponent<PlayerMove>();
+        // フラグの初期化
         shouldStop = false;
     }
 
     /// <summary>
-    /// プレイヤーが障害物タグに接地したとき、プレイヤーの動きを止める
+    /// プレイヤーの動きを止める
     /// </summary>
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other) {
@@ -60,7 +71,7 @@ public class PlayerCollisionHandler : MonoBehaviour {
     /// <param name="flag"></param>
     private async void PlayerPlaySE(bool flag) {
         if (flag) {
-            await SoundManager.instance.PlaySE(5);
+            await SoundManager.instance.PlaySE(_PLAYER_SE_ID);
         }
     }
 }

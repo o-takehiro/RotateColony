@@ -1,15 +1,14 @@
+/*
+ * @file    MenuTitle.cs
+ * @author  oorui
+ */
+
 using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class MenuTitle : MenuBase {
-    // 画面切り替えの選択
-    public bool isCloseScene = false;
-    // 使用するSEのID
-    private const int _TITLE_SE_ID = 1;
-    public WaveTextManager waveText;
+    public bool isCloseScene = false;   // 画面切り替えの状態
+    private const int _TITLE_SE_ID = 1; // 使用するSEのID
+    public WaveTextManager waveText;    // アニメーションテキスト
 
     // <summary>
     // 初期化
@@ -30,7 +29,7 @@ public class MenuTitle : MenuBase {
         isCloseScene = false;
         await base.Open();
         await FadeManager.instance.FadeIn();
-        // Zキーが押されるまで待つ
+        // 押されるのを待つ
         while (true) {
             // InputSystemに切り替え
             if (isCloseScene) {
@@ -44,6 +43,10 @@ public class MenuTitle : MenuBase {
         await Close();
     }
 
+    /// <summary>
+    /// 終了処理
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask Close() {
         await base.Close();
         isCloseScene = false;

@@ -1,3 +1,8 @@
+/*
+ *  @file   PartBase.cs
+ *  @author oorui
+ */
+
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 
@@ -8,7 +13,6 @@ public abstract class PartBase : MonoBehaviour {
 
     /// <summary>
     /// 初期化処理
-    /// ゲーム開始時に一度だけ呼ばれる
     /// </summary>
     /// <returns></returns>
     public virtual async UniTask Initialize() {
@@ -18,7 +22,6 @@ public abstract class PartBase : MonoBehaviour {
 
     /// <summary>
     /// パート実行前に準備
-    /// パートに遷移する前に呼ばれる
     /// </summary>
     /// <returns></returns>
     public virtual async UniTask SetUp() {

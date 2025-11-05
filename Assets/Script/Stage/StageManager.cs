@@ -8,44 +8,45 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ステージ管理クラス
+/// ステージ全体の管理クラス
 /// </summary>
 public class StageManager : SystemObject {
-    [SerializeField] private Transform player;                  // プレイヤー
-    [SerializeField] private List<GameObject> stagePrefabs;     // ステージのPrefabを保管するリスト
+    [SerializeField] private Transform player;                  // プレイヤーの位置
+    [SerializeField] private List<GameObject> stagePrefabs;     // ステージのPrefabリスト
     [SerializeField] private GameObject goalPrefab;             // ゴールステージのPrefab
 
-    private const float SEGMENT_LENGTH = 70f;
-    private const int INITIAL_SEGMENTS = 5;
-    private const int MAX_SEGMENTS = 10;
+    private const float SEGMENT_LENGTH = 70f;                   // 1ステージあたりの長さ
+    private const int INITIAL_SEGMENTS = 5;                     // 初期に生成するステージ数
+    private const int MAX_SEGMENTS = 10;                        // 最大で同時に保持するステージ数
 
-    private readonly List<GameObject> activeSegments = new List<GameObject>();
-    private float spawnZ = 40f;
-    private int totalGeneratedCount = 0;
-    private int passedStageCount = 0;
+    private readonly List<GameObject> activeSegments = new List<GameObject>(); // 現在シーン上に存在するステージオブジェクトのリスト
+    private float spawnZ = 40f;                                 // 次のステージを生成するZ座標
+    private int totalGeneratedCount = 0;                        // これまで生成されたステージの総数
+    private int passedStageCount = 0;                           // プレイヤーが通過したステージ数
 
-    public int PassedStageCount => passedStageCount;
-    public static StageManager instance { get; private set; } = null;
+    public int PassedStageCount => passedStageCount;            // 通過ステージ数を外部から参照可能にするプロパティ
+    public static StageManager instance { get; private set; } = null; // シングルトンインスタンス
 
-    public event System.Action OnGoalReached;
+    public event System.Action OnGoalReached;                   // ゴールに到達した際に通知されるイベント
 
-    private IStageGenerationStrategy stageGenerationStrategy;
-    public GameModeState CurrentMode { get; private set; } = GameModeState.Normal;
+    private IStageGenerationStrategy stageGenerationStrategy;   // ステージの生成方式を決めるクラス
+    public GameModeState CurrentMode { get; private set; } = GameModeState.Normal; // 現在のゲームモード
 
     /// <summary>
-    /// 初期化（モードに応じたステージ生成戦略を設定）
+    /// 初期化処理
     /// </summary>
     public override async UniTask Initialize() {
-        instance = this;
+        instance = this; // 自身をシングルトンとして登録
 
-        // デフォルトではノーマルモード
+        // 初期はノーマルモードを設定
         SetupStrategy(GameModeState.Normal);
 
+        // 各種カウンタ-初期化
         passedStageCount = 0;
         totalGeneratedCount = 0;
         spawnZ = 40f;
 
-        // 初期ステージ生成
+        // 初期ステージを複数生成
         for (int i = 0; i < INITIAL_SEGMENTS; i++) {
             SpawnSegment();
         }
@@ -54,51 +55,48 @@ public class StageManager : SystemObject {
     }
 
     /// <summary>
-    /// モードに応じて、ステージの生成方法を変更する
+    /// ゲームモードに応じたステージ生成を設定する
     /// </summary>
     public void SetupStrategy(GameModeState mode) {
-        // 現在のモードに選択されたモードを追加
-        CurrentMode = mode;
-        // 選択されたモード毎に処理を分ける
+        CurrentMode = mode; // 現在のモードを記録
+
         switch (mode) {
-            // ノーマルモード : ゴールを生成
             case GameModeState.Normal:
+                // ノーマルモードでは、最終ステージとしてゴールを生成する
                 stageGenerationStrategy = new NormalStageMode(stagePrefabs, goalPrefab);
                 break;
-            // エンドレスモード : ゴールは生成しない
             case GameModeState.Endless:
             default:
+                // 無限にステージ生成
                 stageGenerationStrategy = new EndlessStageMode(stagePrefabs);
                 break;
         }
     }
 
     /// <summary>
-    /// 更新処理
+    /// 毎フレーム呼び出される更新処理
     /// </summary>
     private void Update() {
-        if (player == null) return;
+        if (player == null) return; // プレイヤーが未設定なら処理しない
 
-        // 通過したステージを検知
-        CheckPassedSegments();
-        // 進行状況に応じてステージを生成
-        TrySpawnNewSegment();
-        // プレイヤーに一番近いステージの処理を実行
-        UpdateActiveSegment();
+        CheckPassedSegments();   // 通過済みステージをチェック
+        TrySpawnNewSegment();    // 必要に応じて新しいステージを生成
+        UpdateActiveSegment();   // プレイヤーに最も近いステージを更新（回転制御など）
     }
 
     /// <summary>
-    /// プレイヤーが通過したステージを検知
+    /// プレイヤーが通過したステージを検出する
     /// </summary>
     private void CheckPassedSegments() {
         foreach (var segment in activeSegments) {
-            var script = segment.GetComponent<StageSegment>();
-            if (script == null || script.hasPassed) continue;
-            if (player.position.z <= segment.transform.position.z + SEGMENT_LENGTH / 2f) continue;
+            var script = segment.GetComponent<StageSegment>(); // ステージのスクリプトを取得
+            if (script == null || script.hasPassed) continue;  // すでに通過済みならスキップ
+            if (player.position.z <= segment.transform.position.z + SEGMENT_LENGTH / 2f) continue; // まだ通過していない場合
 
-            script.hasPassed = true;
-            passedStageCount++;
+            script.hasPassed = true;  // 通過フラグを立てる
+            passedStageCount++;       // 通過カウントを増やす
 
+            // ゴールステージならイベント
             if (segment.CompareTag("Goal")) {
                 OnGoalReached?.Invoke();
             }
@@ -106,54 +104,63 @@ public class StageManager : SystemObject {
     }
 
     /// <summary>
-    /// プレイヤーの進行に応じて新しいステージを生成
+    /// プレイヤーの進行に応じて新たなステージを生成する
     /// </summary>
     private void TrySpawnNewSegment() {
+        // プレイヤーが一定位置を超えたら
         if (player.position.z > spawnZ - SEGMENT_LENGTH * (INITIAL_SEGMENTS - 1)) {
+            // 次のステージを生成
             SpawnSegment();
+            // 古いステージを削除
             RemoveOldSegment();
         }
     }
 
     /// <summary>
-    /// ステージの生成処理
+    /// 新しいステージを生成する
     /// </summary>
     private void SpawnSegment() {
         if (stageGenerationStrategy == null) return;
 
+        // 次のPrefabを取得
         GameObject prefab = stageGenerationStrategy.GetNextStagePrefab(totalGeneratedCount, MAX_SEGMENTS);
-        if (prefab == null) return; // ゴール生成後はnullになる
+        if (prefab == null) return;
 
+        // ステージの傾きをランダムに設定
         float randomX = Random.Range(-90f, 90f);
+
+        // ステージPrefabを指定位置に生成
         GameObject segment = Instantiate(
             prefab,
             new Vector3(0, 5f, spawnZ),
             Quaternion.Euler(randomX, 90f, 90f)
         );
 
+        // リストに追加して管理
         activeSegments.Add(segment);
-        spawnZ += SEGMENT_LENGTH;
-        totalGeneratedCount++;
+        spawnZ += SEGMENT_LENGTH;   // 次の生成位置を更新
+        totalGeneratedCount++;      // 総生成数をカウント
     }
 
     /// <summary>
-    /// 古いセグメントを破棄
+    /// 古いステージを削除
     /// </summary>
     private void RemoveOldSegment() {
         if (activeSegments.Count > INITIAL_SEGMENTS) {
-            GameObject old = activeSegments[0];
-            activeSegments.RemoveAt(0);
-            Destroy(old);
+            GameObject old = activeSegments[0]; // 一番古いステージを取得
+            activeSegments.RemoveAt(0);         // リストから除外
+            Destroy(old);                       // ゲームオブジェクトを破棄
         }
     }
 
     /// <summary>
-    /// プレイヤーに一番近いステージの処理を更新
+    /// プレイヤーに一番近い処理を実行
     /// </summary>
     private void UpdateActiveSegment() {
-        GameObject nearest = null;
-        float minDistance = float.MaxValue;
+        GameObject nearest = null;              // 最も近いステージを保持する変数
+        float minDistance = float.MaxValue;     // 距離の初期値を最大値に設定
 
+        // 生成された全ステージをみて、一番近いものを探す
         foreach (GameObject segment in activeSegments) {
             float distance = Mathf.Abs(player.position.z - segment.transform.position.z);
             if (distance < minDistance) {
@@ -162,6 +169,7 @@ public class StageManager : SystemObject {
             }
         }
 
+        // 一番近いステージのみ、回転可能にする
         foreach (GameObject segment in activeSegments) {
             var script = segment.GetComponent<StageSegment>();
             if (script != null) {
@@ -170,25 +178,35 @@ public class StageManager : SystemObject {
         }
     }
 
+    /// <summary>
+    /// プレイヤーの参照を外部から設定する
+    /// </summary>
     public void SetPlayer(Transform _player) => player = _player;
 
+    /// <summary>
+    /// すべてのステージを削除
+    /// </summary>
     public void ClearAllSegments() {
         foreach (GameObject segment in activeSegments) {
+            // ステージオブジェクトを削除
             if (segment != null) Destroy(segment);
         }
 
-        activeSegments.Clear();
-        spawnZ = 40f;
+        activeSegments.Clear(); // リストをクリア
+        spawnZ = 40f;           // 生成位置を初期化
         totalGeneratedCount = 0;
         passedStageCount = 0;
     }
 
+    /// <summary>
+    /// 現在存在するステージを取得
+    /// </summary>
     public List<StageSegment> AllSegments {
         get {
-            List<StageSegment> list = new();
+            List<StageSegment> list = new(); // 戻り値用リストを作成
             foreach (var obj in activeSegments) {
                 var script = obj.GetComponent<StageSegment>();
-                if (script != null) list.Add(script);
+                if (script != null) list.Add(script); // スクリプトがあるものだけ追加
             }
             return list;
         }

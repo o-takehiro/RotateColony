@@ -1,3 +1,7 @@
+/*
+ *  @file   FadeManager
+ *  @author oorui
+ */
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;

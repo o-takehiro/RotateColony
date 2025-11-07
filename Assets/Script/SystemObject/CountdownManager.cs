@@ -1,7 +1,15 @@
+/*
+ *  @file   CountdownManager
+ *  @author oorui
+ */
+
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// ゲーム開始前の科運土ダウン
+/// </summary>
 public class CountdownManager : SystemObject {
     [SerializeField] private TMP_Text countdownText; // インスペクターで設定
     [SerializeField] private float displayTime = 1f; // 数字あたりの表示時間
@@ -24,7 +32,7 @@ public class CountdownManager : SystemObject {
         countdownText.gameObject.SetActive(false);
     }
 
-    // 数字やSTART!を表示してフェードイン・フェードアウト
+    // ゲーム開始直前のカウントダウン文字列表示
     private async UniTask ShowNumber(string text, float duration) {
         countdownText.text = text;
 

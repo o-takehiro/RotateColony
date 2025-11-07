@@ -1,20 +1,31 @@
+/*
+ *  @file   TimeManager
+ *  @author oorui
+ */
+
 using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 時間を管理するクラス
+/// </summary>
 public class TimeManager : SystemObject {
+
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask Initialize() {
         await UniTask.CompletedTask;
     }
 
-    public static TimeManager Instance { get; private set; }
+    public static TimeManager Instance { get; private set; }    // 自身の取得
 
-    private float _time;
-    private bool _isRunning = false;
+    private float _time;                // 時間用フラグ
+    private bool _isRunning = false;    // 動いているかどうか
 
     /// <summary>
-    /// 初期化
+    /// Update前初期化
     /// </summary>
     private void Awake() {
         if (Instance == null) {

@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+/*
+ *  @file   GetHoldExample
+ *  @author oorui
+ */
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 /// <summary>
 /// ボタンの長押し入力を受付
@@ -53,8 +54,6 @@ public class GetHoldExample : MonoBehaviour {
             case InputActionPhase.Performed:
                 // ボタンが押された時の処理
                 // PlayerShotの射撃可能フラグをtrueにする
-                Debug.Log("isShot_true");
-                // _image.color = Color.gray;
                 _playerShoot.isShot = true;
 
                 break;
@@ -62,8 +61,6 @@ public class GetHoldExample : MonoBehaviour {
             case InputActionPhase.Canceled:
                 // ボタンが離された時の処理
                 // PlayerShotの射撃可能フラグをfalseにする
-                Debug.Log("isShot_false");
-                // _image.color = Color.white;
                 _playerShoot.isShot = false;
 
                 break;

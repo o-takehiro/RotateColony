@@ -1,5 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+/*
+ *  @file   BoostButton
+ *  @author oorui
+ */
 using UnityEngine;
 using UnityEngine.InputSystem;
 

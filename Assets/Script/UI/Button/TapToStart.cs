@@ -1,5 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+
+/*
+ *  @file   TapToStart
+ *  @author oorui
+ */
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,9 +14,12 @@ public class TapToStart : MonoBehaviour {
     // 入力を受け取るInputAction
     [SerializeField]
     private InputActionReference _tap;
-    private MenuTitle _title;
+    private MenuTitle _title;           // タイトルメニュー
 
 
+    /// <summary>
+    /// 初期化処理
+    /// </summary>
     private void Start() {
         // 親オブジェクトのスクリプトを取得
         _title = GetComponentInParent<MenuTitle>();
@@ -30,7 +37,7 @@ public class TapToStart : MonoBehaviour {
     /// </summary>
     /// <param name="context"></param>
     private void OnTap(InputAction.CallbackContext context) {
-        
+        // シーンを閉じる用のフラグをtrueに
         _title.isCloseScene = true;
     }
 

@@ -29,8 +29,6 @@ public class PlayerMove : PlayerBase {
     private GameObject _boosterEffectRight = null;   // エフェクト格納用
     private GameObject _boosterEffectLeft = null;    // エフェクト格納用
 
-    private const string _BOOST_EFFECT = "boost";    // 加速時エフェクトの文字列
-    private const string _BOOSTER_EFFECT = "booster";// 加速時エフェクトの文字列
     private const int _PLAY_SE_ID = 4;               // 使用するSEのID
 
     private void Start() {
@@ -79,9 +77,9 @@ public class PlayerMove : PlayerBase {
             if (_boostEffect == null) {
                 // boostがOnになった時
                 // エフェクトを格納
-                _boostEffect = EffectManager.Instance.Play(_BOOST_EFFECT, transform.position, false);
-                _boosterEffectRight = EffectManager.Instance.Play(_BOOSTER_EFFECT, _playerBoostPosRight.transform.position, false);
-                _boosterEffectLeft = EffectManager.Instance.Play(_BOOSTER_EFFECT, _playerBoostPosLeft.transform.position, false);
+                _boostEffect = EffectManager.Instance.Play(EffectID._BOOST, transform.position, false);
+                _boosterEffectRight = EffectManager.Instance.Play(EffectID._BOOST2, _playerBoostPosRight.transform.position, false);
+                _boosterEffectLeft = EffectManager.Instance.Play(EffectID._BOOST2, _playerBoostPosLeft.transform.position, false);
             }
             else {
                 // エフェクトをプレイヤーに追従させる
@@ -98,7 +96,7 @@ public class PlayerMove : PlayerBase {
 
             if (_boostEffect != null) {
                 // boostがOFFになった瞬間に止める
-                EffectManager.Instance.Stop(_BOOST_EFFECT, _boostEffect);
+                EffectManager.Instance.Stop(EffectID._BOOST, _boostEffect);
                 _boostEffect = null;
             }
         }
@@ -110,9 +108,11 @@ public class PlayerMove : PlayerBase {
     /// 衝突可否判定
     /// </summary>
     public void StopMoving() {
-
+        // 時間を止める
         TimeManager.Instance.StopTimer();
+        // リザルトデータに時間を送る
         GameResultData.ClearTime = TimeManager.Instance.GetTime();
+        // ゲームオーバー用のフラグを立てる
         _isStopped = true;
     }
 
@@ -155,7 +155,7 @@ public class PlayerMove : PlayerBase {
         // 時間を止めてセットする
         TimeManager.Instance.StopTimer();
         GameResultData.ClearTime = TimeManager.Instance.GetTime();
-        FollowCamera camera = Camera.main?.GetComponent<FollowCamera>();
+        CameraManager camera = Camera.main?.GetComponent<CameraManager>();
         camera.ClearCameraAngle();
     }
 

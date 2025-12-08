@@ -17,7 +17,7 @@ public class Destructible : MonoBehaviour {
             // エフェクト再生
             Vector3 efPos = transform.position;
             efPos.y += transform.position.y * -4f;
-            EffectManager.Instance.Play("Nuke", efPos);
+            EffectManager.Instance.Play(EffectID._SMOKE, efPos);
             // SE再生
             DestroySE();
 

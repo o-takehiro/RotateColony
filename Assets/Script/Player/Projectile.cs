@@ -68,7 +68,7 @@ public class Projectile : MonoBehaviour {
     }
 
     /// <summary>
-    /// ターゲット位置をランダムにずらす（命中が単調にならないように）
+    /// ターゲット位置をランダムにずらす
     /// </summary>
     private Vector3 CalculateRandomTargetOffset(Vector3 baseTarget) {
         float xOffset = Random.Range(-3.5f, 3.5f);
@@ -123,13 +123,13 @@ public class Projectile : MonoBehaviour {
     /// </summary>
     private async void OnTriggerEnter(Collider other) {
         if (!_initialized) return;
-
+        if (other == null) return;
         // 破壊可能オブジェクトならダメージを与える
         if (other.CompareTag("Obstacle")) {
             var destructible = other.GetComponent<Destructible>();
             if (destructible != null) {
                 // エフェクト再生
-                EffectManager.Instance.Play("ex", transform.position);
+                EffectManager.Instance.Play(EffectID._EX, transform.position);
                 // ダメージを与える
                 destructible.TakeDamage(damage);
             }

@@ -8,7 +8,7 @@ using UnityEngine;
 /// <summary>
 /// プレイヤーを追従するカメラ制御クラス
 /// </summary>
-public class FollowCamera : MonoBehaviour {
+public class CameraManager : MonoBehaviour {
     /// <summary>
     /// カメラの状態
     /// </summary>
@@ -16,7 +16,8 @@ public class FollowCamera : MonoBehaviour {
         Idle,           // 待機
         CircularMove,   // 周回演出
         Follow,         // 通常カメラ
-        Clear           // 固定カメラ
+        Clear,          // 固定カメラ
+        Shake           // カメラシェイク
     }
 
     [Header("Follow Settings")]
@@ -39,6 +40,13 @@ public class FollowCamera : MonoBehaviour {
 
     // 固定視点関連
     private Vector3 clearPosition;
+
+    // カメラシェイク
+    private float shakeDuration = 0f;           // 時間
+    private float shakeMagnitude = 0.3f;        // 大きさ
+    private float shakeSpeed = 2f;              // 速度
+    private Vector3 shakeOffset = Vector3.zero; // オフセット
+    private const float _AMOUNT_SWAY = 0.5f;    // 揺れ幅
 
     /// <summary>
     /// 追従対象を設定
@@ -72,17 +80,25 @@ public class FollowCamera : MonoBehaviour {
     private void LateUpdate() {
         if (target == null) return;
 
+        // 状態によってカメラの挙動を変化させる
         switch (currentState) {
             case CameraState.CircularMove:
+                // カメラの円軌道
                 UpdateCircularMove();
                 break;
 
             case CameraState.Follow:
+                // 通常のカメラ移動 
                 UpdateFollow();
                 break;
 
             case CameraState.Clear:
+                // クリア時のカメラ移動
                 UpdateClearView();
+                break;
+            case CameraState.Shake:
+                // カメラの揺れ
+                UpdateShake();
                 break;
         }
     }
@@ -154,5 +170,41 @@ public class FollowCamera : MonoBehaviour {
     /// </summary>
     public void ExitCamera() {
         currentState = CameraState.Follow;
+    }
+
+    /// <summary>
+    /// カメラ揺れ更新
+    /// </summary>
+    private void UpdateShake() {
+        // 通常の追従カメラ処理
+        UpdateFollow();
+
+        if (shakeDuration > 0f) {
+            // 揺れの量を計算
+            float x = (Mathf.PerlinNoise(Time.time * shakeSpeed, 0f) - _AMOUNT_SWAY) * shakeMagnitude;
+            float y = (Mathf.PerlinNoise(0f, Time.time * shakeSpeed) - _AMOUNT_SWAY) * shakeMagnitude;
+
+            // オフセットに揺れの値を入れる
+            shakeOffset = new Vector3(x, y, 0f);
+
+            // 追従位置に対して揺れのオフセットを足す
+            transform.position += shakeOffset;
+
+            // 揺れ時間を減らす
+            shakeDuration -= Time.deltaTime;
+        }
+        else {
+            // オフセットをリセットし通常追従へ戻す
+            shakeOffset = Vector3.zero;
+            currentState = CameraState.Follow;
+        }
+    }
+
+    /// <summary>
+    /// カメラの状態を揺れに変更
+    /// </summary>
+    public void ShakeCamera() {
+        currentState = CameraState.Shake;
+        shakeDuration = 4f;
     }
 }

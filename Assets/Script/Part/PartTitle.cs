@@ -46,7 +46,7 @@ public class PartTitle : PartBase {
         // モード選択画面を表示
         await MenuManager.instance.Get<MenuMode>().Open();
         if (waveText != null) waveText.gameObject.SetActive(false);
-        //await FadeManager.instance.FadeIn();
+        
 
         // 画面遷移時にフェードアウト
         await FadeManager.instance.FadeOut();

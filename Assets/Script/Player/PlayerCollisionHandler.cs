@@ -12,9 +12,7 @@ using UnityEngine;
 public class PlayerCollisionHandler : MonoBehaviour {
 
     private PlayerMove playerMove;      // プレイヤーの移動クラスを取得
-    bool shouldStop = false;            // プレイヤーの停止フラグ
     private const int _PLAYER_SE_ID = 5;// 使用するSEのID
-
 
     /// <summary>
     /// 初期化処理
@@ -22,8 +20,6 @@ public class PlayerCollisionHandler : MonoBehaviour {
     private void Awake() {
         // プレイヤーの移動を取得
         playerMove = GetComponent<PlayerMove>();
-        // フラグの初期化
-        shouldStop = false;
     }
 
     /// <summary>
@@ -33,45 +29,47 @@ public class PlayerCollisionHandler : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
 
         // 障害物に当たった時
-        if (other.CompareTag("Obstacle")) {
-            shouldStop = true;
-        }
-
-        // 非加速時、破壊可能壁に当たったとき
-        if (other.CompareTag("BoostBreak") && !playerMove.boostFlag) {
-            shouldStop = true;
-        }
-
-        // エフェクト再生関数を呼ぶ
-        if (shouldStop) {
-            Vector3 pos = playerMove.transform.position;
-            // エフェクト再生位置をずらす
-            pos += playerMove.transform.right * -2f;
-            // プレイヤーの動きを停止させる
-            playerMove.StopMoving();
-            // エフェクトを指定した位置で再生
-            PlayHitEffect(pos);
-            // 衝突時のSEを再生
-            PlayerPlaySE(shouldStop);
+        if (other.CompareTag("Obstacle") || other.CompareTag("BoostBreak") && !playerMove.boostFlag) {
+            // エフェクト再生
+            BrakePlayer();
         }
     }
 
+    /// <summary>
+    /// エフェクト再生
+    /// </summary>
+    private void BrakePlayer() {
+        // 現在の座標を取得
+        Vector3 pos = playerMove.transform.position;
+        // エフェクト再生位置をずらす
+        pos += playerMove.transform.right * -2f;
+        // カメラを揺らす
+        CameraManager camera = Camera.main?.GetComponent<CameraManager>();
+        if (camera == null) return;
+        camera.ShakeCamera();
+        // プレイヤーの動きを停止
+        playerMove.StopMoving();
+        // エフェクト再生
+        PlayHitEffect(pos);
+        // SEを再生
+        PlayerPlaySE();
+    }
 
     /// <summary>
     /// 障害物に当たったときのエフェクト再生
     /// </summary>
     private void PlayHitEffect(Vector3 pos) {
         // エフェクト再生
-        EffectManager.Instance.Play("fire", pos);
+        EffectManager.Instance.Play(EffectID._BRAKE, pos);
     }
 
     /// <summary>
     /// フラグが立っていればSEを再生する
     /// </summary>
     /// <param name="flag"></param>
-    private async void PlayerPlaySE(bool flag) {
-        if (flag) {
-            await SoundManager.instance.PlaySE(_PLAYER_SE_ID);
-        }
+    private async void PlayerPlaySE() {
+        // SE再生
+        await SoundManager.instance.PlaySE(_PLAYER_SE_ID);
+
     }
 }

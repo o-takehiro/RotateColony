@@ -45,27 +45,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   effectEntries:
-  - name: boost
+  - id: 1
     prefab: {fileID: 8101364517496853386, guid: c2281c6ba94fcab4c847a83119400ad9, type: 3}
     initialPoolSize: 1
     autoReturnTime: -1
-  - name: ex
+  - id: 2
     prefab: {fileID: 2150893837217643313, guid: e5a393ca0511839458036aaf32d8a1a6, type: 3}
     initialPoolSize: 50
     autoReturnTime: -1
-  - name: playerEx
+  - id: 3
     prefab: {fileID: 5162910912013668194, guid: cf82839c411151342a7b2337bda9fb34, type: 3}
     initialPoolSize: 1
     autoReturnTime: -1
-  - name: fire
+  - id: 4
     prefab: {fileID: 100000, guid: 06a7735096a49064bac4963673c4f0b3, type: 3}
     initialPoolSize: 1
     autoReturnTime: 6
-  - name: booster
+  - id: 5
     prefab: {fileID: 100002, guid: 06d796ccd85dc4c4b9c98270196715ae, type: 3}
     initialPoolSize: 2
     autoReturnTime: -1
-  - name: Nuke
+  - id: 6
     prefab: {fileID: 4809171458859421548, guid: 4e91ed1a8efe7044785b9bd97a47d87f, type: 3}
     initialPoolSize: 1
     autoReturnTime: -1

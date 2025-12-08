@@ -135,9 +135,9 @@ public class PartMainGame : PartBase {
                 GameResultData.StagePassedCount = StageManager.instance.PassedStageCount;
                 GameResultData.SelectedMode = StageManager.instance.CurrentMode;
                 // 適当に待つ
-                await UniTask.Delay(3000);
-                // フェードアウト
-                await FadeManager.instance.FadeOut();
+                await UniTask.Delay(2000);
+                // フェードアウト:しろ
+                await FadeManager.instance.FadeOut(FadeManager.FadeColor.White);
                 // エンディングパートに遷移
                 await PartManager.Instance.TransitionPart(eGamePart.Ending);
                 break;
@@ -163,7 +163,7 @@ public class PartMainGame : PartBase {
         ButtonManager.instance.DestroyAllButtons();   // ボタンの削除
         StageManager.instance.ClearAllSegments();     // ステージ要素クリア
         EffectManager.Instance.StopAll();             // 全エフェクト停止
-        FollowCamera camera = Camera.main?.GetComponent<FollowCamera>();
+        CameraManager camera = Camera.main?.GetComponent<CameraManager>();
         camera.ExitCamera();
         await UniTask.CompletedTask;
     }

@@ -34,10 +34,10 @@ public class MenuTitle : MenuBase {
             // InputSystem‚ÉØ‚è‘Ö‚¦
             if (isCloseScene) {
                 // SEÄ¶
-                await SoundManager.instance.PlaySE(_TITLE_SE_ID);
+                UniTask task = SoundManager.instance.PlaySE(_TITLE_SE_ID);
                 break;
             }
-            await UniTask.Delay(1);
+            await UniTask.DelayFrame(1);
         }
         await FadeManager.instance.FadeOut();
         await Close();

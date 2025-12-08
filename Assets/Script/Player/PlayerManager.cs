@@ -53,7 +53,7 @@ public class PlayerManager : SystemObject {
             // プレイヤーを生成
             playerInstance = Instantiate(playerPrefab, _position, _rotation);
             // カメラの取得
-            FollowCamera camera = Camera.main?.GetComponent<FollowCamera>();
+            CameraManager camera = Camera.main?.GetComponent<CameraManager>();
             // カメラをセット
             if (camera != null) {
                 // カメラのターゲットにプレイヤーをセット

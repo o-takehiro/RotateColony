@@ -105,6 +105,7 @@ public class MenuResult : MenuBase {
     /// スコア演出
     /// </summary>
     private async UniTask PlayScoreSequence(int passed, float time) {
+        UniTask task;
         // 最初は全て非表示にしておく
         penetrationText.gameObject.SetActive(false);
         timeText.gameObject.SetActive(false);
@@ -119,22 +120,22 @@ public class MenuResult : MenuBase {
         // 順番に表示演出
         await AnimateText(penetrationText);
         // SE再生
-        await SoundManager.instance.PlaySE(_RESULT_SE_ID);
+        task = SoundManager.instance.PlaySE(_RESULT_SE_ID);
         await UniTask.Delay(_DELAY_TIME02);
         await AnimateText(timeText);
         // SE再生
-        await SoundManager.instance.PlaySE(_RESULT_SE_ID);
+        task = SoundManager.instance.PlaySE(_RESULT_SE_ID);
         await UniTask.Delay(_DELAY_TIME02);
         await AnimateText(modeText);
         // SE再生
-        await SoundManager.instance.PlaySE(_RESULT_SE_ID);
+        task = SoundManager.instance.PlaySE(_RESULT_SE_ID);
 
         // 少し待ってランク表示
         await UniTask.Delay(_DELAY_TIME01);
         ShowRankText(passed, time);
         await AnimateText(rankText);
         // SE再生
-        await SoundManager.instance.PlaySE(_RESULT_SE_ID02);
+        task = SoundManager.instance.PlaySE(_RESULT_SE_ID02);
     }
 
     /// <summary>

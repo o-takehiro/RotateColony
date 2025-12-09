@@ -3,6 +3,7 @@
  *  @author oorui
  */
 
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 /// <summary>
@@ -32,10 +33,17 @@ public abstract class RankCalculatorBase {
     /// ノーマルモードのランク
     /// </summary>
     protected string ScoreToRank(int totalScore) {
-        if (totalScore >= 100) return "S";
-        if (totalScore >= 80) return "A";
-        if (totalScore >= 50) return "B";
-        if (totalScore >= 30) return "C";
+        // マスターデータから取得
+        var scoreData = MasterDataManager.ScoreData[0];
+
+        // スコアを上から順に見る
+        foreach (var data in scoreData) {
+            // 点数に合ったランクを返す
+            if (totalScore >= data.totalScore) {
+                return data.text;
+            }
+        }
+
         return "D";
     }
 
@@ -43,10 +51,16 @@ public abstract class RankCalculatorBase {
     /// エンドレスモードのランク
     /// </summary>
     protected string EndlessToScoreRank(int totalScore) {
-        if (totalScore >= 200) return "S";
-        if (totalScore >= 140) return "A";
-        if (totalScore >= 80) return "B";
-        if (totalScore >= 20) return "C";
+        // マスターデーターから取得
+        var scoreData = MasterDataManager.ScoreData[1];
+
+        // スコアを上から順に見る
+        foreach (var data in scoreData) {
+            // 点数に合ったランクを返す
+            if (totalScore >= data.totalScore) {
+                return data.text;
+            }
+        }
         return "D";
     }
 }
@@ -69,11 +83,17 @@ public class StageClearRankCalculator : RankCalculatorBase {
     /// 短ければ短いほどスコアを上げる
     /// </summary>
     private int CalculateTimeScore(float time) {
-        if (time <= 60f) return 50;
-        if (time <= 90f) return 40;
-        if (time <= 120f) return 30;
-        if (time <= 180f) return 20;
-        if (time <= 240f) return 10;
+        // マスターデーターから取得
+        var timeScore = MasterDataManager.TimeScore[0];
+
+        // データを上から順に見る
+        foreach (var data in timeScore) {
+            // クリアタイムに応じてスコアを返す
+            if (time <= data.time) {
+                // 結果に応じたスコアを返す
+                return data.score;
+            }
+        }
         return 0;
     }
 }
@@ -96,11 +116,17 @@ public class EndlessModeRankCalculator : RankCalculatorBase {
     /// 長ければ長いほどスコアを高くする
     /// </summary>
     private int CalculateTimeScore(float time) {
-        if (time >= 180f) return 50;
-        if (time >= 120f) return 40;
-        if (time >= 90f) return 30;
-        if (time >= 40f) return 20;
-        if (time >= 20f) return 10;
+        // マスターデーターから取得
+        var timeScore = MasterDataManager.TimeScore[1];
+
+        foreach (var data in timeScore) {
+            // 経過時間に応じてスコアを返す
+            if (time >= data.time) {
+                // 結果に応じたスコアを返す
+                return data.score;
+            }
+        }
+
         return 0;
     }
 }

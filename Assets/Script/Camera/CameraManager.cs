@@ -20,7 +20,6 @@ public class CameraManager : MonoBehaviour {
         Shake           // カメラシェイク
     }
 
-    [Header("Follow Settings")]
     [SerializeField] private Transform target;                         // 追従対象
     [SerializeField, Range(0f, 10f)] private float followSpeed = 2.5f; // 追従時の滑らかさ
 
@@ -31,10 +30,10 @@ public class CameraManager : MonoBehaviour {
     private CameraState currentState = CameraState.Idle;
 
     // 円軌道移動関連
-    private Vector3 startOffset;
-    private Vector3 endOffset;
-    private float startAngle;
-    private float endAngle;
+    private Vector3 startOffset;        // スタートからの距離
+    private Vector3 endOffset;          // 終了地点からの距離
+    private float startAngle;           // スタート時の角度
+    private float endAngle;             // 終了時の角度
     private float moveDuration = 3f;
     private float elapsedTime = 0f;
 
@@ -53,6 +52,9 @@ public class CameraManager : MonoBehaviour {
     /// </summary>
     /// <param name="_target">追従対象のTransform</param>
     public void SetTarget(Transform _target) {
+        // 対象がいなければ抜ける
+        // if (target == null) return;
+        // 対象を瀬戸
         target = _target;
     }
 

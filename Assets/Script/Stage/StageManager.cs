@@ -58,6 +58,7 @@ public class StageManager : SystemObject {
     /// ゲームモードに応じたステージ生成を設定する
     /// </summary>
     public void SetupStrategy(GameModeState mode) {
+        if (mode == GameModeState.Invalid) return;
         CurrentMode = mode; // 現在のモードを記録
 
         switch (mode) {

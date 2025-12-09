@@ -10,11 +10,10 @@ using UnityEngine;
 /// 弾のプール管理
 /// </summary>
 public class ProjectilePool : MonoBehaviour {
-    const int DEFAULT_POOLSIZE = 10;
-    [SerializeField] private Projectile projectilePrefab;               // プールする弾
-    [SerializeField] private int poolSize = DEFAULT_POOLSIZE;           // プールの初期数
+    [SerializeField] private Projectile projectilePrefab;        // プールする弾
+    [SerializeField] private int poolSize;                       // プールの初期数
 
-    private Queue<Projectile> pool = new Queue<Projectile>();           // 弾の待ち行列
+    private Queue<Projectile> pool = new Queue<Projectile>();    // 弾の待ち行列
 
     /// <summary>
     /// 初期化
@@ -22,7 +21,9 @@ public class ProjectilePool : MonoBehaviour {
     private void Awake() {
         // 初期プール生成
         for (int i = 0; i < poolSize; i++) {
+            // 弾のプールを生成
             Projectile proj = Instantiate(projectilePrefab, transform);
+            // 生成時は非表示
             proj.gameObject.SetActive(false);
             // 末尾に追加
             pool.Enqueue(proj);
@@ -37,6 +38,7 @@ public class ProjectilePool : MonoBehaviour {
         if (pool.Count == 0) {
             // 弾を生成
             Projectile proj = Instantiate(projectilePrefab, transform);
+            // 生成時は非表示
             proj.gameObject.SetActive(false);
             // 末尾に追加
             pool.Enqueue(proj);

@@ -12,6 +12,8 @@ public class PartStandby : PartBase {
     public override async UniTask Execute() {
         // フェードアウト
         await FadeManager.instance.FadeOut();
+        // マスターデータの読み込み
+        MasterDataManager.LoadAllData();
         // タイトルパートへ遷移、終了待ちはしない
         UniTask task = PartManager.Instance.TransitionPart(eGamePart.Title);
         await UniTask.CompletedTask;

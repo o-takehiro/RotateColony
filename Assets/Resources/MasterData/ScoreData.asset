@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3719c5adda8e47b4ab94e0fff11426ea, type: 3}
+  m_Name: ScoreData
+  m_EditorClassIdentifier: 
+  sheets:
+  - name: NormalMode
+    list:
+    - totalScore: 95
+      text: S
+    - totalScore: 75
+      text: A
+    - totalScore: 60
+      text: B
+    - totalScore: 40
+      text: C
+    - totalScore: -1
+      text: D
+  - name: EndlessMode
+    list:
+    - totalScore: 200
+      text: S
+    - totalScore: 140
+      text: A
+    - totalScore: 80
+      text: B
+    - totalScore: 20
+      text: C
+    - totalScore: -1
+      text: D

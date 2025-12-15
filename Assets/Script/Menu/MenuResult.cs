@@ -20,8 +20,12 @@ public class MenuResult : MenuBase {
     private const int _RESULT_SE_ID = 3;                               // SEのID
     private const int _RESULT_SE_ID02 = 4;                             // SEのID
 
-    private const int _DELAY_TIME01 = 500;                               // 待機時間
-    private const int _DELAY_TIME02 = 300;                               // 待機時間
+    private const int _DELAY_TIME01 = 500;                             // 待機時間
+    private const int _DELAY_TIME02 = 300;                             // 待機時間
+
+    private const string _GAMEMODE_NORMAL = "Normal";                  // ゲームモードノーマル
+    private const string _GAMEMODE_ENDLESS = "Endless";                // ゲームモードエンドレス
+
 
     /// <summary>
     /// リザルト時の状態
@@ -37,16 +41,24 @@ public class MenuResult : MenuBase {
     private GameResultType _currentResult;
     RankCalculatorBase calculator = null;
 
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask Initialize() {
         await base.Initialize();
-        _state = ResultState.None;
-        _isTapLocked = false;
-        _currentResult = GameResultType.None;
+        ResetState();
     }
 
+    /// <summary>
+    /// メニューを開く
+    /// </summary>
+    /// <param name="resultType"></param>
+    /// <returns></returns>
     public override async UniTask Open(GameResultType resultType) {
         await base.Open();
 
+        // ゲーム終了時の状態
         _currentResult = resultType;
         _state = ResultState.Showing;
         _isTapLocked = true;
@@ -62,6 +74,7 @@ public class MenuResult : MenuBase {
         int passed = StagePassedCount;
         float time = ClearTime;
 
+        // フェードイン
         await FadeManager.instance.FadeIn();
 
         // スコア表示演出
@@ -71,22 +84,22 @@ public class MenuResult : MenuBase {
         _isTapLocked = false;
         _state = ResultState.Finished;
 
-        // ループ待機（タップで閉じる）
+        // ループ待機
         while (_state == ResultState.Finished) {
+            // 次のフレームまで待機
             await UniTask.Yield();
         }
     }
 
+    /// <summary>
+    /// 閉じる
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask Close() {
         await base.Close();
-        _state = ResultState.None;
-        _isTapLocked = false;
-        _currentResult = GameResultType.None;
-
-        if (penetrationText != null) penetrationText.text = "";
-        if (timeText != null) timeText.text = "";
-        if (modeText != null) modeText.text = "";
-        if (rankText != null) rankText.text = "";
+        ResetState();
+        // テキストをすべてクリアにする
+        AllTextClear();
     }
 
     /// <summary>
@@ -97,6 +110,7 @@ public class MenuResult : MenuBase {
         if (_state != ResultState.Finished) return;
 
         _isTapLocked = true;
+        // フェードアウト
         await FadeManager.instance.FadeOut();
         await Close();
     }
@@ -107,14 +121,12 @@ public class MenuResult : MenuBase {
     private async UniTask PlayScoreSequence(int passed, float time) {
         UniTask task;
         // 最初は全て非表示にしておく
-        penetrationText.gameObject.SetActive(false);
-        timeText.gameObject.SetActive(false);
-        modeText.gameObject.SetActive(false);
-        rankText.gameObject.SetActive(false);
+        AllSetActive(false);
 
         // 値を設定
         penetrationText.text = $"{passed}";
         timeText.text = FormatTime(time);
+        // 選択されたモード別でテキストを表示
         modeText.text = GetModeString(GameResultData.SelectedMode);
 
         // 順番に表示演出
@@ -169,22 +181,72 @@ public class MenuResult : MenuBase {
         text.rectTransform.localScale = baseScale;
     }
 
+    /// <summary>
+    /// 突破数と時間からランク文字列を出す
+    /// </summary>
+    /// <param name="passed"></param>
+    /// <param name="time"></param>
     private void ShowRankText(int passed, float time) {
         string rank = calculator.CalculateRank(passed, time);
         rankText.text = rank;
     }
 
+    /// <summary>
+    /// 秒数変換
+    /// </summary>
+    /// <param name="seconds"></param>
+    /// <returns></returns>
     private string FormatTime(float seconds) {
+        // 分を求める
         int min = Mathf.FloorToInt(seconds / 60f);
+        // 秒を求める
         int sec = Mathf.FloorToInt(seconds % 60f);
+        // 2桁の表示にする
         return $"{min:D2}:{sec:D2}";
     }
 
+    /// <summary>
+    /// 選択されたモードによって表示するテキストを変える
+    /// </summary>
+    /// <param name="mode"></param>
+    /// <returns></returns>
     private string GetModeString(GameModeState mode) {
         switch (mode) {
-            case GameModeState.Normal: return "Normal";
-            case GameModeState.Endless: return "Endless";
-            default: return "不明";
+            // ノーマルモード
+            case GameModeState.Normal: return _GAMEMODE_NORMAL;
+            // エンドレスモード
+            case GameModeState.Endless: return _GAMEMODE_ENDLESS;
+            default: return null;
         }
+    }
+
+    /// <summary>
+    /// すべて同時に表示非表示を切り替える
+    /// </summary>
+    /// <param name="setValue"></param>
+    private void AllSetActive(bool setValue) {
+        penetrationText.gameObject.SetActive(setValue);
+        timeText.gameObject.SetActive(setValue);
+        modeText.gameObject.SetActive(setValue);
+        rankText.gameObject.SetActive(setValue);
+    }
+
+    /// <summary>
+    /// すべてのテキストをクリアにする
+    /// </summary>
+    private void AllTextClear() {
+        if (penetrationText != null) penetrationText.text = "";
+        if (timeText != null) timeText.text = "";
+        if (modeText != null) modeText.text = "";
+        if (rankText != null) rankText.text = "";
+    }
+
+    /// <summary>
+    /// 状態とフラグの初期化
+    /// </summary>
+    private void ResetState() {
+        _state = ResultState.None;
+        _isTapLocked = false;
+        _currentResult = GameResultType.None;
     }
 }

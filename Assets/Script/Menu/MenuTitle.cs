@@ -5,6 +5,9 @@
 
 using Cysharp.Threading.Tasks;
 
+/// <summary>
+/// タイトルシーン
+/// </summary>
 public class MenuTitle : MenuBase {
     public bool isCloseScene = false;   // 画面切り替えの状態
     private const int _TITLE_SE_ID = 1; // 使用するSEのID

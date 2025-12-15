@@ -11,7 +11,7 @@ public class StageSegment : MonoBehaviour {
     [SerializeField]
     private PlayerMove _playerMove = null;
 
-    // 通過判定フラグ（StageManagerが使う）
+    // 通過判定フラグ
     public bool hasPassed = false;
 
     private Quaternion initialGyroAttitude;
@@ -31,7 +31,7 @@ public class StageSegment : MonoBehaviour {
     /// </summary>
     void Start() {
         Input.gyro.enabled = true;
-
+        // プレイヤーを取得
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null) {
             _playerMove = playerObj.GetComponent<PlayerMove>();

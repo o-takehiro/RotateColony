@@ -48,6 +48,7 @@ public class StageManager : SystemObject {
 
         // 初期ステージを複数生成
         for (int i = 0; i < INITIAL_SEGMENTS; i++) {
+            // ステージ生成
             SpawnSegment();
         }
 
@@ -63,19 +64,20 @@ public class StageManager : SystemObject {
 
         switch (mode) {
             case GameModeState.Normal:
-                // ノーマルモードでは、最終ステージとしてゴールを生成する
+                // ノーマルモード用のステージ生成
                 stageGenerationStrategy = new NormalStageMode(stagePrefabs, goalPrefab);
                 break;
             case GameModeState.Endless:
-            default:
-                // 無限にステージ生成
+                // エンドレスモード用のステージ生成
                 stageGenerationStrategy = new EndlessStageMode(stagePrefabs);
+                break;
+            default:
                 break;
         }
     }
 
     /// <summary>
-    /// 毎フレーム呼び出される更新処理
+    /// 更新処理
     /// </summary>
     private void Update() {
         if (player == null) return; // プレイヤーが未設定なら処理しない

@@ -20,6 +20,12 @@ public class EndlessStageMode : IStageGenerationStrategy {
         this.stagePrefabs = stagePrefabs;
     }
 
+    /// <summary>
+    /// 次のステージのプレファブを取得
+    /// </summary>
+    /// <param name="generatedCount"></param>
+    /// <param name="maxSegments"></param>
+    /// <returns></returns>
     public GameObject GetNextStagePrefab(int generatedCount, int maxSegments) {
         return stagePrefabs[Random.Range(0, stagePrefabs.Count)];
     }

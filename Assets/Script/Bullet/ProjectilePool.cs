@@ -51,6 +51,7 @@ public class ProjectilePool : MonoBehaviour {
     /// 使用済みの弾をプールに戻す
     /// </summary>
     public void ReturnProjectile(Projectile proj) {
+        // 非表示にする
         proj.gameObject.SetActive(false);
         // 末尾に追加
         pool.Enqueue(proj);

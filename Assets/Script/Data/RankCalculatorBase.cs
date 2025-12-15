@@ -10,6 +10,11 @@ using UnityEngine;
 /// リザルト時のスコア計算
 /// </summary>
 public abstract class RankCalculatorBase {
+
+    private const int _STAGEPOINT = 5;              // ステージ通過時のポイント
+    private const int _STAGEPOINTMAX_NORMAL = 50;   // ノーマルステージのステージ通過最大ポイント   
+    private const int _STAGEPOINTMAX_ENDLESS = 150; // エンドレスステージのステージ通過最大ポイント   
+
     /// <summary>
     /// ランクを計算して返す
     /// </summary>
@@ -19,14 +24,14 @@ public abstract class RankCalculatorBase {
     /// ステージスコア計算
     /// </summary>
     protected int CalculateStageScore(int stageCount) {
-        return Mathf.Min(stageCount * 5, 50); // 10ステージ以上で50点満点
+        return Mathf.Min(stageCount * _STAGEPOINT, _STAGEPOINTMAX_NORMAL); // 10ステージ以上で50点満点
     }
 
     /// <summary>
     /// ステージスコア計算
     /// </summary>
     protected int EndlessStageScore(int stageCount) {
-        return Mathf.Min(stageCount * 5, 150); // 30ステージ以上で50点満点
+        return Mathf.Min(stageCount * _STAGEPOINT, _STAGEPOINTMAX_ENDLESS); // 30ステージ以上で50点満点
     }
 
     /// <summary>

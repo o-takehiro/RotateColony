@@ -53,7 +53,7 @@ public class CameraManager : MonoBehaviour {
     /// <param name="_target">’Ç]‘ÎÛ‚ÌTransform</param>
     public void SetTarget(Transform _target) {
         // ‘ÎÛ‚ª‚¢‚È‚¯‚ê‚Î”²‚¯‚é
-        // if (target == null) return;
+        if (_target == null) return;
         // ‘ÎÛ‚ğ£ŒË
         target = _target;
     }

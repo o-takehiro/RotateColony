@@ -110,16 +110,20 @@ public class MenuMode : MenuBase {
     /// </summary>
     private IEnumerator AnimateScale(Vector3 from, Vector3 to, float duration, System.Action onComplete = null) {
         float time = 0f;
+        // アニメーション開始時のスケール
         _howToPlayRect.localScale = from;
 
         while (time < duration) {
             time += Time.deltaTime;
             float t = Mathf.Clamp01(time / duration);
+            // 線形補間で目標位置まで補間
             _howToPlayRect.localScale = Vector3.Lerp(from, to, t);
+            // 次のフレーム
             yield return null;
         }
-
+        // スケールを固定k
         _howToPlayRect.localScale = to;
+
         onComplete?.Invoke();
         _animCoroutine = null;
     }

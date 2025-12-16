@@ -4,7 +4,7 @@
  */
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using static GameConst;
 /// <summary>
 /// ボタンの長押し入力を受付
 /// </summary>
@@ -18,7 +18,7 @@ public class GetHoldExample : MonoBehaviour {
 
     private void Start() {
         // 動的にPlayerShotを探す（例：タグが"Player"のオブジェクトにアタッチされているなら）
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        GameObject playerObj = GameObject.FindGameObjectWithTag(_PLAYER_TAG);
         // _image = gameObject.GetComponent<Image>();
         if (playerObj != null) {
             _playerShoot = playerObj.GetComponent<PlayerShot>();

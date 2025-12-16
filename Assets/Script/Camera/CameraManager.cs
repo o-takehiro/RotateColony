@@ -19,22 +19,21 @@ public class CameraManager : MonoBehaviour {
         Clear,          // 固定カメラ
         Shake           // カメラシェイク
     }
-
-    [SerializeField] private Transform target;                         // 追従対象
-    [SerializeField, Range(0f, 10f)] private float followSpeed = 2.5f; // 追従時の滑らかさ
-
-    // カメラ注視位置の高さ
-    private const float UP_EYE = 2.5f;
-
     // 現在の状態
     private CameraState currentState = CameraState.Idle;
+
+    [SerializeField] private Transform target;          // 追従対象
+    [SerializeField] private float followSpeed = 2.5f;  // 追従時の滑らかさ
+
+    private const float UP_EYE = 2.5f;  // カメラ注視位置の高さ
+
 
     // 円軌道移動関連
     private Vector3 startOffset;        // スタートからの距離
     private Vector3 endOffset;          // 終了地点からの距離
     private float startAngle;           // スタート時の角度
     private float endAngle;             // 終了時の角度
-    private float moveDuration = 3f;
+    private float moveDuration = 3f;    // 円軌道のかかる時間
     private float elapsedTime = 0f;
 
     // 固定視点関連
@@ -160,17 +159,20 @@ public class CameraManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// ゲームクリア時などにカメラを固定
+    /// カメラを設定位置で固定させる
     /// </summary>
     public void ClearCameraAngle() {
+        // カメラ位置をクリア判定になった場所に設定
         clearPosition = transform.position;
+        // カメラの状態をクリア状態にする
         currentState = CameraState.Clear;
     }
 
     /// <summary>
-    /// 固定視点状態を解除（通常追従へ戻す）
+    /// 固定視点状態を解除
     /// </summary>
     public void ExitCamera() {
+        // カメラの状態を通常カメラ状態に戻す
         currentState = CameraState.Follow;
     }
 
@@ -206,7 +208,9 @@ public class CameraManager : MonoBehaviour {
     /// カメラの状態を揺れに変更
     /// </summary>
     public void ShakeCamera() {
+        // カメラの状態を揺れ状態に変更
         currentState = CameraState.Shake;
+        // 揺れの時間を設定
         shakeDuration = 4f;
     }
 }

@@ -6,7 +6,7 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-
+using static GameConst;
 /// <summary>
 /// ステージ全体の管理クラス
 /// </summary>
@@ -100,7 +100,7 @@ public class StageManager : SystemObject {
             passedStageCount++;       // 通過カウントを増やす
 
             // ゴールステージならイベント
-            if (segment.CompareTag("Goal")) {
+            if (segment.CompareTag(_GOAL_TAG)) {
                 OnGoalReached?.Invoke();
             }
         }

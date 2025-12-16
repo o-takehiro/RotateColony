@@ -4,7 +4,7 @@
  */
 
 using UnityEngine;
-
+using static GameConst;
 public class StageSegment : MonoBehaviour {
     private bool shouldRotate = false;
 
@@ -32,7 +32,7 @@ public class StageSegment : MonoBehaviour {
     void Start() {
         Input.gyro.enabled = true;
         // ƒvƒŒƒCƒ„[‚ğæ“¾
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        GameObject playerObj = GameObject.FindGameObjectWithTag(_PLAYER_TAG);
         if (playerObj != null) {
             _playerMove = playerObj.GetComponent<PlayerMove>();
         }

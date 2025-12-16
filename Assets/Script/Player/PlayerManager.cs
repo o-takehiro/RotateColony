@@ -63,9 +63,9 @@ public class PlayerManager : SystemObject {
                 camera.StartCircularMove(
                 fromOffset: new Vector3(0f, 4f, -4f),   // 円の半径と高さ初期値（例）
                 toOffset: new Vector3(0f, 4f, -6f),     // 高さを少し上げる
-                fromAngleDeg: _FROM_ANGLE_DEG,                      // スタート角度
-                toAngleDeg: _TO_ANGLE_DEG,                      // 360度一周させたい場合
-                duration: _DURATION
+                fromAngleDeg: _FROM_ANGLE_DEG,          // スタート角度
+                toAngleDeg: _TO_ANGLE_DEG,              // 360度一周させたい場合
+                duration: _DURATION                     // かかる時間
                 );
             }
 
@@ -80,6 +80,7 @@ public class PlayerManager : SystemObject {
     /// </summary>
     public void DestroyPlayer() {
         if (playerInstance != null) {
+            // 削除
             Destroy(playerInstance);
             playerInstance = null;
         }

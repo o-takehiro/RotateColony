@@ -111,7 +111,7 @@ public class PartMainGame : PartBase {
             // ゴール到達処理
             if (goalReached) {
                 if (playerObj != null) {
-                    // クリア時間を取得
+                    // クリア時間を設定
                     moveScript?.ClearPlayer();
                 }
 

@@ -5,7 +5,7 @@
 
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-
+using static GameConst;
 /// <summary>
 /// 弾の動作
 /// ベジエ曲線でターゲットに向かって飛ぶ
@@ -125,7 +125,7 @@ public class Projectile : MonoBehaviour {
         if (!_initialized) return;
         if (other == null) return;
         // 破壊可能オブジェクトならダメージを与える
-        if (other.CompareTag("Obstacle")) {
+        if (other.CompareTag(_OBSTACLE_TAG)) {
             var destructible = other.GetComponent<Destructible>();
             if (destructible != null) {
                 // エフェクト再生

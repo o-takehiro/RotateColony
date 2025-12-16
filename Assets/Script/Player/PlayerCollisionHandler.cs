@@ -5,7 +5,7 @@
  */
 
 using UnityEngine;
-
+using static GameConst;
 /// <summary>
 /// プレイヤーが当たったときの処理
 /// </summary>
@@ -29,14 +29,14 @@ public class PlayerCollisionHandler : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
 
         // 障害物に当たった時
-        if (other.CompareTag("Obstacle") || other.CompareTag("BoostBreak") && !playerMove.boostFlag) {
+        if (other.CompareTag(_OBSTACLE_TAG) || other.CompareTag(_BOOSTBREAK_TAG) && !playerMove.boostFlag) {
             // エフェクト再生
             BrakePlayer();
         }
     }
 
     /// <summary>
-    /// エフェクト再生
+    /// プレイヤーがぶつかった際に行う
     /// </summary>
     private void BrakePlayer() {
         // 現在の座標を取得

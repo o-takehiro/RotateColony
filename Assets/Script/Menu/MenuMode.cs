@@ -19,7 +19,7 @@ public class MenuMode : MenuBase {
     [SerializeField] private GameObject _howToPlayPanel;        // 操作説明UI
     private RectTransform _howToPlayRect;                       // スケール制御用
     private bool _isHowToPlayVisible = false;                   // 表示状態
-    private Coroutine _animCoroutine;                           // アニメ管理
+    private Coroutine _animCoroutine;                           // アニメーション管理
 
 
     [SerializeField] private Vector3 _targetScale = Vector3.one; // 表示サイズ
@@ -42,6 +42,7 @@ public class MenuMode : MenuBase {
     /// <returns></returns>
     public override async UniTask Open() {
         await base.Open();
+        // フェードイン
         await FadeManager.instance.FadeIn();
 
         // モードが選ばれるまで待機

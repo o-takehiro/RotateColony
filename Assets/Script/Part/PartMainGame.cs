@@ -63,7 +63,7 @@ public class PartMainGame : PartBase {
             StageManager.instance.SetPlayer(playerF);
         }
 
-        // ゴールイベント登録（ゴールに到達したときの処理を追加）
+        // ゴールイベント登録
         StageManager.instance.OnGoalReached += OnGoalReachedHandler;
 
         // 適当に待つ
@@ -97,7 +97,7 @@ public class PartMainGame : PartBase {
     }
 
     /// <summary>
-    /// 実行処理（プレイ中のループ。ゴール or ゲームオーバーまで待機）
+    /// 実行処理
     /// </summary>
     public override async UniTask Execute() {
         GameObject playerObj = PlayerManager.instance.GetPlayerObject();
